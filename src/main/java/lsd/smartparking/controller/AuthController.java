@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -24,7 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 import lsd.smartparking.model.User;
 
 
-@Controller()
+@Controller
 public class AuthController {
 	
 	private DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users");

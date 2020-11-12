@@ -10,6 +10,8 @@ import org.springframework.core.io.ClassPathResource;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 @SpringBootApplication
 public class SmartParkingApplication {
@@ -21,7 +23,7 @@ public class SmartParkingApplication {
 			
             FirebaseOptions options = new FirebaseOptions.Builder()
                 .setCredentials(GoogleCredentials.fromStream(new ClassPathResource("static/resources/file/serviceAccountKey.json").getInputStream()))
-                .setDatabaseUrl("https://crimescraper.firebaseio.com")
+                .setDatabaseUrl("https://sparking-uni.firebaseio.com/")
                 .setDatabaseAuthVariableOverride(admin)
                 .build();
             if (FirebaseApp.getApps().isEmpty()) {

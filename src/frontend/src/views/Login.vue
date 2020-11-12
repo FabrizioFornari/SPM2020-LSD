@@ -4,8 +4,7 @@
       <div class="col-md-8">
         <div class="card">
           <div class="card-body">
-            <div v-if="error" class="alert alert-danger">{{error}}</div>
-            <form @submit.prevent="signIn">
+            <form>
               <div class="form-group row">
                 <label for="email" class="col-md-4 col-form-label text-md-right">Email</label>
 
@@ -25,10 +24,11 @@
               </div>
 
               <div class="form-group row mb-0">
-                <div class="col-md-8 offset-md-4">
+                <div class="col-md-12">
                   <button type="submit" class="btn btn-primary">Login</button>
+                  <br><br>
+                  <p><a href="/register">Non sei registrato?</a></p>
                 </div>
-                <p><a href="/register">Non sei registrato?</a></p>
               </div>
             </form>
           </div>
@@ -47,8 +47,7 @@ export default {
       form: {
         email: "",
         password: ""
-      },
-      error: null
+      }
     };
   },
   methods: {

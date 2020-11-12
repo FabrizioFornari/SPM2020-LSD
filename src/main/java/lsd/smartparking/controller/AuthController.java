@@ -1,7 +1,12 @@
 package lsd.smartparking.controller;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,9 +19,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.MutableData;
-import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
+
+import lsd.smartparking.model.User;
 
 
 @Controller()
@@ -79,14 +84,12 @@ public class AuthController {
 		return result;
 	}
 	
-	@PostMapping("register/user/{uid}/{name}/{surname}/{age}/{work}/{interest1}/{interest2}/{place}/{district}/{email}")
+	@PostMapping("register/user/{uid}/{name}/{surname}/{age}/{email}")
 	public DeferredResult<String> newUser(@PathVariable("uid") String uid, @PathVariable("name") String name, 
 						   @PathVariable("surname") String surname,@PathVariable("age") int age,
-						   @PathVariable("work") String work, @PathVariable("interest1") boolean interest1,
-						   @PathVariable("interest2") boolean interest2, @PathVariable("place") String place,
-						   @PathVariable("district") String district, @PathVariable("email") String email) throws IOException, MailchimpException, FirebaseAuthException {
+						   @PathVariable("email") String email) throws IOException, FirebaseAuthException {
 		DeferredResult<String> result = new DeferredResult<>();
-		User u = new User(name, surname, age, work, interest1, interest2, place, district, email, uid);
+		User u = new User(name, surname, age, email, uid);
 		Map<String, Object> claims = new HashMap<>();
 		claims.put("type", "user");
 		FirebaseAuth.getInstance().setCustomUserClaims(uid, claims);

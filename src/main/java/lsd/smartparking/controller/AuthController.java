@@ -27,7 +27,6 @@ import lsd.smartparking.model.User;
 @Controller()
 public class AuthController {
 	
-	@Autowired
 	private DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users");
 	
 	

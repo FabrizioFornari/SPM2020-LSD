@@ -82,12 +82,11 @@ public class AuthController {
 		return result;
 	}
 	
-	@PostMapping("register/user/{uid}/{name}/{surname}/{age}/{email}")
+	@PostMapping("register/user/{uid}/{name}/{surname}/{email}")
 	public DeferredResult<String> newUser(@PathVariable("uid") String uid, @PathVariable("name") String name, 
-						   @PathVariable("surname") String surname,@PathVariable("age") int age,
-						   @PathVariable("email") String email) throws IOException, FirebaseAuthException {
+						   @PathVariable("surname") String surname, @PathVariable("email") String email) throws IOException, FirebaseAuthException {
 		DeferredResult<String> result = new DeferredResult<>();
-		User u = new User(name, surname, age, email, uid);
+		User u = new User(name, surname, email, uid);
 		Map<String, Object> claims = new HashMap<>();
 		claims.put("type", "user");
 		FirebaseAuth.getInstance().setCustomUserClaims(uid, claims);

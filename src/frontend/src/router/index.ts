@@ -25,6 +25,15 @@ const routes: Array<RouteConfig> = [
     }
   },
   {
+    path: '/register',
+    name: 'Register',
+    component: () => import('../views/Register.vue'),
+    meta: { 
+        title: 'Register - Sparking',
+        requiresAuth: false 
+    }
+  },
+  {
     path: '/dashboard',
     name: 'Dashboard',
     component: () => import('../views/Dashboard.vue'),

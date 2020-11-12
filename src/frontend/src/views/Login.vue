@@ -28,6 +28,7 @@
                 <div class="col-md-8 offset-md-4">
                   <button type="submit" class="btn btn-primary">Login</button>
                 </div>
+                <p><a href="/register">Non sei registrato?</a></p>
               </div>
             </form>
           </div>

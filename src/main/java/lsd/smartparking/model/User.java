@@ -5,17 +5,15 @@ public class User {
 	private String id;
 	private String name;
 	private String surname;
-	private int age;
 	private String email;
 
 	
     public User() { }
 
-	public User(String name, String surname, int age, String email, String id) {
+	public User(String name, String surname, String email, String id) {
 		this.id = id;
 		this.name = name;
 		this.surname = surname;
-		this.age = age;
 		this.email = email;
 	}
 
@@ -49,14 +47,6 @@ public class User {
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
-	
-	public int getAge() {
-		return age;
-	}
-
-	public void setAge(int age) {
-		this.age = age;
 	}
 	
 }

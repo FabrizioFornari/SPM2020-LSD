@@ -5,8 +5,7 @@
 </template>
 
 <script>
-import { Component, Vue } from 'vue-property-decorator';
-import Map from '@/components/Map.vue';
+import Map from '@/components/Map.vue' // @ is an alias to /src
 
 export default {
   name: 'home', 

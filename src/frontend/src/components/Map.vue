@@ -1,20 +1,22 @@
 <template>
-    <l-map id="homeMap"
-        :zoom="zoom"
-        :center="center"
-        :options="mapOptions">
-        <l-tile-layer :url="url" :attribution="attribution"/>
-        <l-marker v-for="(marker, index) in markers"  
-            :lat-lng="[marker.lat, marker.lon]" 
-            :icon="myMarkerIcon"
-            :key="index">
-            <l-popup>
-            <b>{{ marker.category }}</b> <br> 
-            <i>{{ marker.address }}</i> <br> 
-            {{ marker.date | formatDate }}
-            </l-popup>
-        </l-marker>
-    </l-map>
+    <div class="map">
+        <l-map id="homeMap"
+            :zoom="zoom"
+            :center="center"
+            :options="mapOptions">
+            <l-tile-layer :url="url" :attribution="attribution"/>
+            <l-marker v-for="(marker, index) in markers"  
+                :lat-lng="[marker.lat, marker.lon]" 
+                :icon="myMarkerIcon"
+                :key="index">
+                <l-popup>
+                <b>{{ marker.category }}</b> <br> 
+                <i>{{ marker.address }}</i> <br> 
+                {{ marker.date | formatDate }}
+                </l-popup>
+            </l-marker>
+        </l-map>
+    </div>
 </template>
 
 <script>
@@ -23,7 +25,7 @@ import { latLng } from "leaflet"
 import 'leaflet/dist/leaflet.css'
 
 export default {
-    name: 'map',  
+    name: 'spark-map',  
     data() {
         return {
             markers: [],
@@ -60,10 +62,8 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
 #homeMap {
-    width: 100vw;
+    width: 100%;
     height: 100vh;
-    margin-top: 100px;
-    margin-left: -6vw;
     z-index: 1;
 }
 </style>

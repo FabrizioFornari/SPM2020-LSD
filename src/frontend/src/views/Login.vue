@@ -27,7 +27,7 @@
                 <div class="col-md-12">
                   <button type="submit" class="btn btn-primary">Login</button>
                   <br><br>
-                  <p><a href="/register">Non sei registrato?</a></p>
+                  <p><router-link to="/register">Non sei registrato?</router-link></p>
                 </div>
               </div>
             </form>

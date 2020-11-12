@@ -4,14 +4,14 @@
       <div class="col-md-8">
         <div class="card">
           <div class="card-body">
-			Registrati come
-			<select id="mySelect" @change="myFunction">
-				<option value="0">Utente</option>
-				<option value="1">Agente di Polizia</option>
-				<option value="2">Comune</option>
-			</select>
-			<br><br>
-            <form id ="form1">
+            Registrati come
+            <select id="mySelect" v-model="type">
+              <option value="0">Utente</option>
+              <option value="1">Agente di Polizia</option>
+              <option value="2">Comune</option>
+            </select>
+            <br><br>
+            <form id ="form1" v-if="type == '0'">
             <div class="form-group row">
                 <label for="nameUser" class="col-md-4 col-form-label text-md-right">Nome</label>
                 <div class="col-md-6">
@@ -48,7 +48,7 @@
                 </div>
               </div>
             </form>
-            <form id ="form2" style="display:none">
+            <form id ="form2" v-if="type == '1'">
             <div class="form-group row">
                 <label for="namePolice" class="col-md-4 col-form-label text-md-right">Nome</label>
                 <div class="col-md-6">
@@ -92,7 +92,7 @@
                 </div>
               </div>
             </form>
-            <form id ="form3" style="display:none">
+            <form id ="form3" v-if="type == '2'">
             <div class="form-group row">
                 <label for="nameMunicipality" class="col-md-4 col-form-label text-md-right">Nome</label>
                 <div class="col-md-6">
@@ -133,7 +133,7 @@
               <div class="col-md-12">
                 <button type="submit" class="btn btn-primary">Registrati</button>
                 <br><br>
-                <p><a href="/login">Sei già registrato?</a></p>
+                <p><router-link to="/login">Sei già registrato?</router-link></p>
               </div>
             </div>
           </div>
@@ -150,6 +150,7 @@ import { login } from '@/firebase';
 export default {
   data() {
     return {
+      type: "0",
       form: {
         email: "",
         password: ""
@@ -162,16 +163,7 @@ export default {
       this.$router.push(this.$route.query.redirect || '/')
       this.form.email = ""
       this.form.password = ""
-    },
-    myFunction() {
-		document.getElementById("form1").style.display="none";
-		document.getElementById("form2").style.display="none";
-		document.getElementById("form3").style.display="none";
-		const x = document.getElementById("mySelect").value;
-		if (x === "0") document.getElementById("form1").style.display="block";
-		else if (x === "1") document.getElementById("form2").style.display="block";
-		else if (x === "2") document.getElementById("form3").style.display="block";
-	}
+    }
   }
 };
 </script>

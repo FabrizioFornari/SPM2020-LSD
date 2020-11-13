@@ -70,7 +70,6 @@ a:hover {
 
 #main {
   width: 40%;
-  min-width: 400px;
   height: 100vh;
   right: 0;
   background-color: #fff;
@@ -106,5 +105,29 @@ a:hover {
   height: 100vh;
   min-height: 300px;
   align-items: center;
+}
+
+
+@media (max-width: 400px) {
+  #main {
+    width: 100%;
+    padding-top: 70px;
+    margin-bottom: 40px;
+
+    #backhome {
+      height: 40px;
+      top: auto;
+      bottom: 0;
+      background-color: #42b983;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 3;
+
+      &::before {
+        content: 'Return to map';
+      }
+    }
+  }
 }
 </style>

@@ -20,60 +20,51 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import lsd.smartparking.model.Municipality;
+import lsd.smartparking.model.Policeman;
 import lsd.smartparking.model.User;
 
 
 @Controller
 public class AuthController {
 	
-	private DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users");
+	private DatabaseReference policemanRef = FirebaseDatabase.getInstance().getReference("Policemen");
+	private DatabaseReference municipalityRef = FirebaseDatabase.getInstance().getReference("Municipality");
 	
-	
-	public static String tokenToUid(String token) {
-        try {
-			return FirebaseAuth.getInstance().verifyIdToken(token).getUid();
-		} catch (FirebaseAuthException e) {
-			System.out.println("Token parse error!");
-			return null;
-		}
-	}
-
-	@GetMapping("/auth")
-    public String authLogin(ModelMap map) {
-		return "auth/authMenu";
-    }
-	
-	@GetMapping("/auth/register")
-	public String register() {
-    	return "auth/registerMenu";
-	}
-	
-	@PostMapping("/auth/null") 
-	public String logout() {
-		return "auth/authMenu";
-	}
-	
-	@GetMapping("/auth/password")
-	public String password() {
-		return "auth/passwordMenu";
-	}
-	
-	@PostMapping("register/user/{uid}/{name}/{surname}/{email}")
-	public DeferredResult<String> newUser(@PathVariable("uid") String uid, @PathVariable("name") String name, 
-						   @PathVariable("surname") String surname, @PathVariable("email") String email) throws IOException, FirebaseAuthException {
+	@PostMapping("register/user/{uid}/{name}/{surname}/{email}/{municipalityId}")
+	public DeferredResult<String> newPoliceman(@PathVariable("uid") String uid, @PathVariable("name") String name, 
+						   @PathVariable("surname") String surname, @PathVariable("email") String email,
+						   @PathVariable("municipalityId") String municipalityId) throws IOException, FirebaseAuthException {
 		DeferredResult<String> result = new DeferredResult<>();
-		User u = new User(name, surname, email, uid);
-		Map<String, Object> claims = new HashMap<>();
-		claims.put("type", "user");
-		FirebaseAuth.getInstance().setCustomUserClaims(uid, claims);
+		Policeman p = new Policeman(name, surname, email, uid, municipalityId);
 		 
-		userRef.child(uid).setValue(u, new DatabaseReference.CompletionListener() {
+		policemanRef.child(uid).setValue(p, new DatabaseReference.CompletionListener() {
 			@Override
 			public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
 				if (databaseError != null) {
 					System.out.println("Data could not be saved " + databaseError.getMessage());
 				} else {
-					result.setResult("auth/authMenu");
+					//TODO set Result for frontend
+				}
+			}
+		});
+        return result;
+	}
+	
+	@PostMapping("register/user/{uid}/{city}/{province}/{region}/{email}")
+	public DeferredResult<String> newMunicipality(@PathVariable("uid") String uid, @PathVariable("city") String city, 
+						   @PathVariable("province") String province, @PathVariable("region") String region,
+						   @PathVariable("email") String email) throws IOException, FirebaseAuthException {
+		DeferredResult<String> result = new DeferredResult<>();
+		Municipality m = new Municipality(city, province, region, uid, email);
+		 
+		municipalityRef.child(uid).setValue(m, new DatabaseReference.CompletionListener() {
+			@Override
+			public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+				if (databaseError != null) {
+					System.out.println("Data could not be saved " + databaseError.getMessage());
+				} else {
+					//TODO set Result for frontend
 				}
 			}
 		});

@@ -97,7 +97,7 @@ a:hover {
 
   .page {
     height: 100%;
-    overflow-y: scroll;
+    overflow-y: auto;
     position: relative;
     z-index: 1;
 

@@ -57,30 +57,6 @@ public class AuthController {
 	public String password() {
 		return "auth/passwordMenu";
 	}
-
-	@PostMapping("/login/user/{userId}/{userToken}")
-	public DeferredResult<String> loginUser(@PathVariable("userId") String userId, @PathVariable("userToken") String userToken, Model model) throws FirebaseAuthException {
-		DeferredResult<String> result = new DeferredResult<>();
-		String uid = tokenToUid(userToken);
-
-		if (uid.equals(userId) && FirebaseAuth.getInstance().getUser(uid).isEmailVerified()) {
-			userRef.child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
-	            @Override
-	            public void onDataChange(DataSnapshot dataSnapshot) {
-	            	User currentUser = dataSnapshot.getValue(User.class);
-        			model.addAttribute("currentUser", currentUser);
-					result.setResult("auth/welcomeUser");
-	            }
-	
-	            @Override
-	            public void onCancelled(DatabaseError databaseError) {
-	            }
-	        });
-		} else
-			result.setResult("error/403");
-
-		return result;
-	}
 	
 	@PostMapping("register/user/{uid}/{name}/{surname}/{email}")
 	public DeferredResult<String> newUser(@PathVariable("uid") String uid, @PathVariable("name") String name, 

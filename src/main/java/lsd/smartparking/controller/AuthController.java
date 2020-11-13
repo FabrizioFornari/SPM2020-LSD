@@ -23,7 +23,7 @@ public class AuthController {
 	DocumentReference municipalityRef = db.collection("Municipality").document();
 
 	
-	@PostMapping("register/user/{uid}/{name}/{surname}/{email}/{municipalityId}")
+	@PostMapping("register/policeman/{uid}/{name}/{surname}/{email}/{municipalityId}")
 	public String newPoliceman(@PathVariable("uid") String uid, @PathVariable("name") String name, 
 						   @PathVariable("surname") String surname, @PathVariable("email") String email,
 						   @PathVariable("municipalityId") String municipalityId) throws IOException, FirebaseAuthException {
@@ -32,7 +32,7 @@ public class AuthController {
 		return "";
 	}
 	
-	@PostMapping("register/user/{uid}/{city}/{province}/{region}/{email}")
+	@PostMapping("register/municipality/{uid}/{city}/{province}/{region}/{email}")
 	public String newMunicipality(@PathVariable("uid") String uid, @PathVariable("city") String city, 
 						   @PathVariable("province") String province, @PathVariable("region") String region,
 						   @PathVariable("email") String email) throws IOException, FirebaseAuthException {

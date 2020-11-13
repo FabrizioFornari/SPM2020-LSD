@@ -23,16 +23,16 @@ export async function signin(email: string, password: string, name: string, surn
         await fireAuth.createUserWithEmailAndPassword(email, password)
         const current = fireAuth.currentUser
         if(current) {
-            current.updateProfile({
+            await current.updateProfile({
                 displayName: name
             })
+            fireStore.collection("Users").doc(store.getters.user.uid).set({
+                "name": name,
+                "surname": surname,
+                "email": email
+            })
+            store.dispatch("fetchUser", fireAuth.currentUser)
         }
-        await fireStore.collection("Users").doc(store.getters.user.uid).set({
-            "name": name,
-            "surname": surname,
-            "email": email
-        })
-        await fireAuth.signOut()
         console.log("Registred")
     } catch (error) {
         console.log(error)

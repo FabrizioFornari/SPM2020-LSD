@@ -4,6 +4,11 @@
       <router-link to="/login" v-if="!this.$store.getters.isLogged">Login</router-link> 
       <router-link to="/dashboard" v-else>Profilo</router-link>
     </div>
+    <div id="nav-mobile">
+      <router-link to="/" class="mapIcon"><img src="./assets/map.svg"></router-link>
+      <router-link to="/login" v-if="!this.$store.getters.isLogged"><img src="./assets/user.svg"></router-link> 
+      <router-link to="/dashboard" v-else class="userIcon"><img src="./assets/user.svg"></router-link>
+    </div>
 
     <div id="main" v-if="$route.fullPath !== '/'">
       <div class="page">
@@ -68,13 +73,17 @@ a:hover {
   color: #42b983;
 }
 
+#nav-mobile {
+  display: none;
+}
+
 #main {
   width: 40%;
+  min-width: 400px;
   height: 100vh;
   right: 0;
   background-color: #fff;
   box-shadow: 0 0 30px #00000022;
-  overflow-y: auto;
   position: fixed;
   z-index: 2;
 
@@ -87,7 +96,8 @@ a:hover {
   }
 
   .page {
-    height: 100vh;
+    height: 100%;
+    overflow-y: auto;
     position: relative;
     z-index: 1;
 
@@ -109,24 +119,39 @@ a:hover {
 
 
 @media (max-width: 400px) {
+  #nav {
+    display: none;
+  }
+
+  #nav-mobile {
+    width: 100vw;
+    height: 50px;
+    bottom: 0;
+    background-color: #fff;
+    box-shadow: 0 0 20px #00000019;
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+    justify-content: space-around;
+    position: fixed;
+    z-index: 100;
+
+    a {
+      width: 50px;
+    }
+
+    img {
+      width: 25px;
+    }
+  }
+
   #main {
     width: 100%;
-    padding-top: 70px;
-    margin-bottom: 40px;
+    min-width: 100%;
+    padding-bottom: 50px;
 
     #backhome {
-      height: 40px;
-      top: auto;
-      bottom: 0;
-      background-color: #42b983;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 3;
-
-      &::before {
-        content: 'Return to map';
-      }
+      display: none;
     }
   }
 }

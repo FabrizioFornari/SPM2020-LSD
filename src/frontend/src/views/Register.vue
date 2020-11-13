@@ -15,35 +15,35 @@
               <label for="nameUser" class="col-md-4 col-form-label text-md-right">Nome</label>
               <div class="col-md-6">
                 <input id="nameUser" type="text" class="form-control" name="nameUser" value required autofocus
-                  v-model="form.nameUser"/>
+                  v-model="form.name"/>
               </div>
             </div>
             <div class="form-group row">
               <label for="surnameUser" class="col-md-4 col-form-label text-md-right">Cognome</label>
               <div class="col-md-6">
                 <input id="surnameUser" type="text" class="form-control" name="surnameUser" value required autofocus
-                  v-model="form.surnameUser"/>
+                  v-model="form.surname"/>
               </div>
             </div>
             <div class="form-group row">
               <label for="emailUser" class="col-md-4 col-form-label text-md-right">Email</label>
               <div class="col-md-6">
                 <input id="emailUser" type="email" class="form-control" name="emailUser" value required autofocus
-                  v-model="form.emailUser"/>
+                  v-model="form.email"/>
               </div>
             </div>
             <div class="form-group row">
               <label for="passwordUser" class="col-md-4 col-form-label text-md-right">Password</label>
               <div class="col-md-6">
                 <input id="passwordUser" type="password" class="form-control" name="passwordUser" required
-                  v-model="form.passwordUser"/>
+                  v-model="form.password"/>
               </div>
             </div>
             <div class="form-group row">
               <label for="passwordUserConfirm" class="col-md-4 col-form-label text-md-right">Conferma password</label>
               <div class="col-md-6">
                 <input id="passwordUserConfirm" type="password" class="form-control" name="passwordUserConfirm" required
-                  v-model="form.passwordUserConfirm"/>
+                  v-model="form.password"/>
               </div>
             </div>
           </form>
@@ -130,7 +130,7 @@
           </form>
           <div class="form-group row mb-0">
             <div class="col-md-12">
-              <button type="submit" class="btn btn-primary">Registrati</button>
+              <button type="submit" @click="register" class="btn btn-primary">Registrati</button>
               <br><br>
               <p><router-link to="/login">Sei già registrato?</router-link></p>
             </div>
@@ -143,7 +143,7 @@
 
 <script>
 	
-import { login } from '@/firebase';
+import { signin } from '@/firebase';
 
 export default {
   data() {
@@ -151,13 +151,15 @@ export default {
       type: "0",
       form: {
         email: "",
-        password: ""
+        password: "",
+        name: "",
+        surname: ""
       }
     };
   },
   methods: {
-    async signIn() {
-      await login(this.form.email, this.form.password)
+    async register() {
+      await signin(this.form.email, this.form.password, this.form.name, this.form.surname)
       this.$router.push(this.$route.query.redirect || '/')
       this.form.email = ""
       this.form.password = ""

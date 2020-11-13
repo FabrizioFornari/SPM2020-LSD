@@ -6,7 +6,9 @@
     </div>
 
     <div id="main" v-if="$route.fullPath !== '/'">
-      <router-view :key="$route.fullPath"/>
+      <div class="page">
+        <router-view :key="$route.fullPath"/>
+      </div>
       <router-link to="/" id="backhome"></router-link>
     </div>
     <Map />
@@ -78,11 +80,25 @@ a:hover {
   z-index: 2;
 
   #backhome {
-    width: 60%;
+    width: 100vw;
     height: 100vh;
     top: 0;
     left: 0;
     position: fixed;
+  }
+
+  .page {
+    height: 100vh;
+    position: relative;
+    z-index: 1;
+
+    .dashboard {
+      height: 100vh;
+      flex-flow: column;
+      align-items: center;
+      justify-content: center;
+      display: flex;
+    }
   }
 }
 

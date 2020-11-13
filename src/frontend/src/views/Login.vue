@@ -46,7 +46,8 @@ export default {
       form: {
         email: "",
         password: ""
-      }
+      },
+      error: null
     };
   },
   methods: {

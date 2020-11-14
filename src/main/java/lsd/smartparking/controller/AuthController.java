@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.cloud.firestore.CollectionReference;
-import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.Firestore;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.cloud.FirestoreClient;
@@ -43,4 +42,5 @@ public class AuthController {
 		municipalityRef.document(uid).set(m);
         return "";
 	}
+
 }

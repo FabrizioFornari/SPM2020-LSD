@@ -55,22 +55,20 @@ a:hover {
 
 #nav {
   right: 0;
-  background-color: #fff;
   box-shadow: 0 10px 20px #00000019;
   margin: 10px;
-  padding: 10px 20px;
   border-radius: 10px;
+  overflow: hidden;
   position: fixed;
   z-index: 100;
-}
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
+  a {
+    padding: 10px 20px;
+    background-color: #fff;
+    font-weight: bold;
+    color: #2c3e50;
+    display: block;
+  }
 }
 
 #nav-mobile {
@@ -112,9 +110,13 @@ a:hover {
 }
 
 .justify-content-center {
-  height: 100vh;
+  height: 100%;
   min-height: 300px;
   align-items: center;
+}
+
+.container {
+  height: 100%;
 }
 
 
@@ -125,30 +127,38 @@ a:hover {
 
   #nav-mobile {
     width: 100vw;
-    height: 50px;
+    height: 60px;
     bottom: 0;
     background-color: #fff;
     box-shadow: 0 0 20px #00000019;
     display: flex;
     flex-flow: row;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-evenly;
     position: fixed;
     z-index: 100;
 
     a {
-      width: 50px;
+      width: 60px;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+
+      &.router-link-exact-active img {
+        width: 28px;
+      }
     }
 
     img {
       width: 25px;
+      transition: .1s;
     }
   }
 
   #main {
     width: 100%;
     min-width: 100%;
-    padding-bottom: 50px;
+    padding-bottom: 60px;
 
     #backhome {
       display: none;

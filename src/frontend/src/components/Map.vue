@@ -5,14 +5,15 @@
             :center="center"
             :options="mapOptions">
             <l-tile-layer :url="url" :attribution="attribution"/>
+            <l-locate-control :options="{icon: 'fa fa-crosshairs'}" />
             <l-marker v-for="(marker, index) in markers"  
                 :lat-lng="[marker.lat, marker.lon]" 
                 :icon="myMarkerIcon"
                 :key="index">
                 <l-popup>
-                <b>{{ marker.category }}</b> <br> 
-                <i>{{ marker.address }}</i> <br> 
-                {{ marker.date | formatDate }}
+                    <b>{{ marker.category }}</b> <br> 
+                    <i>{{ marker.address }}</i> <br> 
+                    {{ marker.date | formatDate }}
                 </l-popup>
             </l-marker>
         </l-map>
@@ -21,6 +22,7 @@
 
 <script>
 import { LMap, LTileLayer, LMarker, LPopup } from 'vue2-leaflet'
+import Vue2LeafletLocatecontrol from 'vue2-leaflet-locatecontrol/Vue2LeafletLocatecontrol'
 import { latLng } from "leaflet"
 import 'leaflet/dist/leaflet.css'
 
@@ -54,7 +56,8 @@ export default {
         'l-map': LMap,
         'l-tile-layer': LTileLayer,
         'l-marker': LMarker,
-        'l-popup': LPopup
+        'l-popup': LPopup,
+        'l-locate-control': Vue2LeafletLocatecontrol
     }
 }
 </script>

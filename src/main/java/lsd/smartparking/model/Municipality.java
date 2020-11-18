@@ -10,6 +10,7 @@ public class Municipality {
 	private String region;
 	private String email;
 	private HashMap<String, Policeman> policemen;
+	private boolean approved;
 
 	
     public Municipality() { }
@@ -20,6 +21,7 @@ public class Municipality {
 		this.city = city;
 		this.province = province;
 		this.region = region;
+		this.approved = false;
 	}
 
 	public String getId() {
@@ -68,6 +70,14 @@ public class Municipality {
 
 	public void setPolicemen(HashMap<String, Policeman> policemen) {
 		this.policemen = policemen;
+	}
+
+	public boolean isApproved() {
+		return approved;
+	}
+
+	public void setApproved(boolean approved) {
+		this.approved = approved;
 	}
 	
 }

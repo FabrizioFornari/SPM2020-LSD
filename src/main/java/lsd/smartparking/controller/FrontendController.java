@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller()
 public class FrontendController {
 
-    @RequestMapping(value = "{_:^(?!index\\.html|api|manifest\\.json|service-worker\\.js|precache).*$}")
+    @RequestMapping(value = "{_:^(?!index\\.html|api|css|js|img|static|manifest\\.json|service-worker\\.js|precache).*$}/**")
     public String redirectFrontend() {
         return "forward:/";
     }

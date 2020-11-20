@@ -1,13 +1,14 @@
-import store from '@/store/auth';
-import router from '@/router';
-import config from '@/config/firebase';
-import Firebase from 'firebase/app';
-import 'firebase/auth';
-import 'firebase/firestore';
+import store from '@/store/auth'
+import router from '@/router'
+import config from '@/config/firebase'
+import Firebase from 'firebase/app'
+import 'firebase/auth'
+import 'firebase/firestore'
 
-export const fireApp = Firebase.initializeApp(config);
-export const fireAuth = Firebase.auth();
-export const fireStore = Firebase.firestore();
+export const fireApp = Firebase.initializeApp(config)
+export const fireAuth = Firebase.auth()
+export const fireStore = Firebase.firestore()
+export const geoPoint = Firebase.firestore.GeoPoint
 
 const onAuthStateChangedPromise = new Promise((resolve, reject) => {
     fireAuth.onAuthStateChanged(user => {
@@ -22,11 +23,12 @@ export async function signin(email: string, password: string, name: string, surn
     try {
         await fireAuth.createUserWithEmailAndPassword(email, password)
         const current = fireAuth.currentUser
-        if(current) {
+        if (current) {
             await current.updateProfile({
                 displayName: name
             })
             fireStore.collection("Users").doc(store.getters.user.uid).set({
+                "id": store.getters.user.uid,
                 "name": name,
                 "surname": surname,
                 "email": email

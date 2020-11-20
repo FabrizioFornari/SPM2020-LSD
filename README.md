@@ -17,13 +17,15 @@ Group name: SPM2020-LSD
 
 ## About The Project
 
-About.
+The main purpose of this project is to provide municipalities that subscribe to the platform to be able to manage parking spaces in a more smart way, and to provide citizens the ability to book these with greater ease and immediacy. The police forces will interact with the digital system to allow general compliance with the rules.
 
 
 ### Built With
 
 * [Spring Boot](https://spring.io/projects/spring-boot)
-
+* [Vue.js](https://vuejs.org/)
+* [Firebase](https://firebase.google.com/)
+* [Leaflet](https://leafletjs.com/)
 
 
 ## Getting Started
@@ -53,8 +55,8 @@ See the [open issues](https://github.com/FabrizioFornari/SPM2020-LSD/issues) for
 
 ## Contact
 
-Daniele Parisi
+Daniele Parisi - [Linkedin](https://www.linkedin.com/in/daniele-parisi-177181180/)
 
 Samuel Piatanesi - [Linkedin](https://it.linkedin.com/in/samuel-piatanesi)
 
-Luca Ruschioni
+Luca Ruschioni - [Linkedin](https://www.linkedin.com/in/luca-ruschioni/)

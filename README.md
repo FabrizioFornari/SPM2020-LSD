@@ -55,8 +55,6 @@ See the [open issues](https://github.com/FabrizioFornari/SPM2020-LSD/issues) for
 
 ## Contact
 
-Daniele Parisi - [Linkedin](https://www.linkedin.com/in/daniele-parisi-177181180/)
-
 Samuel Piatanesi - [Linkedin](https://it.linkedin.com/in/samuel-piatanesi)
 
 Luca Ruschioni - [Linkedin](https://www.linkedin.com/in/luca-ruschioni/)

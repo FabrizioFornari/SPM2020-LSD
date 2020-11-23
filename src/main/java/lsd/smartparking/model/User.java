@@ -1,6 +1,6 @@
 package lsd.smartparking.model;
 
-public class User {
+public class User extends Utils {
 
 	private String id;
 	private String name;
@@ -32,9 +32,7 @@ public class User {
 
 	public void setName(String name) {
 		checkFields(name);
-		if (name.length() > 20) {
-			throw new IllegalArgumentException("The name is too long");
-		}
+		checkFieldsLength(name);
 		this.name = name.trim();
 	}
 
@@ -44,9 +42,7 @@ public class User {
 
 	public void setSurname(String surname) {
 		checkFields(surname);
-		if (surname.length() > 20) {
-			throw new IllegalArgumentException("The surname is too long");
-		}
+		checkFieldsLength(surname);
 		this.surname = surname.trim();
 	}
 
@@ -56,16 +52,8 @@ public class User {
 
 	public void setEmail(String email) {
 		checkFields(email);
-		if (email.length() > 20) {
-			throw new IllegalArgumentException("The email is too long");
-		}
+		checkFieldsLength(email);
 		this.email = email.trim();
-	}
-	
-	private void checkFields(String field) {
-		if (field == null || field == "") {
-			throw new IllegalArgumentException("The field cannot be null or empty");
-		}
 	}
 	
 }

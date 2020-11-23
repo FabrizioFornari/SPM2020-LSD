@@ -18,13 +18,7 @@ public class Policeman extends User {
 
 	public void setMunicipalityId(String municipalityId) {
 		checkFields(municipalityId);
-		this.municipalityId = municipalityId;
-	}
-	
-	private void checkFields(String field) {
-		if (field == null || field == "") {
-			throw new IllegalArgumentException("The field cannot be null or empty");
-		}
+		this.municipalityId = municipalityId.trim();
 	}
 	
 }

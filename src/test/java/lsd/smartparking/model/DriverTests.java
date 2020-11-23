@@ -9,7 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest(classes = {User.class})
+@SpringBootTest(classes = {Driver.class})
 public class DriverTests {
 
     private Driver driver;
@@ -21,7 +21,7 @@ public class DriverTests {
 	private HashMap<String, Car> testCars;
 	
 	@BeforeEach
-	public void createUser() {
+	public void createDriver() {
 		testName = "Luca";
 		testSurname = "Verdi";
 		testEmail = "a@a.it";
@@ -31,7 +31,7 @@ public class DriverTests {
 	}
 	
 	@Test
-	public void checkUserFields() {
+	public void checkDriverFields() {
 		assertEquals(driver.getClass(), Driver.class);
 		assertEquals(driver.getName(), testName);
 		assertEquals(driver.getSurname(), testSurname);

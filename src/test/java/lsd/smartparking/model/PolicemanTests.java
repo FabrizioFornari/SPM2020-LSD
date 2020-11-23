@@ -9,7 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest(classes = {User.class})
+@SpringBootTest(classes = {Policeman.class})
 public class PolicemanTests {
 
     private Policeman policeman;
@@ -21,7 +21,7 @@ public class PolicemanTests {
 	private String testMunicipalityId;
 	
 	@BeforeEach
-	public void createUser() {
+	public void createPoliceman() {
 		testName = "Luca";
 		testSurname = "Verdi";
 		testEmail = "a@a.it";
@@ -32,7 +32,7 @@ public class PolicemanTests {
 	}
 	
 	@Test
-	public void checkUserFields() {
+	public void checkPolicemanFields() {
 		assertEquals(policeman.getClass(), Policeman.class);
 		assertEquals(policeman.getName(), testName);
 		assertEquals(policeman.getSurname(), testSurname);

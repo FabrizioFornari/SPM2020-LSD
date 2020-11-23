@@ -6,6 +6,7 @@ public class Driver extends User {
 	
 	private HashMap<String, Car> cars;
 	private HashMap<String, Payment> payments;
+	private HashMap<String, Ticket> tickets;
 	
 	
 	public Driver() { }
@@ -37,6 +38,14 @@ public class Driver extends User {
 
 	public void setPayments(HashMap<String, Payment> payments) {
 		this.payments = payments;
+	}
+
+	public HashMap<String, Ticket> getTickets() {
+		return tickets;
+	}
+
+	public void setTickets(HashMap<String, Ticket> tickets) {
+		this.tickets = tickets;
 	}
 
 }

@@ -2,26 +2,17 @@ package lsd.smartparking.model;
 
 import java.util.HashMap;
 
-public class Driver {
+public class Driver extends User {
 	
-	private String uid;
 	private HashMap<String, Car> cars;
 	private HashMap<String, Payment> payments;
 	
 	
 	public Driver() { }
 	
-	public Driver(String uid, HashMap<String, Car> cars) {
-		this.uid = uid;
-		this.cars = cars;
-	}
-	
-	public String getUid() {
-		return uid;
-	}
-	
-	public void setUid(String uid) {
-		this.uid = uid;
+	public Driver(String name, String surname, String email, String id, HashMap<String, Car> cars) {
+		super(name, surname, email, id);
+		this.setCars(cars);
 	}
 	
 	public HashMap<String, Car> getCars() {

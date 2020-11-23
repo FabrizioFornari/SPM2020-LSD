@@ -7,13 +7,15 @@
             @ready="handleEvents">
             <l-tile-layer :url="url" :attribution="attribution"/>
             <l-search :options="searchOptions" />
+            <l-routing :waypoints="waypoints" :icon="myMarkerIcon" :key="waypoints" />
             <l-locate-control :options="{icon: 'fa fa-crosshairs'}" />
             <l-marker v-for="(marker, index) in markers"  
                 :lat-lng="[marker.coords.latitude, marker.coords.longitude]" 
                 :icon="myMarkerIcon"
                 :key="index">
                 <l-popup>
-                    <b>{{ marker.name }}</b>
+                    <b>{{ marker.name }}</b> <br>
+                    <button @click="findRoute(marker.coords.latitude, marker.coords.longitude)">Indicazioni</button>
                 </l-popup>
             </l-marker>
         </l-map>
@@ -25,8 +27,8 @@ import { LMap, LTileLayer, LMarker, LPopup } from 'vue2-leaflet'
 import Vue2LeafletLocatecontrol from 'vue2-leaflet-locatecontrol/Vue2LeafletLocatecontrol'
 import { OpenStreetMapProvider } from 'leaflet-geosearch'
 import Geosearch from '@/components/Geosearch'
-import L from 'leaflet'
-import { latLng } from 'leaflet'
+import Routing from '@/components/Routing'
+import L, { latLng } from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { fireStore, geoPoint } from '@/firebase'
 
@@ -46,6 +48,7 @@ export default {
                 zoomSnap: 0.5
             },
 
+            userPosition: null,
             markers: [],
             myMarkerIcon: L.icon({
                 popupAnchor: [0, -40],
@@ -54,6 +57,7 @@ export default {
                 shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
                 iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png')
             }),
+            waypoints: [],
 
             searchOptions: {
                 provider: new OpenStreetMapProvider(),
@@ -68,7 +72,8 @@ export default {
         'l-marker': LMarker,
         'l-popup': LPopup,
         'l-locate-control': Vue2LeafletLocatecontrol,
-        'l-search': Geosearch
+        'l-search': Geosearch,
+        'l-routing': Routing
     },
     methods: {
         handleEvents(map) {
@@ -87,9 +92,20 @@ export default {
                         console.log("Error getting documents: ", error);
                     })
             })
-            map.on('moveend', (ev) => {
+            map.on('moveend', () => {
                 if (this.autoSearch) console.log(map.getBounds()); 
             })
+            map.on('locationfound', (ev) => {
+                this.userPosition = ev.latlng
+            })
+            map.on('locationerror', (ev) => {
+                this.userPosition = null
+            })
+        },
+
+        findRoute(lat, lng) {
+            if (this.userPosition) this.waypoints = [this.userPosition, latLng(lat, lng)]
+            else alert("Partenza non inserita! Inserisci la posizione di partenza oppure premi il pulsante di geolocalizzazione")
         }
     }
 }

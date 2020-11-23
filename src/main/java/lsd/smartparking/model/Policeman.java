@@ -1,54 +1,15 @@
 package lsd.smartparking.model;
 
-public class Policeman {
+public class Policeman extends User {
 
-	private String id;
-	private String name;
-	private String surname;
-	private String email;
 	private String municipalityId;
 
 	
     public Policeman() { }
 
 	public Policeman(String name, String surname, String email, String id, String municipalityId) {
-		this.id = id;
-		this.name = name;
-		this.surname = surname;
-		this.email = email;
-		this.municipalityId = municipalityId;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}	
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getSurname() {
-		return surname;
-	}
-
-	public void setSurname(String surname) {
-		this.surname = surname;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
+		super(name, surname, email, id);
+		this.setMunicipalityId(municipalityId);
 	}
 
 	public String getMunicipalityId() {
@@ -56,7 +17,14 @@ public class Policeman {
 	}
 
 	public void setMunicipalityId(String municipalityId) {
+		checkFields(municipalityId);
 		this.municipalityId = municipalityId;
+	}
+	
+	private void checkFields(String field) {
+		if (field == null || field == "") {
+			throw new IllegalArgumentException("The field cannot be null or empty");
+		}
 	}
 	
 }

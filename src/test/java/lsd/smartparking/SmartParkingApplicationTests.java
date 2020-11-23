@@ -3,7 +3,13 @@ package lsd.smartparking;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-class SmartParkingApplicationTests {
+import lsd.smartparking.model.User;
 
+@SpringBootTest(classes = {User.class})
+class SmartParkingApplicationTests {
+	
+	@Test
+	void contextLoads() {
+	}
+	
 }

@@ -2,7 +2,7 @@ package lsd.smartparking.model;
 
 import java.util.HashMap;
 
-public class Municipality {
+public class Municipality extends Utils {
 
 	private String id;
 	private String city;
@@ -15,13 +15,13 @@ public class Municipality {
 	
     public Municipality() { }
 
-	public Municipality(String city, String province, String region, String id, String email) {
-		this.id = id;
-		this.email = email;
-		this.city = city;
-		this.province = province;
-		this.region = region;
-		this.approved = false;
+	public Municipality(String city, String province, String region, String email, String id) {
+		this.setId(id);
+		this.setEmail(email);
+		this.setCity(city);
+		this.setProvince(province);
+		this.setRegion(region);
+		this.setApproved(false);
 	}
 
 	public String getId() {
@@ -29,7 +29,8 @@ public class Municipality {
 	}
 
 	public void setId(String id) {
-		this.id = id;
+		checkFields(id);
+		this.id = id.trim();
 	}
 
 	public String getEmail() {
@@ -37,7 +38,9 @@ public class Municipality {
 	}
 
 	public void setEmail(String email) {
-		this.email = email;
+		checkFields(email);
+		checkFieldsLength(email);
+		this.email = email.trim();
 	}
 
 	public String getCity() {
@@ -45,7 +48,9 @@ public class Municipality {
 	}
 
 	public void setCity(String city) {
-		this.city = city;
+		checkFields(city);
+		checkFieldsLength(city);
+		this.city = city.trim();
 	}
 
 	public String getProvince() {
@@ -53,7 +58,9 @@ public class Municipality {
 	}
 
 	public void setProvince(String province) {
-		this.province = province;
+		checkFields(province);
+		checkFieldsLength(province);
+		this.province = province.trim();
 	}
 
 	public String getRegion() {
@@ -61,7 +68,9 @@ public class Municipality {
 	}
 
 	public void setRegion(String region) {
-		this.region = region;
+		checkFields(region);
+		checkFieldsLength(region);
+		this.region = region.trim();
 	}
 
 	public HashMap<String, Policeman> getPolicemen() {

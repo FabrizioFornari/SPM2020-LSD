@@ -130,7 +130,7 @@ a:hover {
     height: 60px;
     bottom: 0;
     background-color: #fff;
-    box-shadow: 0 0 20px #00000019;
+    box-shadow: 0 10 20px #00000019;
     display: flex;
     flex-flow: row;
     align-items: center;

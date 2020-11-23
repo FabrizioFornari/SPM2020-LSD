@@ -42,10 +42,13 @@ export default {
 
   .leaflet-geosearch-bar {
     width: 400px;
-    max-width: calc(100% - 120px);
+    max-width: calc(100% - 100px);
     left: 50%;
     bottom: 20px;
+    border-radius: 5px;
+    background-color: #fff;
     transform: translateX(-50%);
+    overflow: hidden;
     position: fixed;
     cursor: auto;
 
@@ -72,6 +75,15 @@ export default {
         border-top: 0 !important;
         border-bottom: 1px solid #ddd;
       }
+    }
+  }
+
+  @media (max-width: 400px) {
+    .leaflet-geosearch-bar {
+      width: 100%;
+      max-width: 100%;
+      bottom: 60px;
+      border-radius: 15px 15px 0 0;
     }
   }
 </style>

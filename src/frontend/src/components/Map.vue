@@ -54,8 +54,7 @@ export default {
                 popupAnchor: [0, -40],
                 iconAnchor: [12, 40],
                 iconUrl: require('leaflet/dist/images/marker-icon.png'),
-                shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
-                iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png')
+                shadowUrl: require('leaflet/dist/images/marker-shadow.png')
             }),
             waypoints: [],
 

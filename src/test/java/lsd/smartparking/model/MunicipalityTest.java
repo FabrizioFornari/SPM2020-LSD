@@ -3,6 +3,7 @@ package lsd.smartparking.model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.HashMap;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -76,6 +77,22 @@ public class MunicipalityTest {
 	public void createMunicipalityInvalidId() {
 		assertThrows(IllegalArgumentException.class, () -> municipality.setId(null));
 		assertThrows(IllegalArgumentException.class, () -> municipality.setId(""));
+	}
+	
+	@Test
+	public void addValidPolicemenToMunicipality() {
+		Policeman policeman = new Policeman("Tizio", "Verdi", "tizio@verdi.it", UUID.randomUUID().toString(), municipality.getId());
+		HashMap<String, Policeman> newPolicemen = municipality.getPolicemen();
+		newPolicemen.put(policeman.getId(), policeman);
+		assertEquals(newPolicemen, municipality.getPolicemen());
+	}
+	
+	@Test
+	public void addInvalidPolicemenToMunicipality() {
+		HashMap<String, Policeman> newPolicemen = municipality.getPolicemen();
+		Policeman policeman = new Policeman("Caio", "Lori", "caio@lori.it", UUID.randomUUID().toString(), "fasfafa");
+		newPolicemen.put(policeman.getId(), policeman);
+		assertThrows(IllegalArgumentException.class, () -> municipality.setPolicemen(newPolicemen));
 	}
 	
 }

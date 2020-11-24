@@ -22,6 +22,7 @@ public class Municipality extends Utils {
 		this.setProvince(province);
 		this.setRegion(region);
 		this.setApproved(false);
+		this.policemen = new HashMap<String, Policeman>();
 	}
 
 	public String getId() {
@@ -78,6 +79,11 @@ public class Municipality extends Utils {
 	}
 
 	public void setPolicemen(HashMap<String, Policeman> policemen) {
+		for (Policeman p : policemen.values()) {
+			if (!p.getMunicipalityId().equals(this.getId())) {
+				throw new IllegalArgumentException("Invalid policeman");
+			}
+		}
 		this.policemen = policemen;
 	}
 

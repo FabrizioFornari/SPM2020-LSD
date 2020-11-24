@@ -14,11 +14,12 @@ public class PolicemanTests {
 
     private Policeman policeman;
 	private User user;
+	private Municipality municipality;
+	private String testMunicipalityId;
 	private String testName;
 	private String testSurname;
 	private String testEmail;
 	private String testId;
-	private String testMunicipalityId;
 	
 	@BeforeEach
 	public void createPoliceman() {
@@ -27,6 +28,7 @@ public class PolicemanTests {
 		testEmail = "a@a.it";
 		testId = UUID.randomUUID().toString();
 		testMunicipalityId = UUID.randomUUID().toString();
+		municipality = new Municipality("Roma", "Roma", "Lazio", "b@b.it", testMunicipalityId);
 		user = new User(testName, testSurname, testEmail, testId);
 		policeman = new Policeman(user.getName(), user.getSurname(), user.getEmail(), user.getId(), testMunicipalityId);
 	}
@@ -45,6 +47,11 @@ public class PolicemanTests {
 	public void createPolicemanInvalidMunicipalityId() {
 		assertThrows(IllegalArgumentException.class, () -> policeman.setMunicipalityId(null));
 		assertThrows(IllegalArgumentException.class, () -> policeman.setMunicipalityId(""));
+	}
+	
+	@Test
+	public void checkPolicemanValidMunicipality() {
+		assertEquals(testMunicipalityId, municipality.getId());
 	}
 	
 }

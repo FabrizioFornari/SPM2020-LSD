@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest(classes = {Municipality.class})
-public class MunicipalityTest {
+public class MunicipalityTests {
 
     private Municipality municipality;
 	private String testCity;

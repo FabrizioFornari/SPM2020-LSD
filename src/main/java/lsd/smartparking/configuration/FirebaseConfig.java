@@ -26,7 +26,7 @@ public class FirebaseConfig {
             .setDatabaseAuthVariableOverride(admin)
             .build();
             
-        FirebaseApp.initializeApp(options);
+        if (FirebaseApp.getApps().isEmpty()) FirebaseApp.initializeApp(options);
     }
 
 }

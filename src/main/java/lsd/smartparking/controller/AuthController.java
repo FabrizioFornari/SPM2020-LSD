@@ -31,16 +31,16 @@ public class AuthController {
 						   @PathVariable("municipalityId") String municipalityId) throws IOException, FirebaseAuthException {
 		Policeman p = new Policeman(name, surname, email, uid, municipalityId);
 		policemanRef.document(uid).set(p);
-		return "";
+		return "Successfully registered";
 	}
 	
 	@PostMapping("register/municipality/{uid}/{city}/{province}/{region}/{email}")
 	public String newMunicipality(@PathVariable("uid") String uid, @PathVariable("city") String city, 
 						   @PathVariable("province") String province, @PathVariable("region") String region,
 						   @PathVariable("email") String email) throws IOException, FirebaseAuthException {
-		Municipality m = new Municipality(city, province, region, uid, email);
+		Municipality m = new Municipality(city, province, region, email, uid);
 		municipalityRef.document(uid).set(m);
-        return "";
+        return "Successfully registered";
 	}
 
 }

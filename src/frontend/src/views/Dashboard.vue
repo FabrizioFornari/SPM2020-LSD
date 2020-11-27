@@ -1,5 +1,5 @@
 <template>
-  <div class="dashboard">
+  <div class="container width-70">
     <h1><b-badge variant="success">Hi {{ name }}!</b-badge></h1>
     <h5>This is your dashboard</h5>
     <button @click="signOut()">Logout</button>

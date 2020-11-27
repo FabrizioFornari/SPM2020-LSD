@@ -47,6 +47,7 @@ export default {
     bottom: 20px;
     border-radius: 5px;
     background-color: #fff;
+    box-shadow: 0 10px 20px rgba(0,0,0,.09803921568627451);
     transform: translateX(-50%);
     overflow: hidden;
     position: fixed;
@@ -54,7 +55,6 @@ export default {
 
     form {
       border: none !important;
-      box-shadow: 0 10px 20px #00000019 !important;
       flex-flow: column-reverse;
       display: flex;
 

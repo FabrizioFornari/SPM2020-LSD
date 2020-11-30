@@ -76,7 +76,7 @@ a:hover {
 }
 
 #main {
-  width: 40%;
+  width: max-content;
   min-width: 400px;
   height: 100vh;
   right: 0;
@@ -117,6 +117,13 @@ a:hover {
 
 .container {
   height: 100%;
+
+  &.width-40 {
+    width: 40vw;
+  }
+  &.width-70 {
+    width: 70vw;
+  }
 }
 
 
@@ -162,6 +169,10 @@ a:hover {
 
     #backhome {
       display: none;
+    }
+
+    .container {
+      width: 100% !important;
     }
   }
 }

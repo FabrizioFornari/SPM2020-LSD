@@ -23,8 +23,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
                 .antMatchers("/api/hello").permitAll()
                 .antMatchers("/api/user/**").permitAll() // allow every URI, that begins with '/api/user/'
-                .antMatchers("/api/secured").hasRole("ADMIN")
-                .antMatchers("/api/admin/login").hasRole("ADMIN")
+                .antMatchers("/api/admin/**").hasRole("ADMIN")
                 //.anyRequest().authenticated() // protect all other requests
             .and()
                 .formLogin()

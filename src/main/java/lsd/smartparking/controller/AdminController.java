@@ -1,5 +1,6 @@
 package lsd.smartparking.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -19,6 +20,7 @@ import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.WriteResult;
 import com.google.firebase.cloud.FirestoreClient;
+import com.google.gson.Gson;
 
 import lsd.smartparking.model.Municipality;
 
@@ -41,11 +43,12 @@ public class AdminController {
     @GetMapping("/admin/view/municipalities")
     public @ResponseBody String viewMunicipalities() throws InterruptedException, ExecutionException {
     	ApiFuture<QuerySnapshot> future = municipalityRef.get();
-    	List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+        List<Municipality> allMunicipalities = new ArrayList<Municipality>();
     	for (QueryDocumentSnapshot document : documents) {
-    	    System.out.println(document.getId()+" "+document.toObject(Municipality.class));
+    	    allMunicipalities.add(document.toObject(Municipality.class));
     	}
-        return "Municipalities downloaded";
+        return (new Gson().toJson(allMunicipalities));
     }
     
     @PostMapping("/admin/approve/municipality/{uid}")

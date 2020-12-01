@@ -11,7 +11,7 @@ public class Parking {
 	
 	public Parking() { }
 
-	public Parking(String id, String name, double lat, double lon, long life, String municipalityId) {
+	public Parking(String id, String name, double lat, double lon, String municipalityId) {
 		this.setId(id);
 		this.setName(name);
 		this.setLat(lat);

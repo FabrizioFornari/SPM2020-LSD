@@ -1,7 +1,10 @@
 package lsd.smartparking.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 import org.slf4j.Logger;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.CollectionReference;
+import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
@@ -58,10 +62,16 @@ public class MunicipalityController {
     	return "Errore";
     }
     
-    @PostMapping("/municipality/{uid}/{token}/insert/parking")
-    public @ResponseBody String insertParking() throws InterruptedException, ExecutionException {
-    	// TODO
-		return "";
+    @PostMapping("/municipality/{uid}/{token}/insert/parking/{name}/{lat}/{lon}")
+    public @ResponseBody String insertParking(@PathVariable("uid") String uid, @PathVariable("token") String token,
+    		@PathVariable("name") String name, @PathVariable("lat") double lat,
+    		@PathVariable("lon") double lon) throws InterruptedException, ExecutionException, FirebaseAuthException {
+    	if (verifyMunicipality(uid, token)) {
+    		Parking p = new Parking(UUID.randomUUID().toString(), name, lat, lon, uid);
+    		ApiFuture<DocumentReference> addedDocRef = parkingRef.add(p);
+	        return (new Gson().toJson(addedDocRef));
+    	}
+    	return "Errore";
     }
     
     @PostMapping("/municipality/{uid}/{token}/edit/parking")

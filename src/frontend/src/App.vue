@@ -145,6 +145,15 @@ a:hover {
     position: fixed;
     z-index: 100;
 
+    &::before {
+      content: "";
+      width: 80%;
+      height: 1px;
+      top: 0;
+      background-color: #ddd;
+      position: absolute;
+    }
+
     a {
       width: 60px;
       height: 100%;

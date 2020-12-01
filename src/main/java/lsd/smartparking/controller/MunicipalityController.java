@@ -74,14 +74,17 @@ public class MunicipalityController {
     	return "Error";
     }
     
-    @PostMapping("/municipality/{uid}/{token}/edit/parking/{name}/{lat}/{lon}")
-    public @ResponseBody String editParking(@PathVariable("uid") String uid, @PathVariable("token") String token,
-    		@PathVariable("name") String name, @PathVariable("lat") double lat,
-    		@PathVariable("lon") double lon) throws InterruptedException, ExecutionException {
-    	if (verifyMunicipality(uid, token)) {
-    		Parking p = new Parking(UUID.randomUUID().toString(), name, lat, lon, uid);
-    		ApiFuture<DocumentReference> addedDocRef = parkingRef.add(p);
-	        return (new Gson().toJson(addedDocRef));
+    @PostMapping("/municipality/{municipalityId}/{token}/edit/parking/{uid}/{name}/{lat}/{lon}")
+    public @ResponseBody String editParking(@PathVariable("municipalityId") String municipalityId, @PathVariable("token") String token,
+    		@PathVariable("uid") String uid, @PathVariable("name") String name, @PathVariable("lat") double lat,
+    		@PathVariable("lon") double lon) throws InterruptedException, ExecutionException, FirebaseAuthException {
+    	if (verifyMunicipality(municipalityId, token)) {
+    		Map<String, Object> parkingFields = new HashMap<>();
+    		parkingFields.put("name", name);
+    		parkingFields.put("lat", lat);
+    		parkingFields.put("lon", lon);
+    		ApiFuture<WriteResult> editedParking = parkingRef.document(uid).update(parkingFields);
+	        return (new Gson().toJson(editedParking));
     	}
     	return "Error";
     }
@@ -89,7 +92,7 @@ public class MunicipalityController {
     @PostMapping("/municipality/{municipalityId}/{token}/delete/parking/{uid}/")
     public @ResponseBody String deleteParking(@PathVariable("municipalityId") String municipalityId, @PathVariable("token") String token,
     		@PathVariable("uid") String uid) throws InterruptedException, ExecutionException, FirebaseAuthException {
-    	if (verifyMunicipality(uid, token)) {
+    	if (verifyMunicipality(municipalityId, token)) {
     		ApiFuture<WriteResult> writeResult = parkingRef.document(uid).delete();
 	        return (new Gson().toJson(writeResult));
     	}

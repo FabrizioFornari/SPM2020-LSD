@@ -10,6 +10,7 @@ public class Municipality extends Utils {
 	private String region;
 	private String email;
 	private HashMap<String, Policeman> policemen;
+	private HashMap<String, Parking> parking;
 	private boolean approved;
 
 	
@@ -23,6 +24,7 @@ public class Municipality extends Utils {
 		this.setRegion(region);
 		this.setApproved(false);
 		this.policemen = new HashMap<String, Policeman>();
+		this.setParking(new HashMap<String, Parking>());
 	}
 
 	public String getId() {
@@ -93,6 +95,19 @@ public class Municipality extends Utils {
 
 	public void setApproved(boolean approved) {
 		this.approved = approved;
+	}
+
+	public HashMap<String, Parking> getParking() {
+		return parking;
+	}
+
+	public void setParking(HashMap<String, Parking> parking) {
+		for (Parking p : parking.values()) {
+			if (!p.getMunicipalityId().equals(this.getId())) {
+				throw new IllegalArgumentException("Invalid parking");
+			}
+		}
+		this.parking = parking;
 	}
 	
 }

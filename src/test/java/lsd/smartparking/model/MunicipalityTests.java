@@ -90,9 +90,25 @@ public class MunicipalityTests {
 	@Test
 	public void addInvalidPolicemenToMunicipality() {
 		HashMap<String, Policeman> newPolicemen = municipality.getPolicemen();
-		Policeman policeman = new Policeman("Caio", "Lori", "caio@lori.it", UUID.randomUUID().toString(), "fasfafa");
+		Policeman policeman = new Policeman("Caio", "Lori", "caio@lori.it", UUID.randomUUID().toString(), "InvalidID");
 		newPolicemen.put(policeman.getId(), policeman);
 		assertThrows(IllegalArgumentException.class, () -> municipality.setPolicemen(newPolicemen));
+	}
+	
+	@Test
+	public void addValidParkingToMunicipality() {
+		Parking parking = new Parking("Parcheggio Comunale", UUID.randomUUID().toString(), 0.0, 0.0, municipality.getId());
+		HashMap<String, Parking> newParking = municipality.getParking();
+		newParking.put(parking.getId(), parking);
+		assertEquals(newParking, municipality.getParking());
+	}
+	
+	@Test
+	public void addInvalidParkingToMunicipality() {
+		HashMap<String, Parking> newParking = municipality.getParking();
+		Parking parking = new Parking("Parcheggio Comunale", UUID.randomUUID().toString(), 0.0, 0.0, "InvalidID");
+		newParking.put(parking.getId(), parking);
+		assertThrows(IllegalArgumentException.class, () -> municipality.setParking(newParking));
 	}
 	
 }

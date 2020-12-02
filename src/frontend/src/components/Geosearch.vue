@@ -41,8 +41,9 @@ export default {
   @import url("https://unpkg.com/leaflet-geosearch/dist/geosearch.css");
 
   .leaflet-geosearch-bar {
-    width: 400px;
+    width: 500px;
     max-width: calc(100% - 100px);
+    min-width: 400px;
     left: 50%;
     bottom: 20px;
     border-radius: 5px;
@@ -82,6 +83,7 @@ export default {
     .leaflet-geosearch-bar {
       width: 100%;
       max-width: 100%;
+      min-width: 100%;
       bottom: 60px;
       border-radius: 15px 15px 0 0;
     }

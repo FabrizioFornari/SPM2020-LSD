@@ -1,5 +1,7 @@
 package lsd.smartparking.model;
 
+import java.util.HashMap;
+
 public class Parking {
 
 	private String name;
@@ -7,6 +9,7 @@ public class Parking {
 	private double lat;
 	private double lon;
 	private String municipalityId;
+	private HashMap<Integer, Hour> hours;
 	
 	
 	public Parking() { }
@@ -17,6 +20,7 @@ public class Parking {
 		this.setLat(lat);
 		this.setLon(lon);
 		this.setMunicipalityId(municipalityId);
+		this.setHours(new HashMap<Integer, Hour>());
 	}
 
 	public String getMunicipalityId() {
@@ -57,6 +61,14 @@ public class Parking {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public HashMap<Integer, Hour> getHours() {
+		return hours;
+	}
+
+	public void setHours(HashMap<Integer, Hour> hours) {
+		this.hours = hours;
 	}
 
 }

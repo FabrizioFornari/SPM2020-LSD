@@ -23,7 +23,7 @@ public class Municipality extends Utils {
 		this.setProvince(province);
 		this.setRegion(region);
 		this.setApproved(false);
-		this.policemen = new HashMap<String, Policeman>();
+		this.setPolicemen(new HashMap<String, Policeman>());
 		this.setParking(new HashMap<String, Parking>());
 	}
 

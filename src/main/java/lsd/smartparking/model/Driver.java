@@ -13,7 +13,7 @@ public class Driver extends User {
 	
 	public Driver(String name, String surname, String email, String id, HashMap<String, Car> cars) {
 		super(name, surname, email, id);
-		this.setCars(cars);
+		if (cars != null) this.setCars(cars);
 	}
 	
 	public HashMap<String, Car> getCars() {

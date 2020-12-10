@@ -40,7 +40,17 @@ const router: VueRouter = new VueRouter({
       meta: { 
           title: 'Dashboard - Sparking',
           requiresAuth: true 
-      }
+      },
+      children: [
+        {
+          path: 'garage',
+          name: 'Garage',
+          component: () => import('../views/driver/Garage.vue'),
+          meta: { 
+              title: 'My Garage - Sparking'
+          }
+        }
+      ]
     },
     { 
       path: '/admin/login',

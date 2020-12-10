@@ -95,6 +95,7 @@ a:hover {
 
   .page {
     height: 100%;
+    padding-top: 30px;
     overflow-y: auto;
     position: relative;
     z-index: 1;
@@ -117,6 +118,9 @@ a:hover {
 
 .container {
   height: 100%;
+  max-width: 100%;
+  min-width: 380px;
+  padding: 0 40px !important;
 
   &.width-40 {
     width: 40vw;
@@ -147,7 +151,7 @@ a:hover {
 
     &::before {
       content: "";
-      width: 80%;
+      width: 85%;
       height: 1px;
       top: 0;
       background-color: #ddd;
@@ -182,6 +186,10 @@ a:hover {
 
     .container {
       width: 100% !important;
+      min-width: 100%;
+      padding: 0 6% !important;
+      flex-flow: column;
+      display: flex;
     }
   }
 }

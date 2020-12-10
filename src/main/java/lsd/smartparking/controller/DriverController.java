@@ -22,13 +22,15 @@ import lsd.smartparking.model.Car;
 @RequestMapping("/api")
 public class DriverController extends TokenChecker {
 
+    private final String role = "driver";
 	Firestore db = FirestoreClient.getFirestore();
     CollectionReference carRef = db.collection("Cars");
+
     
     @PostMapping("car/{uid}/{token}/{cod}/{plate}/{name}")
     public @ResponseBody String addCar(@PathVariable("uid") String uid, @PathVariable("token") String token,
             @PathVariable("cod") String cod, @PathVariable("plate") String plate, @PathVariable("name") String name) throws FirebaseAuthException {
-        if (checkToken(uid, token)) {
+        if (checkToken(uid, token, role)) {
             Car c = new Car(UUID.randomUUID().toString(), cod, plate, name, uid);
     		ApiFuture<DocumentReference> addedDocRef = carRef.add(c);
 	        return (new Gson().toJson(addedDocRef));

@@ -28,14 +28,15 @@ import lsd.smartparking.model.Parking;
 
 
 @RestController()
-@RequestMapping("/api")
+@RequestMapping("/api/municipality")
 public class MunicipalityController extends TokenChecker {
 	
     private final String role = "municipality";
 	Firestore db = FirestoreClient.getFirestore();
 	CollectionReference parkingRef = db.collection("Parking");
+
     
-    @PostMapping("/municipality/{uid}/{token}/view/parking")
+    @PostMapping("/{uid}/{token}/view/parking")
     public @ResponseBody String viewParking(@PathVariable("uid") String uid, @PathVariable("token") String token) throws InterruptedException, ExecutionException, FirebaseAuthException {
     	if (checkToken(uid, token, role)) {
 	    	ApiFuture<QuerySnapshot> future = parkingRef.get();
@@ -50,7 +51,7 @@ public class MunicipalityController extends TokenChecker {
     	return "Error";
     }
     
-    @PostMapping("/municipality/{municipalityId}/{token}/insert/parking/{name}/{lat}/{lon}")
+    @PostMapping("/{municipalityId}/{token}/insert/parking/{name}/{lat}/{lon}")
     public @ResponseBody String addParking(@PathVariable("municipalityId") String municipalityId, @PathVariable("token") String token,
     		@PathVariable("name") String name, @PathVariable("lat") double lat,
     		@PathVariable("lon") double lon) throws InterruptedException, ExecutionException, FirebaseAuthException {
@@ -62,7 +63,7 @@ public class MunicipalityController extends TokenChecker {
     	return "Error";
     }
     
-    @PostMapping("/municipality/{municipalityId}/{token}/edit/parking/{uid}/{name}/{lat}/{lon}")
+    @PostMapping("/{municipalityId}/{token}/edit/parking/{uid}/{name}/{lat}/{lon}")
     public @ResponseBody String editParking(@PathVariable("municipalityId") String municipalityId, @PathVariable("token") String token,
     		@PathVariable("uid") String uid, @PathVariable("name") String name, @PathVariable("lat") double lat,
     		@PathVariable("lon") double lon) throws InterruptedException, ExecutionException, FirebaseAuthException {
@@ -77,7 +78,7 @@ public class MunicipalityController extends TokenChecker {
     	return "Error";
     }
     
-    @PostMapping("/municipality/{municipalityId}/{token}/delete/parking/{id}/")
+    @PostMapping("/{municipalityId}/{token}/delete/parking/{id}/")
     public @ResponseBody String deleteParking(@PathVariable("municipalityId") String municipalityId, @PathVariable("token") String token,
     		@PathVariable("id") String id) throws InterruptedException, ExecutionException, FirebaseAuthException {
     	if (checkToken(municipalityId, token, role)) {

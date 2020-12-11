@@ -7,7 +7,8 @@
             :center="center"
             :options="mapOptions"
             @ready="handleEvents"
-            @update:zoom="hideMarkers">
+            @update:zoom="hideMarkers"
+            @click="addParking">
             <l-tile-layer :url="url" :attribution="attribution"/>
             <l-search :options="searchOptions" />
             <l-routing :waypoints="waypoints" :icon="myMarkerIcon" :key="waypoints" />
@@ -17,12 +18,12 @@
             </l-control>
             <l-group v-if="markerVisible">
                 <l-marker v-for="(marker, index) in markers"  
-                    :lat-lng="[marker.coords.latitude, marker.coords.longitude]" 
+                    :lat-lng="[marker.lat, marker.lon]" 
                     :icon="myMarkerIcon"
                     :key="index">
                     <l-popup>
                         <b>{{ marker.name }}</b> <br>
-                        <button @click="findRoute(marker.coords.latitude, marker.coords.longitude)">Indicazioni</button>
+                        <button @click="findRoute(marker.lat, marker.lon)">Indicazioni</button>
                     </l-popup>
                 </l-marker>
             </l-group>
@@ -40,12 +41,15 @@ import L, { latLng } from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { fireStore, geoPoint } from '@/firebase'
 import * as turf from '@turf/turf'
+import municipalityApi from './../api/municipality'
+import { fireAuth } from './../firebase'
+import store from '@/store/auth'
 
 export default {
     name: 'spark-map',  
     data() {
         return {
-            autoSearch: true,
+            autoSearch: false,
             locSearch: false,
             searchBounds: null,
             searchSpots: [],
@@ -109,10 +113,21 @@ export default {
             })
         },
 
+        async addParking(ev) {
+            const newParking = {
+                name: "prova",
+                lat: ev.latlng.lat,
+                lon: ev.latlng.lng
+            }
+            this.markers.push(newParking)
+            const token = await fireAuth.currentUser.getIdToken()
+            municipalityApi.addParking(store.getters.user.uid, token, newParking)
+        },
+
         findParkings(bounds) {
             fireStore.collection('Parkings')
-                .where('coords', '<=', new geoPoint(bounds.getNorthEast().lat, bounds.getNorthEast().lng))
-                .where('coords', '>=', new geoPoint(bounds.getSouthWest().lat, bounds.getSouthWest().lng))
+                .where('lat', '<=', bounds.getNorthEast().lat)
+                .where('lat', '>=', bounds.getSouthWest().lat)
                 .get()
                 .then((querySnapshot) => {
                     console.log(querySnapshot.size, "new parkings were found")

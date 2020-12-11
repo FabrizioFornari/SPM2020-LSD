@@ -56,6 +56,11 @@ export default {
           border: 1px solid #0010ec41;
           background-color: rgba(0, 63, 236, 0.255);
         }
+
+        p {
+            margin: 0;
+            font-size: 0.9em;
+        }
     }
 }
 </style>

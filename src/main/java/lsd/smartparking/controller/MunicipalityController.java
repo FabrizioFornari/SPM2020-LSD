@@ -33,7 +33,7 @@ public class MunicipalityController extends TokenChecker {
 	
     private final String role = "municipality";
 	Firestore db = FirestoreClient.getFirestore();
-	CollectionReference parkingRef = db.collection("Parking");
+	CollectionReference parkingRef = db.collection("Parkings");
 
     
     @PostMapping("/{uid}/{token}/view/parking")

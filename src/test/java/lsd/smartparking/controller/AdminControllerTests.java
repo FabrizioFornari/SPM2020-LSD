@@ -2,6 +2,7 @@ package lsd.smartparking.controller;
 
 import java.lang.reflect.Type;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -31,12 +32,6 @@ public class AdminControllerTests {
  
     @Autowired
 	private MockMvc mockMvc;
-
-	@BeforeEach
-	void addTestMunicipality() throws Exception {
-		mockMvc.perform( post("/api/register/municipality/aaaaa/ProvaCity/ProvaProvince/ProvaRegion/emaill") )
-			.andExpect(status().isOk());
-	}
  
     @Test
 	void shouldLogin() throws Exception {

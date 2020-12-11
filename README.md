@@ -22,10 +22,21 @@ The main purpose of this project is to provide municipalities that subscribe to 
 
 ### Built With
 
-* [Spring Boot](https://spring.io/projects/spring-boot)
-* [Vue.js](https://vuejs.org/)
-* [Firebase](https://firebase.google.com/)
-* [Leaflet](https://leafletjs.com/)
+<img src="https://i0.wp.com/thecuriousdev.org/wp-content/uploads/2017/12/spring-boot-logo.png?resize=600%2C315&ssl=1" alt="Screen 1" width="120" height="62">
+
+[Spring Boot](https://spring.io/projects/spring-boot)
+
+<img src="https://3lhowb48prep40031529g5yj-wpengine.netdna-ssl.com/wp-content/uploads/2019/10/logo-vuejs-min.png" alt="Screen 2" width="100" height="60">
+
+[Vue.js](https://vuejs.org/)
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/b/bd/Firebase_Logo.png" alt="Screen 3" width="128" height="44">
+
+[Firebase](https://firebase.google.com/)
+
+<img src="https://leafletjs.com/docs/images/logo.png" alt="Screen 4" width="120" height="30">
+
+[Leaflet](https://leafletjs.com/)
 
 
 ## Getting Started

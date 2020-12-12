@@ -51,12 +51,12 @@ public class MunicipalityController extends TokenChecker {
     	return "Error";
     }
     
-    @PostMapping("/{municipalityId}/{token}/insert/parking/{name}/{lat}/{lon}")
+    @PostMapping("/{municipalityId}/{token}/insert/parking/{name}/{lat}/{lon}/{guarded}")
     public @ResponseBody String addParking(@PathVariable("municipalityId") String municipalityId, @PathVariable("token") String token,
     		@PathVariable("name") String name, @PathVariable("lat") double lat,
-    		@PathVariable("lon") double lon) throws InterruptedException, ExecutionException, FirebaseAuthException {
+    		@PathVariable("lon") double lon, @PathVariable("guarded") boolean guarded) throws InterruptedException, ExecutionException, FirebaseAuthException {
     	if (checkToken(municipalityId, token, role)) {
-    		Parking p = new Parking(UUID.randomUUID().toString(), name, lat, lon, municipalityId);
+    		Parking p = new Parking(UUID.randomUUID().toString(), name, lat, lon, guarded, municipalityId);
     		ApiFuture<DocumentReference> addedDocRef = parkingRef.add(p);
 	        return (new Gson().toJson(addedDocRef));
     	}

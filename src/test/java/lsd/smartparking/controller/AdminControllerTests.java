@@ -36,7 +36,7 @@ public class AdminControllerTests {
     @Test
 	void shouldLogin() throws Exception {
     	this.mockMvc.perform( get("/api/admin/login")
-			.with(SecurityMockMvcRequestPostProcessors.httpBasic("admin", "sparking-admin"))
+			.with(SecurityMockMvcRequestPostProcessors.httpBasic("admin", "admin"))
 			.contentType(MediaType.APPLICATION_JSON)
 			.accept(MediaType.APPLICATION_JSON))
 			//.andDo(print())

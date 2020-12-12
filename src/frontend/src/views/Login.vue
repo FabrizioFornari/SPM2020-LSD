@@ -8,20 +8,20 @@
             <div class="form-group row">
               <label for="email" class="col-md-4 col-form-label text-md-right">Email</label>
               <div class="col-md-6">
-                <input type="email" class="form-control" value required autofocus v-model="form.email"/>
+                <input type="email" id="emailLogin" class="form-control" value required autofocus v-model="form.email"/>
               </div>
             </div>
 
             <div class="form-group row">
               <label for="password" class="col-md-4 col-form-label text-md-right">Password</label>
               <div class="col-md-6">
-                <input type="password" class="form-control" required v-model="form.password"/>
+                <input type="password" id="passwordLogin" class="form-control" required v-model="form.password"/>
               </div>
             </div>
 
             <div class="form-group row mb-0">
               <div class="col-md-12">
-                <button type="submit" class="btn btn-primary">Login</button>
+                <button type="submit" id="buttonLogin" class="btn btn-primary">Login</button>
                 <br><br>
                 <p><router-link to="/register">Aren't you registered?</router-link></p>
               </div>

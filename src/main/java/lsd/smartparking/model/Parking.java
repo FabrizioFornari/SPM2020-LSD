@@ -9,18 +9,20 @@ public class Parking {
 	private double lat;
 	private double lon;
 	private String municipalityId;
+	private boolean guarded;
 	private HashMap<Integer, Hour> hours;
 	
 	
 	public Parking() { }
 
-	public Parking(String id, String name, double lat, double lon, String municipalityId) {
+	public Parking(String id, String name, double lat, double lon, String municipalityId, boolean guarded) {
 		this.setId(id);
 		this.setName(name);
 		this.setLat(lat);
 		this.setLon(lon);
 		this.setMunicipalityId(municipalityId);
 		this.setHours(new HashMap<Integer, Hour>());
+		this.setGuarded(guarded);
 	}
 
 	public String getMunicipalityId() {
@@ -69,6 +71,14 @@ public class Parking {
 
 	public void setHours(HashMap<Integer, Hour> hours) {
 		this.hours = hours;
+	}
+
+	public boolean isGuarded() {
+		return guarded;
+	}
+
+	public void setGuarded(boolean guarded) {
+		this.guarded = guarded;
 	}
 
 }

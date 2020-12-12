@@ -66,7 +66,8 @@ See the [open issues](https://github.com/FabrizioFornari/SPM2020-LSD/issues) for
 It is possible to view the project status after each sprint, in the relative branches created:
 * [Sprint 1](https://github.com/FabrizioFornari/SPM2020-LSD/tree/sprint1/)
 * [Sprint 2](https://github.com/FabrizioFornari/SPM2020-LSD/tree/sprint2/)
-* Sprint 3 (in progress)
+* [Sprint 3](https://github.com/FabrizioFornari/SPM2020-LSD/tree/sprint3/)
+* Sprint 4 (in progress)
 
 
 ## Contact

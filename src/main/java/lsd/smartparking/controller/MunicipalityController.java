@@ -34,7 +34,19 @@ public class MunicipalityController extends TokenChecker {
     private final String role = "municipality";
 	Firestore db = FirestoreClient.getFirestore();
 	CollectionReference parkingRef = db.collection("Parkings");
-
+	CollectionReference municipalityRef = db.collection("Municipality");
+    
+	
+    @PostMapping("/edit/municipality/{municipalityId}/{email}")
+    public @ResponseBody String editEmail(@PathVariable("municipalityId") String municipalityId, @PathVariable("email") String email,
+    		@PathVariable("token") String token) throws InterruptedException, ExecutionException, FirebaseAuthException {
+    	if (checkToken(municipalityId, token, role)) {
+    		ApiFuture<WriteResult> future = municipalityRef.document(municipalityId).update("email", email);
+        	WriteResult result = future.get();
+        	System.out.println("Write result: " + result);
+    	}
+    	return "Error";
+    }
     
     @PostMapping("/{uid}/{token}/view/parking")
     public @ResponseBody String viewParking(@PathVariable("uid") String uid, @PathVariable("token") String token) throws InterruptedException, ExecutionException, FirebaseAuthException {

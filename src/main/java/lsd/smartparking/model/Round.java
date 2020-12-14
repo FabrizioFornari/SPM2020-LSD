@@ -1,5 +1,8 @@
 package lsd.smartparking.model;
 
+/* A day can have multiple rounds. For instance, if a park is opened from 4 PM to 6 PM it is okay.
+ * But if we want to customize hours, such as from 4 PM to 5 PM, then from 7 PM to 8 PM, we
+ * need to setup rounds. */
 public class Round {
 	
 	private int start;

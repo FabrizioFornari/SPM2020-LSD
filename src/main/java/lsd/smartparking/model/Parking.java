@@ -10,7 +10,7 @@ public class Parking {
 	private double lon;
 	private String municipalityId;
 	private boolean guarded;
-	private HashMap<Integer, Hour> hours;
+	private HashMap<Integer, Day> days;
 	
 	
 	public Parking() { }
@@ -21,7 +21,7 @@ public class Parking {
 		this.setLat(lat);
 		this.setLon(lon);
 		this.setMunicipalityId(municipalityId);
-		this.setHours(new HashMap<Integer, Hour>());
+		this.setDays(new HashMap<Integer, Day>());
 		this.setGuarded(guarded);
 	}
 
@@ -65,12 +65,12 @@ public class Parking {
 		this.id = id;
 	}
 
-	public HashMap<Integer, Hour> getHours() {
-		return hours;
+	public HashMap<Integer, Day> getDays() {
+		return days;
 	}
 
-	public void setHours(HashMap<Integer, Hour> hours) {
-		this.hours = hours;
+	public void setDays(HashMap<Integer, Day> days) {
+		this.days = days;
 	}
 
 	public boolean isGuarded() {

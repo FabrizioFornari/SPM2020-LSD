@@ -2,16 +2,19 @@ package lsd.smartparking.model;
 
 import java.util.HashMap;
 
-public class Hour {
+/* Day, from 0 to 7 in the database, can contain opening hour and closing hour.
+ * Plus, it can be customized with multiple rounds.
+ * However you can also set the entire day, for instance Tuesday (2), closed. */
+public class Day {
 	
 	private int start;
 	private int end;
 	private boolean closed;
 	private HashMap<Integer, Round> rounds;
 	
-	public Hour() { }
+	public Day() { }
 	
-	public Hour(int start, int end, boolean closed) {
+	public Day(int start, int end, boolean closed) {
 		this.setStart(start);
 		this.setEnd(end);
 		this.setClosed(closed);

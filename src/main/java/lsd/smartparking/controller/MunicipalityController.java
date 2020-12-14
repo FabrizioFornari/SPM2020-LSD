@@ -24,6 +24,7 @@ import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.cloud.FirestoreClient;
 import com.google.gson.Gson;
 
+import lsd.smartparking.model.Day;
 import lsd.smartparking.model.Parking;
 
 
@@ -86,6 +87,18 @@ public class MunicipalityController extends TokenChecker {
     		parkingFields.put("lon", lon);
     		ApiFuture<WriteResult> editedParking = parkingRef.document(uid).update(parkingFields);
 	        return (new Gson().toJson(editedParking));
+    	}
+    	return "Error";
+    }
+    
+    @PostMapping("/{municipalityId}/{token}/edit/parking/{uid}/{dayNumber}/{start}/{end}/{closed}")
+    public @ResponseBody String editParkingDays(@PathVariable("municipalityId") String municipalityId, @PathVariable("token") String token,
+    		@PathVariable("uid") String uid, @PathVariable("dayNumber") String dayNumber, @PathVariable("start") int start,
+    		@PathVariable("end") int end, @PathVariable("closed") boolean closed) throws InterruptedException, ExecutionException, FirebaseAuthException {
+    	if (checkToken(municipalityId, token, role)) {
+    		Day day = new Day(start, end, closed);
+    		ApiFuture<WriteResult> editedParkingDays = parkingRef.document(uid).collection("days").document(dayNumber).set(day);
+	        return (new Gson().toJson(editedParkingDays));
     	}
     	return "Error";
     }

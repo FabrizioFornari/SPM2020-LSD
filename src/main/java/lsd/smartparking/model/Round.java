@@ -10,7 +10,7 @@ public class Round {
 	
 	public Round() { }
 	
-	public Round(int start, int end, boolean closed) {
+	public Round(int start, int end) {
 		this.setStart(start);
 		this.setEnd(end);
 	}

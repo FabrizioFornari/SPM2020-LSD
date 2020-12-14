@@ -26,6 +26,7 @@ import com.google.gson.Gson;
 
 import lsd.smartparking.model.Day;
 import lsd.smartparking.model.Parking;
+import lsd.smartparking.model.Round;
 
 
 @RestController()
@@ -99,6 +100,18 @@ public class MunicipalityController extends TokenChecker {
     		Day day = new Day(start, end, closed);
     		ApiFuture<WriteResult> editedParkingDays = parkingRef.document(uid).collection("days").document(dayNumber).set(day);
 	        return (new Gson().toJson(editedParkingDays));
+    	}
+    	return "Error";
+    }
+    
+    @PostMapping("/{municipalityId}/{token}/edit/parking/{uid}/{dayNumber}/{roundNumber}/{start}/{end}/")
+    public @ResponseBody String editParkingRounds(@PathVariable("municipalityId") String municipalityId, @PathVariable("token") String token,
+    		@PathVariable("uid") String uid, @PathVariable("dayNumber") String dayNumber, @PathVariable("roundNumber") String roundNumber,
+    		@PathVariable("start") int start, @PathVariable("end") int end) throws InterruptedException, ExecutionException, FirebaseAuthException {
+    	if (checkToken(municipalityId, token, role)) {
+    		Round round = new Round(start, end);
+    		ApiFuture<WriteResult> editedParkingRounds = parkingRef.document(uid).collection("days").document(dayNumber).collection("rounds").document(roundNumber).set(round);
+	        return (new Gson().toJson(editedParkingRounds));
     	}
     	return "Error";
     }

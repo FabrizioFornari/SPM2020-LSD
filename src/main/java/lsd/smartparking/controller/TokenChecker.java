@@ -7,7 +7,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
 
-class TokenChecker {
+abstract class TokenChecker {
 
 	boolean checkToken(String uid, String token, String role) throws FirebaseAuthException {
     	FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(token);

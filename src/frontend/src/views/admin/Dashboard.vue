@@ -5,8 +5,14 @@
         <h1><b-badge variant="success">{{ welcome }}</b-badge></h1>
         <b-table hover :head-variant="'light'" :items="municipalities" :fields="fields">
           <template #cell(approved)="data">
-            <button v-if="data.approved" @click="reject(data.index, data.item.id)">Reject</button>
-            <button v-else @click="approve(data.index, data.item.id)">Approve</button>
+            <div v-if="!data.item.approved">
+              <button @click="approve(data.index, data.item.id)">Approve</button>
+              <button @click="reject(data.index, data.item.id)">Reject</button>
+            </div>
+            <div v-else>
+              <button v-if="data.item.disabled" @click="able(data.index, data.item.id)">Able</button>
+              <button v-else @click="disable(data.index, data.item.id)">Disable</button>
+            </div>
           </template>
         </b-table>
         <button @click="signOut()">Logout</button>
@@ -16,7 +22,7 @@
 </template>
 
 <script>
-import auth from '@/store/auth'
+import auth from '@/store'
 import api from '@/api/admin-municipalities'
 
 export default {
@@ -31,8 +37,7 @@ export default {
   mounted() {
     api.getMunicipalities().then(response => {
           if (response.status == 200) this.municipalities = response.data;
-      })
-      .catch(error => {
+      }, error => {
           console.log("Error: " + error);
       })
   },
@@ -40,22 +45,40 @@ export default {
     approve(index, id) {
       api.approveMunicipality(id).then(response => {
             if (response.status == 200) {
-              this.municipalities[index].approved = true;
-              alert("Municipality approved!")
+                this.municipalities[index].approved = true;
+                alert("Municipality approved!")
             }
-        })
-        .catch(error => {
+        }, error => {
             console.log("Error: " + error);
         })
     },
     reject(index, id) {
       api.rejectMunicipality(id).then(response => {
             if (response.status == 200)  {
-              this.municipalities[index].approved = false;
-              alert("Municipality rejected!")
+                this.municipalities[index].approved = false;
+                alert("Municipality rejected!")
             }
+        }, error => {
+            console.log("Error: " + error);
         })
-        .catch(error => {
+    },
+    able(index, id) {
+      api.ableMunicipality(id).then(response => {
+            if (response.status == 200)  {
+                this.municipalities[index].disabled = false;
+                alert("Municipality disabled!")
+            }
+        }, error => {
+            console.log("Error: " + error);
+        })
+    },
+    disable(index, id) {
+      api.disableMunicipality(id).then(response => {
+            if (response.status == 200)  {
+                this.municipalities[index].disabled = true;
+                alert("Municipality abled!")
+            }
+        }, error => {
             console.log("Error: " + error);
         })
     },

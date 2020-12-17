@@ -2,12 +2,18 @@ import AXIOS from '@/config/axios'
 
 export default {
     getMunicipalities() {
-        return AXIOS.get(`/admin/view/municipalities`);
+        return AXIOS.get(`/admin/view/municipalities`)
     },
     approveMunicipality(id: string) {
-        return AXIOS.post(`/admin/approve/municipality/`+id);
+        return AXIOS.post(`/admin/approve/municipality/`+id)
     },
     rejectMunicipality(id: string) {
-        return AXIOS.post(`/admin/reject/municipality/`+id);
+        return AXIOS.post(`/admin/reject/municipality/`+id)
+    },
+    ableMunicipality(id: string) {
+        return AXIOS.post(`/admin/able/municipality/`+id)
+    },
+    disableMunicipality(id: string) {
+        return AXIOS.post(`/admin/disabled/municipality/`+id)
     }
 }

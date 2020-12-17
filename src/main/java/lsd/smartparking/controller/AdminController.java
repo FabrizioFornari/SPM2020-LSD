@@ -67,7 +67,7 @@ public class AdminController {
     
     @PostMapping("/admin/enable/municipality/{uid}")
     public @ResponseBody String enableMunicipality(@PathVariable("uid") String uid) throws InterruptedException, ExecutionException {
-    	ApiFuture<WriteResult> future = municipalityRef.document(uid).update("approved", true);
+    	ApiFuture<WriteResult> future = municipalityRef.document(uid).update("disabled", true);
     	WriteResult result = future.get();
     	System.out.println("Write result: " + result);
         return "Municipality rejected";
@@ -75,7 +75,7 @@ public class AdminController {
     
     @PostMapping("/admin/disable/municipality/{uid}")
     public @ResponseBody String disableMunicipality(@PathVariable("uid") String uid) throws InterruptedException, ExecutionException {
-    	ApiFuture<WriteResult> future = municipalityRef.document(uid).update("approved", false);
+    	ApiFuture<WriteResult> future = municipalityRef.document(uid).update("disabled", false);
     	WriteResult result = future.get();
     	System.out.println("Write result: " + result);
         return "Municipality rejected";

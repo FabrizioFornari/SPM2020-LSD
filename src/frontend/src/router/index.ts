@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import store from '@/store/auth'
+import store from '@/store'
 import { onAuthStateInit } from '@/firebase'
 
 Vue.use(VueRouter)
@@ -38,16 +38,41 @@ const router: VueRouter = new VueRouter({
       name: 'Dashboard',
       component: () => import('../views/Dashboard.vue'),
       meta: { 
-          title: 'Dashboard - Sparking',
-          requiresAuth: true 
+        requiresAuth: true 
       },
       children: [
+        {
+          path: '',
+          name: 'Menu',
+          component: () => import('../views/Menu.vue'),
+          meta: { 
+            title: 'Dashboard - Sparking',
+            requiresAuth: true 
+          }
+        },
         {
           path: 'garage',
           name: 'Garage',
           component: () => import('../views/driver/Garage.vue'),
           meta: { 
-              title: 'My Garage - Sparking'
+              title: 'My Garage - Sparking',
+              requiresAuth: true 
+          }
+        },
+        {
+          path: 'garage/:id',
+          name: 'Vehicle',
+          component: () => import('../views/driver/Vehicle.vue'),
+          meta: {
+              title: 'My Vehicle - Sparking'
+          }
+        },
+        {
+          path: 'garage/new',
+          name: 'NewVehicle',
+          component: () => import('../views/driver/Vehicle.vue'),
+          meta: {
+              title: 'New Vehicle - Sparking'
           }
         }
       ]
@@ -92,6 +117,6 @@ router.beforeEach(async (to, from, next) => {
 
   if (to.meta.title !== undefined) document.title = to.meta.title
   else document.title = 'Sparking'
-});
+})
 
 export default router

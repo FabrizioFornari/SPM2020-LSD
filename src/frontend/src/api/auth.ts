@@ -1,7 +1,7 @@
 import AXIOS from '@/config/axios'
 
 export default {
-    registerUser(user: any, type: string) {
+    registerUser(user, type: string) {
         return AXIOS.post(`/register/`+type,user);
     }
 }

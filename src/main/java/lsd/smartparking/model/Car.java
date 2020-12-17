@@ -1,30 +1,30 @@
 package lsd.smartparking.model;
 
-public class Car {
+import java.util.HashMap;
 
-	private String id;
+public class Car extends Vehicle {
+
 	private String cod;
 	private String plate;
-	private String name;
-	private String owner;
 	
 	
 	public Car() { }
-	
+
 	public Car(String id, String cod, String plate, String name, String owner) {
-		this.id = id;
-		this.cod = cod;
-		this.plate = plate;
-		this.name = name;
-		this.owner = owner;
+		this.setId(id);
+		this.setCod(cod);
+		this.setPlate(plate);
+		this.setName(name);
+		this.setOwner(owner);
 	}
 	
-	public String getId() {
-		return this.id;
-	}
-	
-	public void setId(String id) {
-		this.id = id;
+	public Car(String id, String cod, String plate, String name, String owner, HashMap<String, String> sharedOwners) {
+		this.setId(id);
+		this.setCod(cod);
+		this.setPlate(plate);
+		this.setName(name);
+		this.setOwner(owner);
+		this.setSharedOwners(sharedOwners);
 	}
 	
 	public String getCod() {
@@ -41,22 +41,6 @@ public class Car {
 	
 	public void setPlate(String plate) {
 		this.plate = plate;
-	}
-	
-	public String getName() {
-		return this.name;
-	}
-	
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	public String getOwner() {
-		return this.owner;
-	}
-	
-	public void setOwner(String owner) {
-		this.owner = owner;
 	}
 	
 }

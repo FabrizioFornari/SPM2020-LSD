@@ -18,7 +18,7 @@ public class DriverTests {
 	private String testSurname;
 	private String testEmail;
 	private String testId;
-	private HashMap<String, Car> testCars;
+	private HashMap<String, String> testCars;
 	
 	@BeforeEach
 	public void createDriver() {
@@ -37,7 +37,7 @@ public class DriverTests {
 		assertEquals(driver.getSurname(), testSurname);
 		assertEquals(driver.getEmail(), testEmail);
 		assertEquals(driver.getId(), testId);
-		assertEquals(driver.getCars(), testCars);
+		assertEquals(driver.getVehicles(), testCars);
 	}
 	
 }

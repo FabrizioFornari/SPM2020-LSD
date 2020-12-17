@@ -4,28 +4,28 @@ import java.util.HashMap;
 
 public class Driver extends User {
 	
-	private HashMap<String, Car> cars;
+	private HashMap<String, String> vehicles;
 	private HashMap<String, Payment> payments;
 	private HashMap<String, Ticket> tickets;
 	
 	
 	public Driver() { }
 	
-	public Driver(String name, String surname, String email, String id, HashMap<String, Car> cars) {
+	public Driver(String name, String surname, String email, String id, HashMap<String, String> vehicles) {
 		super(name, surname, email, id);
-		if (cars != null) this.setCars(cars);
+		if (vehicles != null) this.setVehicles(vehicles);
 	}
 	
-	public HashMap<String, Car> getCars() {
-		return cars;
+	public HashMap<String, String> getVehicles() {
+		return vehicles;
 	}
 	
-	public Car getCar(String id) {
-		return cars.get(id);
+	public String getVehicle(String id) {
+		return vehicles.get(id);
 	}
 	
-	public void setCars(HashMap<String, Car> cars) {
-		this.cars = cars;
+	public void setVehicles(HashMap<String, String> vehicles) {
+		this.vehicles = vehicles;
 	}
 
 	public HashMap<String, Payment> getPayments() {

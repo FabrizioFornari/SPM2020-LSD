@@ -25,20 +25,20 @@ import com.google.gson.Gson;
 import lsd.smartparking.model.Municipality;
 
 @RestController()
-@RequestMapping("/api")
+@RequestMapping("/api/admin")
 public class AdminController {
 	
 	Firestore db = FirestoreClient.getFirestore();
 	CollectionReference municipalityRef = db.collection("Municipality");
     private static final Logger LOG = LoggerFactory.getLogger(AuthController.class);
 
-	@GetMapping("/admin/login")
+	@GetMapping("/login")
     public @ResponseBody String loginAdmin() {
         LOG.info("GET successfully called on /secured resource");
         return "You are logged in";
     }
     
-    @GetMapping("/admin/view/municipalities")
+    @GetMapping("/view/municipalities")
     public @ResponseBody String viewMunicipalities() throws InterruptedException, ExecutionException {
     	ApiFuture<QuerySnapshot> future = municipalityRef.get();
         List<QueryDocumentSnapshot> documents = future.get().getDocuments();
@@ -49,7 +49,7 @@ public class AdminController {
         return (new Gson().toJson(allMunicipalities));
     }
     
-    @PostMapping("/admin/approve/municipality/{uid}")
+    @PostMapping("/approve/municipality/{uid}")
     public @ResponseBody String approveMunicipality(@PathVariable("uid") String uid) throws InterruptedException, ExecutionException {
     	ApiFuture<WriteResult> future = municipalityRef.document(uid).update("approved", true);
     	WriteResult result = future.get();
@@ -57,7 +57,7 @@ public class AdminController {
         return "Municipality approved";
     }
     
-    @PostMapping("/admin/reject/municipality/{uid}")
+    @PostMapping("/reject/municipality/{uid}")
     public @ResponseBody String rejectMunicipality(@PathVariable("uid") String uid) throws InterruptedException, ExecutionException {
     	ApiFuture<WriteResult> future = municipalityRef.document(uid).update("approved", false);
     	WriteResult result = future.get();
@@ -65,20 +65,20 @@ public class AdminController {
         return "Municipality rejected";
     }
     
-    @PostMapping("/admin/enable/municipality/{uid}")
+    @PostMapping("/enable/municipality/{uid}")
     public @ResponseBody String enableMunicipality(@PathVariable("uid") String uid) throws InterruptedException, ExecutionException {
-    	ApiFuture<WriteResult> future = municipalityRef.document(uid).update("disabled", true);
-    	WriteResult result = future.get();
-    	System.out.println("Write result: " + result);
-        return "Municipality rejected";
-    }
-    
-    @PostMapping("/admin/disable/municipality/{uid}")
-    public @ResponseBody String disableMunicipality(@PathVariable("uid") String uid) throws InterruptedException, ExecutionException {
     	ApiFuture<WriteResult> future = municipalityRef.document(uid).update("disabled", false);
     	WriteResult result = future.get();
     	System.out.println("Write result: " + result);
-        return "Municipality rejected";
+        return "Municipality enabled";
+    }
+    
+    @PostMapping("/disable/municipality/{uid}")
+    public @ResponseBody String disableMunicipality(@PathVariable("uid") String uid) throws InterruptedException, ExecutionException {
+    	ApiFuture<WriteResult> future = municipalityRef.document(uid).update("disabled", true);
+    	WriteResult result = future.get();
+    	System.out.println("Write result: " + result);
+        return "Municipality disabled";
     }
 
 }

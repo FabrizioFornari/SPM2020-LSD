@@ -66,7 +66,7 @@ export default {
       api.enableMunicipality(id).then(response => {
             if (response.status == 200)  {
                 this.municipalities[index].disabled = false;
-                alert("Municipality disabled!")
+                alert("Municipality enabled!")
             }
         }, error => {
             console.log("Error: " + error);
@@ -76,7 +76,7 @@ export default {
       api.disableMunicipality(id).then(response => {
             if (response.status == 200)  {
                 this.municipalities[index].disabled = true;
-                alert("Municipality enabled!")
+                alert("Municipality disabled!")
             }
         }, error => {
             console.log("Error: " + error);

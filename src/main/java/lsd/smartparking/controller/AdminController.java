@@ -6,6 +6,7 @@ import java.util.concurrent.ExecutionException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,8 +34,7 @@ public class AdminController {
 	CollectionReference municipalityRef = db.collection("Municipality");
     private static final Logger LOG = LoggerFactory.getLogger(AuthController.class);
 
-	
-    @GetMapping("/admin/login")
+	@GetMapping("/admin/login")
     public @ResponseBody String loginAdmin() {
         LOG.info("GET successfully called on /secured resource");
         return "You are logged in";

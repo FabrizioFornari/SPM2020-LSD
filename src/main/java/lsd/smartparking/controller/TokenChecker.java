@@ -12,13 +12,13 @@ abstract class TokenChecker {
 	boolean checkToken(String uid, String token, String role) throws FirebaseAuthException {
     	FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(token);
     	String decodedUid = decodedToken.getUid();
-    	if (decodedUid.equals(uid) && Boolean.TRUE.equals(decodedToken.getClaims().get(role))) return true;
+    	if (decodedUid.equals(uid) && decodedToken.getClaims().get("role") == role) return true;
 		return false;
 	}
 
 	void claimToken(String uid, String role) throws FirebaseAuthException {
 		Map<String, Object> claims = new HashMap<>();
-		claims.put(role, true);
+		claims.put("role", role);
 		FirebaseAuth.getInstance().setCustomUserClaims(uid, claims);
 	}
 

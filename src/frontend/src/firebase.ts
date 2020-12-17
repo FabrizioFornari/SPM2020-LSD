@@ -1,4 +1,4 @@
-import store from '@/store/auth'
+import store from '@/store'
 import router from '@/router'
 import config from '@/config/firebase'
 import Firebase from 'firebase/app'
@@ -9,15 +9,6 @@ export const fireApp = Firebase.initializeApp(config)
 export const fireAuth = Firebase.auth()
 export const fireStore = Firebase.firestore()
 export const geoPoint = Firebase.firestore.GeoPoint
-
-const onAuthStateChangedPromise = new Promise((resolve, reject) => {
-    fireAuth.onAuthStateChanged(user => {
-        store.dispatch("fetchUser", user)
-        resolve(user)
-    }, err => {
-        reject(err)
-    })
-})
 
 export async function signin(email: string, password: string) {
     try {
@@ -48,5 +39,25 @@ export async function logout() {
         console.log(error)
     }
 }
+
+async function getRole(user) {
+    if (user) {
+        await user.getIdTokenResult(true).then(idTokenResult => {
+            store.dispatch("fetchRole", idTokenResult.claims.role)
+        }, err => {
+            console.log(err)
+        })
+    }
+}
+
+const onAuthStateChangedPromise = new Promise((resolve, reject) => {
+    fireAuth.onAuthStateChanged(async user => {
+        store.dispatch("fetchUser", user)
+        await getRole(user)
+        resolve(user)
+    }, err => {
+        reject(err)
+    })
+})
   
 export const onAuthStateInit = () => onAuthStateChangedPromise

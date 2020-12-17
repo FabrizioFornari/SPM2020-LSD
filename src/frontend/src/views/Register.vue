@@ -92,7 +92,7 @@
 <script>
 import { signin } from '@/firebase';
 import auth from '@/api/auth'
-import store from '@/store/auth'
+import store from '@/store'
 
 export default {
   data() {
@@ -134,9 +134,10 @@ export default {
         user.id = store.getters.user.uid
         
         auth.registerUser(user, this.type)
+        store.dispatch("fetchRole", this.type)
         this.$router.push(this.$route.query.redirect || '/')
       }
     }
   }
-};
+}
 </script>

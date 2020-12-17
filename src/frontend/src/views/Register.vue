@@ -115,7 +115,8 @@ export default {
     async register(e) {
       e.preventDefault()
       if (this.form.password == this.form.passwordConf) {
-        await signin(this.form.email, this.form.password)
+        const username = (this.form.name ? this.form.name : this.form.city)
+        await signin(this.form.email, this.form.password, username)
         
         const user = {}
         if (this.type == "municipality") {

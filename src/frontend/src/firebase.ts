@@ -10,11 +10,19 @@ export const fireAuth = Firebase.auth()
 export const fireStore = Firebase.firestore()
 export const geoPoint = Firebase.firestore.GeoPoint
 
-export async function signin(email: string, password: string) {
+export async function signin(email: string, password: string, username: string) {
     try {
         await fireAuth.createUserWithEmailAndPassword(email, password)
         const current = fireAuth.currentUser
-        if (current) store.dispatch("fetchUser", current)
+        if (current) {
+            current.updateProfile({
+                displayName: username
+            }).then(function() {
+                store.dispatch("fetchUser", current)
+            }).catch(function(error) {
+                console.log(error)
+            })
+        }
         console.log("Registred")
     } catch (error) {
         console.log(error)

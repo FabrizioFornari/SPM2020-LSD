@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import auth from '@/store/auth';
+import auth from '@/store';
 
 export default {
   name: 'adminLogin',

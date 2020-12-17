@@ -12,6 +12,7 @@ public class Municipality extends Utils {
 	private HashMap<String, Policeman> policemen;
 	private HashMap<String, Parking> parking;
 	private boolean approved;
+	private boolean disabled;
 
 	
     public Municipality() { }
@@ -23,6 +24,7 @@ public class Municipality extends Utils {
 		this.setProvince(province);
 		this.setRegion(region);
 		this.setApproved(false);
+		this.setDisabled(false);
 		this.setPolicemen(new HashMap<String, Policeman>());
 		this.setParking(new HashMap<String, Parking>());
 	}
@@ -108,6 +110,14 @@ public class Municipality extends Utils {
 			}
 		}
 		this.parking = parking;
+	}
+
+	public boolean isDisabled() {
+		return disabled;
+	}
+
+	public void setDisabled(boolean disabled) {
+		this.disabled = disabled;
 	}
 	
 }

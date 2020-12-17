@@ -66,5 +66,21 @@ public class AdminController {
     	System.out.println("Write result: " + result);
         return "Municipality rejected";
     }
+    
+    @PostMapping("/admin/enable/municipality/{uid}")
+    public @ResponseBody String enableMunicipality(@PathVariable("uid") String uid) throws InterruptedException, ExecutionException {
+    	ApiFuture<WriteResult> future = municipalityRef.document(uid).update("approved", true);
+    	WriteResult result = future.get();
+    	System.out.println("Write result: " + result);
+        return "Municipality rejected";
+    }
+    
+    @PostMapping("/admin/disable/municipality/{uid}")
+    public @ResponseBody String disableMunicipality(@PathVariable("uid") String uid) throws InterruptedException, ExecutionException {
+    	ApiFuture<WriteResult> future = municipalityRef.document(uid).update("approved", false);
+    	WriteResult result = future.get();
+    	System.out.println("Write result: " + result);
+        return "Municipality rejected";
+    }
 
 }

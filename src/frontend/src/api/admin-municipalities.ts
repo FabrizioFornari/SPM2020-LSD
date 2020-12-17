@@ -10,10 +10,10 @@ export default {
     rejectMunicipality(id: string) {
         return AXIOS.post(`/admin/reject/municipality/`+id)
     },
-    ableMunicipality(id: string) {
-        return AXIOS.post(`/admin/able/municipality/`+id)
+    enableMunicipality(id: string) {
+        return AXIOS.post(`/admin/enable/municipality/`+id)
     },
     disableMunicipality(id: string) {
-        return AXIOS.post(`/admin/disabled/municipality/`+id)
+        return AXIOS.post(`/admin/disable/municipality/`+id)
     }
 }

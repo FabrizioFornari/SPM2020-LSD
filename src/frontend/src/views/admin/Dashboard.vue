@@ -10,7 +10,7 @@
               <button @click="reject(data.index, data.item.id)">Reject</button>
             </div>
             <div v-else>
-              <button v-if="data.item.disabled" @click="able(data.index, data.item.id)">Able</button>
+              <button v-if="data.item.disabled" @click="enable(data.index, data.item.id)">Able</button>
               <button v-else @click="disable(data.index, data.item.id)">Disable</button>
             </div>
           </template>
@@ -62,8 +62,8 @@ export default {
             console.log("Error: " + error);
         })
     },
-    able(index, id) {
-      api.ableMunicipality(id).then(response => {
+    enable(index, id) {
+      api.enableMunicipality(id).then(response => {
             if (response.status == 200)  {
                 this.municipalities[index].disabled = false;
                 alert("Municipality disabled!")
@@ -76,7 +76,7 @@ export default {
       api.disableMunicipality(id).then(response => {
             if (response.status == 200)  {
                 this.municipalities[index].disabled = true;
-                alert("Municipality abled!")
+                alert("Municipality enabled!")
             }
         }, error => {
             console.log("Error: " + error);

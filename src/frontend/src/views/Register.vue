@@ -118,17 +118,14 @@ export default {
         await signin(this.form.email, this.form.password)
         
         const user = {}
-        if (this.type == "driver") {
-          user.name = this.form.name
-          user.surname = this.form.surname
-        } else if (this.type == "policeman") {
-          user.name = this.form.name
-          user.surname = this.form.surname
-          user.district = this.form.district
-        } else {
+        if (this.type == "municipality") {
           user.city = this.form.city
           user.province = this.form.province
           user.region = this.form.region
+        } else {
+          user.name = this.form.name
+          user.surname = this.form.surname
+          if (this.type == "policeman") user.district = this.form.district
         }
         user.email = this.form.email
         user.id = store.getters.user.uid

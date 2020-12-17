@@ -35,13 +35,10 @@ public class AuthController extends TokenChecker {
 		return "Successfully registered";
 	}
 
-	@PostMapping("/policeman/{uid}/{name}/{surname}/{email}/{municipalityId}")
-	public String newPoliceman(@PathVariable("uid") String uid, @PathVariable("name") String name, 
-						   @PathVariable("surname") String surname, @PathVariable("email") String email,
-						   @PathVariable("municipalityId") String municipalityId) throws IOException, FirebaseAuthException {
-		Policeman p = new Policeman(name, surname, email, uid, municipalityId);
-		policemanRef.document(uid).set(p);
-		claimToken(uid, "policeman");
+	@PostMapping("/policeman")
+	public String newPoliceman(@RequestBody Policeman policeman) throws IOException, FirebaseAuthException {
+		policemanRef.document(policeman.getId()).set(policeman);
+		claimToken(policeman.getId(), "policeman");
 		return "Successfully registered";
 	}
 	

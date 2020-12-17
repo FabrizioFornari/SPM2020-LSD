@@ -11,6 +11,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -18,14 +21,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
-        http.cors().and().
-        csrf().disable()
+        http.cors()
+        	.and().
+        		csrf().disable()
             .authorizeRequests()
                 .antMatchers("/api/hello").permitAll()
-                .antMatchers("/api/user/**").permitAll() // allow every URI, that begins with '/api/user/'
+                .antMatchers("/api/user/**").permitAll()
                 .antMatchers("/api/admin/**").hasRole("ADMIN")
-                //.anyRequest().authenticated() // protect all other requests
             .and()
                 .formLogin()
                 .loginPage("/api/admin/login")
@@ -36,8 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .deleteCookies("JSESSIONID")
                 .invalidateHttpSession(true)
             .and()
-                .httpBasic(); // disable cross site request forgery, as we don't use cookies - otherwise ALL PUT, POST, DELETE will get HTTP 403!
-    
+                .httpBasic();
     }
 
     @Autowired
@@ -49,6 +50,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+    
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+        return source;
     }
     
 }

@@ -4,7 +4,6 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -47,7 +46,6 @@ public class SeleniumTest {
 	}
 	
 	@Test
-	@Disabled
 	@Order(1)
 	  public void testLogin() throws Exception {
 	    driver.get("http://localhost:8098/login");

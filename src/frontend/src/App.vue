@@ -2,7 +2,7 @@
   <div id="app">
     <div id="nav">
       <router-link to="/login" v-if="!this.$store.getters.isLogged">Login</router-link> 
-      <router-link to="/dashboard" v-else>Profile</router-link>
+      <router-link to="/dashboard" v-else id="profileMenu">Profile</router-link>
     </div>
     <div id="nav-mobile">
       <router-link to="/" class="mapIcon"><img src="./assets/map.svg"></router-link>

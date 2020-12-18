@@ -8,7 +8,7 @@
         <h3> My Garage! </h3> 
         <p> Watch all your vehicles, add more or modify existing ones </p>
     </router-link>
-    <div class="choice logout" @click="signOut()"> Logout </div>
+    <div class="choice logout" @click="signOut()" id="logoutButton"> Logout </div>
   </div>
 </template>
 

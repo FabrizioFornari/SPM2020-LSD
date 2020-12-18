@@ -48,7 +48,7 @@ public class SeleniumTest {
 	@Test
 	@Order(1)
 	  public void testLogin() throws Exception {
-	    driver.get("http://localhost:8080/login");
+	    driver.get("http://localhost:8098/login");
 	    driver.findElement(By.xpath("//form")).click();
 	    driver.findElement(By.id("emailLogin")).clear();
 	    driver.findElement(By.id("emailLogin")).sendKeys("a@a.it");

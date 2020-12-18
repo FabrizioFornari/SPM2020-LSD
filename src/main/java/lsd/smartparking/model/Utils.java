@@ -9,7 +9,7 @@ public abstract class Utils {
 	}
 	
 	public static void checkFieldsLength(String field) {
-		if (field.length() > 20) {
+		if (field.length() > 30) {
 			throw new IllegalArgumentException("The field is too long");
 		}
 	}

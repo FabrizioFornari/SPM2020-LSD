@@ -27,9 +27,9 @@
               </div>
               <div v-if="type == 'policeman'">
                 <div class="form-group row">
-                  <label for="nameUser" class="col-md-4 col-form-label text-md-right">District</label>
+                  <label for="nameUser" class="col-md-4 col-form-label text-md-right">Municipality</label>
                   <div class="col-md-8">
-                    <input type="text" class="form-control" value required v-model="form.district"/>
+                    <input type="text" class="form-control" value required v-model="form.municipalityId"/>
                   </div>
                 </div>
               </div>
@@ -126,7 +126,7 @@ export default {
         } else {
           user.name = this.form.name
           user.surname = this.form.surname
-          if (this.type == "policeman") user.district = this.form.district
+          if (this.type == "policeman") user.municipalityId = this.form.municipalityId
         }
         user.email = this.form.email
         user.id = store.getters.user.uid

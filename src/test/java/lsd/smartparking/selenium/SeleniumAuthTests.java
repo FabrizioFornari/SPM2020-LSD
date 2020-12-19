@@ -1,4 +1,4 @@
-package lsd.smartparking.configuration;
+package lsd.smartparking.selenium;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -17,7 +17,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class SeleniumTest {
+public class SeleniumAuthTests {
 	
 	
 	private static WebDriver driver;

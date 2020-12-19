@@ -25,7 +25,7 @@ public class SeleniumAdminTests {
     
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
-		System.setProperty("webdriver.chrome.driver","src/test/java/lsd/smartparking/configuration/chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver","src/test/java/lsd/smartparking/selenium/chromedriver.exe");
 	    driver = new ChromeDriver();
 	    driver.manage().window().maximize();
 	    driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
@@ -50,61 +50,24 @@ public class SeleniumAdminTests {
 	
 	@Test
 	@Order(1)
-	  public void testLoginDriver() throws Exception {
-	    driver.get("http://localhost:8098/login");
+	  public void testLoginAdmin() throws Exception {
+	    driver.get("http://localhost:8098/admin/login");
 	    driver.findElement(By.xpath("//form")).click();
-	    driver.findElement(By.id("emailLogin")).clear();
-	    driver.findElement(By.id("emailLogin")).sendKeys("piatanesi.samuel@gmail.com");
-	    driver.findElement(By.id("passwordLogin")).clear();
-	    driver.findElement(By.id("passwordLogin")).sendKeys("password");
-	    driver.findElement(By.id("buttonLogin")).click();
-        WebDriverWait wait1 = new WebDriverWait(driver, 3);
-	    wait1.until((ExpectedCondition<Boolean>) wd -> ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
-	    driver.findElement(By.id("profileMenu")).click();
-        WebDriverWait wait2 = new WebDriverWait(driver, 3);
-	    wait2.until((ExpectedCondition<Boolean>) wd -> ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
-	    Thread.sleep(1000);
-	    driver.findElement(By.id("logoutButton")).click();
+	    driver.findElement(By.id("adminUsername")).clear();
+	    driver.findElement(By.id("adminUsername")).sendKeys("admin");
+	    driver.findElement(By.id("adminPassword")).clear();
+	    driver.findElement(By.id("adminPassword")).sendKeys("admin");
+	    driver.findElement(By.id("adminButtonLogin")).click();
 	    Thread.sleep(1000);
 	  }
 	
 	@Test
 	@Order(2)
-	  public void testLoginPoliceman() throws Exception {
-	    driver.get("http://localhost:8098/login");
-	    driver.findElement(By.xpath("//form")).click();
-	    driver.findElement(By.id("emailLogin")).clear();
-	    driver.findElement(By.id("emailLogin")).sendKeys("poliziotto@castelfidardo.it");
-	    driver.findElement(By.id("passwordLogin")).clear();
-	    driver.findElement(By.id("passwordLogin")).sendKeys("password");
-	    driver.findElement(By.id("buttonLogin")).click();
-        WebDriverWait wait1 = new WebDriverWait(driver, 3);
-	    wait1.until((ExpectedCondition<Boolean>) wd -> ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
-	    driver.findElement(By.id("profileMenu")).click();
-        WebDriverWait wait2 = new WebDriverWait(driver, 3);
-	    wait2.until((ExpectedCondition<Boolean>) wd -> ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
-	    Thread.sleep(1000);
-	    driver.findElement(By.id("logoutButton")).click();
-	    Thread.sleep(1000);
-	  }
-	
-	@Test
-	@Order(3)
-	  public void testLoginMunicipality() throws Exception {
-	    driver.get("http://localhost:8098/login");
-	    driver.findElement(By.xpath("//form")).click();
-	    driver.findElement(By.id("emailLogin")).clear();
-	    driver.findElement(By.id("emailLogin")).sendKeys("a@castelfidardo.it");
-	    driver.findElement(By.id("passwordLogin")).clear();
-	    driver.findElement(By.id("passwordLogin")).sendKeys("password");
-	    driver.findElement(By.id("buttonLogin")).click();
-        WebDriverWait wait1 = new WebDriverWait(driver, 3);
-	    wait1.until((ExpectedCondition<Boolean>) wd -> ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
-	    driver.findElement(By.id("profileMenu")).click();
-        WebDriverWait wait2 = new WebDriverWait(driver, 3);
-	    wait2.until((ExpectedCondition<Boolean>) wd -> ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
-	    Thread.sleep(1000);
-	    driver.findElement(By.id("logoutButton")).click();
+	  public void toggleMunicipality() throws Exception {
+	    driver.get("http://localhost:8098/admin/dashboard");
+	    driver.findElement(By.id("municipalityButtonAction")).click();
+        Thread.sleep(1000);
+        driver.findElement(By.id("municipalityButtonAction")).click();
 	    Thread.sleep(1000);
 	  }
 

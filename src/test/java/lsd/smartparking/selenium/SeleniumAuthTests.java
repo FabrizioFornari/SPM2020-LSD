@@ -25,7 +25,7 @@ public class SeleniumAuthTests {
     
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
-		System.setProperty("webdriver.chrome.driver","src/test/java/lsd/smartparking/configuration/chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver","src/test/java/lsd/smartparking/selenium/chromedriver.exe");
 	    driver = new ChromeDriver();
 	    driver.manage().window().maximize();
 	    driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);

@@ -10,8 +10,8 @@
               <button @click="reject(data.index, data.item.id)">Reject</button>
             </div>
             <div v-else>
-              <button v-if="data.item.disabled" @click="enable(data.index, data.item.id)">Enable</button>
-              <button v-else @click="disable(data.index, data.item.id)">Disable</button>
+              <button id="municipalityButtonAction" v-if="data.item.disabled" @click="enable(data.index, data.item.id)">Enable</button>
+              <button id="municipalityButtonAction" v-else @click="disable(data.index, data.item.id)">Disable</button>
             </div>
           </template>
         </b-table>

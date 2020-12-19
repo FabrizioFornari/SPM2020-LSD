@@ -7,19 +7,19 @@
           <form @submit.prevent="signIn">
             <div class="form-group row">
               <div class="col-md-12">
-                <input type="text" class="form-control" placeholder="Username" value required autofocus v-model="user"/>
+                <input type="text" class="form-control" placeholder="Username" id="adminUsername" value required autofocus v-model="user"/>
               </div>
             </div>
 
             <div class="form-group row">
               <div class="col-md-12">
-                <input type="password" class="form-control" placeholder="Password" required v-model="password"/>
+                <input type="password" class="form-control" placeholder="Password" id="adminPassword" required v-model="password"/>
               </div>
             </div>
 
             <div class="form-group row mb-0">
               <div class="col-md-12">
-                <button type="submit" class="btn btn-primary">Login</button>
+                <button type="submit" id="adminButtonLogin" class="btn btn-primary">Login</button>
               </div>
             </div>
           </form>

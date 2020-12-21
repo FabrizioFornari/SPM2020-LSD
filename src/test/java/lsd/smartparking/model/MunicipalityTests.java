@@ -49,28 +49,28 @@ public class MunicipalityTests {
 	public void createMunicipalityInvalidCity() {
 		assertThrows(IllegalArgumentException.class, () -> municipality.setCity(null));
 		assertThrows(IllegalArgumentException.class, () -> municipality.setCity(""));
-		assertThrows(IllegalArgumentException.class, () -> municipality.setCity("123456789012345678901"));
+		assertThrows(IllegalArgumentException.class, () -> municipality.setCity("1234567890123456789012345678901"));
 	}
 	
 	@Test
 	public void createMunicipalityInvalidProvince() {
 		assertThrows(IllegalArgumentException.class, () -> municipality.setProvince(null));
 		assertThrows(IllegalArgumentException.class, () -> municipality.setProvince(""));
-		assertThrows(IllegalArgumentException.class, () -> municipality.setProvince("123456789012345678901"));
+		assertThrows(IllegalArgumentException.class, () -> municipality.setProvince("1234567890123456789012345678901"));
 	}
 	
 	@Test
 	public void createMunicipalityInvalidRegion() {
 		assertThrows(IllegalArgumentException.class, () -> municipality.setRegion(null));
 		assertThrows(IllegalArgumentException.class, () -> municipality.setRegion(""));
-		assertThrows(IllegalArgumentException.class, () -> municipality.setRegion("123456789012345678901"));
+		assertThrows(IllegalArgumentException.class, () -> municipality.setRegion("1234567890123456789012345678901"));
 	}
 	
 	@Test
 	public void createMunicipalityInvalidEmail() {
 		assertThrows(IllegalArgumentException.class, () -> municipality.setEmail(null));
 		assertThrows(IllegalArgumentException.class, () -> municipality.setEmail(""));
-		assertThrows(IllegalArgumentException.class, () -> municipality.setEmail("123456789012345678901"));
+		assertThrows(IllegalArgumentException.class, () -> municipality.setEmail("1234567890123456789012345678901"));
 	}
 	
 	@Test

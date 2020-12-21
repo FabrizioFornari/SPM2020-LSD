@@ -40,21 +40,21 @@ public class UserTests {
 	public void createUserInvalidName() {
 		assertThrows(IllegalArgumentException.class, () -> user.setName(null));
 		assertThrows(IllegalArgumentException.class, () -> user.setName(""));
-		assertThrows(IllegalArgumentException.class, () -> user.setName("123456789012345678901"));
+		assertThrows(IllegalArgumentException.class, () -> user.setName("1234567890123456789012345678901"));
 	}
 	
 	@Test
 	public void createUserInvalidSurname() {
 		assertThrows(IllegalArgumentException.class, () -> user.setSurname(null));
 		assertThrows(IllegalArgumentException.class, () -> user.setSurname(""));
-		assertThrows(IllegalArgumentException.class, () -> user.setSurname("123456789012345678901"));
+		assertThrows(IllegalArgumentException.class, () -> user.setSurname("1234567890123456789012345678901"));
 	}
 	
 	@Test
 	public void createUserInvalidEmail() {
 		assertThrows(IllegalArgumentException.class, () -> user.setEmail(null));
 		assertThrows(IllegalArgumentException.class, () -> user.setEmail(""));
-		assertThrows(IllegalArgumentException.class, () -> user.setEmail("123456789012345678901"));
+		assertThrows(IllegalArgumentException.class, () -> user.setEmail("1234567890123456789012345678901"));
 	}
 	
 	@Test

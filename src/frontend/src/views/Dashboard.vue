@@ -22,7 +22,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .header {
   padding-left: 15px;
   text-align: left;
@@ -32,7 +32,51 @@ export default {
   }
 }
 
-.sections {
-  margin-top: auto;
+.sections {    
+  flex: 1 1 auto;
+  flex-flow: column;
+  display: flex;
+}
+
+.menu {
+  flex-flow: column;
+  flex: 1 1 auto;
+  display: flex;
+
+  .choices {
+    flex-flow: row wrap;
+    flex: 1 1 auto;
+    align-content: center;
+    display: flex;
+
+    .choice {
+      flex: 1 1 300px;
+    }
+  }
+
+  .choice {
+    margin: 15px;
+    padding: 15px;
+    color: black;
+    border: 1px solid #00000011;
+    border-radius: 8px;
+    flex-flow: column;
+    justify-content: center;
+    display: flex;
+
+    &.action {
+      padding: 10px;
+    }
+
+    &:hover {
+      box-shadow: 0 5px 10px #00000011;
+      cursor: pointer;
+    }
+
+    p {
+      margin: 0;
+      font-size: 0.9em;
+    }
+  }
 }
 </style>

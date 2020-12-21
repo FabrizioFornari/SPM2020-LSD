@@ -97,6 +97,7 @@ a:hover {
     height: 100%;
     padding-top: 30px;
     padding-bottom: 10px;
+    overflow-x: hidden;
     overflow-y: auto;
     position: relative;
     z-index: 1;
@@ -119,9 +120,11 @@ a:hover {
 
 .container {
   height: 100%;
-  max-width: 100%;
-  min-width: 380px;
-  padding: 0 40px !important;
+  max-width: 100% !important;
+  min-width: 400px;
+  padding: 0 6% !important;
+  flex-flow: column;
+  display: flex;
 
   &.width-40 {
     width: 40vw;
@@ -188,7 +191,6 @@ a:hover {
     .container {
       width: 100% !important;
       min-width: 100%;
-      padding: 0 6% !important;
       flex-flow: column;
       display: flex;
     }

@@ -1,7 +1,6 @@
 package lsd.smartparking.controller;
 
 import java.lang.reflect.Type;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +25,7 @@ import com.google.gson.reflect.TypeToken;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 
+@Disabled
 @WebMvcTest
 @ContextConfiguration(classes = { AuthController.class, AdminController.class, SecurityConfig.class })
 public class AdminControllerTests {
@@ -55,6 +55,7 @@ public class AdminControllerTests {
 		String json = result.getResponse().getContentAsString();
 		Type type = new TypeToken<ArrayList<Municipality>>(){}.getType();
 		ArrayList<Municipality> allMunicipalities = new Gson().fromJson(json, type);
+		System.out.println(allMunicipalities);
 	}
 
 }

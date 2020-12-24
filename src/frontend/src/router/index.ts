@@ -60,11 +60,13 @@ const router: VueRouter = new VueRouter({
           }
         },
         {
-          path: 'garage/:id',
+          path: 'vehicle/:id',
           name: 'Vehicle',
           component: () => import('../views/driver/Vehicle.vue'),
+          props: true,
           meta: {
-              title: 'My Vehicle - Sparking'
+              title: 'My Vehicle - Sparking',
+              requiresAuth: true 
           }
         },
         {
@@ -72,7 +74,8 @@ const router: VueRouter = new VueRouter({
           name: 'NewVehicle',
           component: () => import('../views/driver/Vehicle.vue'),
           meta: {
-              title: 'New Vehicle - Sparking'
+              title: 'New Vehicle - Sparking',
+              requiresAuth: true 
           }
         }
       ]

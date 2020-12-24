@@ -18,6 +18,9 @@ export default {
     return {
       name: this.$store.getters.user.name
     }
+  },
+  async created() {
+    const user = await this.$store.dispatch('fetchDriver')
   }
 }
 </script>

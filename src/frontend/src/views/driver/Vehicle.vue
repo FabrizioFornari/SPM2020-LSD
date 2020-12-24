@@ -1,10 +1,13 @@
 <template>
     <div class="vehicle">
         <div class="details">
-            <input type="text" v-model="vehicle.name">
-            <input type="text" v-model="vehicle.plate">
-            <input type="text" v-model="vehicle.cod">
-            <input type="text" v-model="vehicle.type">
+            Name: <input type="text" v-model="vehicle.name">
+            Plate: <input type="text" v-model="vehicle.plate">
+            Code: <input type="text" v-model="vehicle.cod">
+            Type: <select v-model="vehicle.type">
+            <option value="other">Other</option>
+            <option value="car">Car</option>
+            </select>
         </div>
         
         <div v-if="!id" class="actions">

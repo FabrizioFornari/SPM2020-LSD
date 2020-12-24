@@ -18,7 +18,7 @@
 import { logout } from '@/firebase'
 
 export default {
-  name: 'menu',
+  name: 'choices',
   methods: {
     signOut() {
       logout()

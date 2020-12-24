@@ -26,6 +26,13 @@ const auth = {
             state.user.data = data
         }
     },
+    getters: {
+        isLoggedAdmin: state => state.admin.loggedIn,
+        isLogged: state => state.user.loggedIn,
+        userRole: state => state.user.role,
+        userUid: state => state.user.data.uid,
+        user: state => state.user.data
+    },
     actions: {
         fetchAdmin({ commit }, { user, password }) {
             if (user === null) {
@@ -76,12 +83,6 @@ const auth = {
         fetchRole({ commit }, role) {
             if (role) commit("SET_USER_ROLE", role)
         }
-    },
-    getters: {
-        isLoggedAdmin: state => state.admin.loggedIn,
-        isLogged: state => state.user.loggedIn,
-        userRole: state => state.user.role,
-        user: state => state.user.data
     }
 }
 

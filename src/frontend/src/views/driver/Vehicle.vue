@@ -20,7 +20,6 @@
 
 <script>
 import { fireAuth, fireStore } from '@/firebase'
-import api from '@/api/driver'
 
 export default {
     data() {
@@ -40,7 +39,6 @@ export default {
     methods: {
         async addVehicle() {
             const token = await fireAuth.currentUser.getIdToken()
-            api.addVehicle(this.$store.getters.user.uid, token, this.vehicle)
         },
         async updateVehicle() {
             const vehicles = {[this.vehicle.id]: {id: this.vehicle.id, name: this.vehicle.name, type: this.vehicle.type}}

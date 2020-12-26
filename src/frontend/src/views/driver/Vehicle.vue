@@ -1,13 +1,25 @@
 <template>
     <div class="vehicle">
         <div class="details">
-            Name: <input type="text" v-model="vehicle.name">
-            Plate: <input type="text" v-model="vehicle.plate">
-            Code: <input type="text" v-model="vehicle.cod">
-            Type: <select v-model="vehicle.type">
-            <option value="other">Other</option>
-            <option value="car">Car</option>
-            </select>
+            <label>
+                <input type="text" class="input" v-model="vehicle.name" required>
+                <span>Name</span>
+            </label>
+            <label>
+                <input type="text" class="input" v-model="vehicle.plate" required>
+                <span>Plate</span>
+            </label>
+            <label>
+                <input type="text" class="input" v-model="vehicle.cod" required>
+                <span>Code</span>
+            </label>
+            <label> 
+                <select class="input" v-model="vehicle.type" required>
+                    <option value="other">Other</option>
+                    <option value="car">Car</option>
+                </select>
+                <span>Type</span>
+            </label>
         </div>
         
         <div v-if="!id" class="actions">
@@ -70,18 +82,6 @@ export default {
         flex-flow: column;
         justify-content: center;
         display: flex;
-
-        input {
-            margin: 15px;
-            border: 1px solid #00000011;
-            border-radius: 8px;
-            padding: 10px 20px;
-
-            &:hover,
-            &:focus {
-                border: 1px solid #00000033;
-            }
-        }
     }
 
     .actions {

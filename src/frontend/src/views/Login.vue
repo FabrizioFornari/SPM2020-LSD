@@ -5,19 +5,15 @@
         <div class="card-body">
           <div v-if="error" class="alert alert-danger">{{error}}</div>
           <form @submit.prevent="signIn">
-            <div class="form-group row">
-              <label for="email" class="col-md-4 col-form-label text-md-right">Email</label>
-              <div class="col-md-6">
-                <input type="email" id="emailLogin" class="form-control" value required autofocus v-model="form.email"/>
-              </div>
-            </div>
+            <label>
+              <input type="email" id="emailLogin" class="input" value required autofocus v-model="form.email">
+              <span>Email</span>
+            </label>
 
-            <div class="form-group row">
-              <label for="password" class="col-md-4 col-form-label text-md-right">Password</label>
-              <div class="col-md-6">
-                <input type="password" id="passwordLogin" class="form-control" required v-model="form.password"/>
-              </div>
-            </div>
+            <label>
+              <input type="password" id="passwordLogin" class="input" required v-model="form.password"/>
+              <span>Password</span>
+            </label>
 
             <div class="form-group row mb-0">
               <div class="col-md-12">

@@ -134,6 +134,50 @@ a:hover {
   }
 }
 
+form {
+  flex-flow: column;
+  display: flex;
+}
+
+label {
+    margin: 15px !important;
+    display: flex !important;
+    
+    & > .input {
+        width: 100%;
+        border: 1px solid #00000019;
+        border-radius: 8px;
+        padding: 15px 20px 10px 20px;
+
+        &:hover,
+        &:focus {
+            border: 1px solid #00000033;
+        }
+    }
+
+    & > span {
+        margin-left: 10px;
+        padding: 0 10px;
+        background-color: white;
+        color: #555;
+        align-self: center;
+        position: absolute;
+        transition: 0.2s;
+    }
+
+    &:focus-within > .input,
+    & .input:valid {
+        opacity: 1;
+        transition: 0.4s;
+    }
+
+    &:focus-within > span,
+    & .input:valid + span {
+        margin-bottom: 50px;
+        font-size: 10px;
+    }
+}
+
 
 @media (max-width: 400px) {
   #nav {

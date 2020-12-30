@@ -25,19 +25,17 @@ const driver = {
     actions: {
         async fetchDriver({ commit, rootGetters }) {
             if (rootGetters.driver.status) return rootGetters.driver
-            else {
-                const driver = await fireStore.collection('Users').doc(rootGetters.userUid).get()
-                commit('setDriver', driver.data())
-                return driver.data()
-            }
+            const driver = await fireStore.collection('Users').doc(rootGetters.userUid).get()
+            if (!driver.exists) return null
+            commit('setDriver', driver.data())
+            return driver.data()
         },
         async fetchVehicle({ commit, rootGetters}, id) {
             if (rootGetters.vehicles[id]) return rootGetters.vehicles[id]
-            else {
-                const vehicle = await fireStore.collection('Vehicles').doc(id).get()
-                commit('addVehicle', vehicle.data())
-                return vehicle.data()
-            }
+            const vehicle = await fireStore.collection('Vehicles').doc(id).get()
+            if (!vehicle.exists) return null
+            commit('addVehicle', vehicle.data())
+            return vehicle.data()
         }
     }
 }

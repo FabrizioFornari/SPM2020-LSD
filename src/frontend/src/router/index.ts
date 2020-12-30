@@ -9,7 +9,7 @@ const router: VueRouter = new VueRouter({
   mode: 'history', 
   routes: [
     {
-      path: '/',
+      path: '/map',
       name: 'Home',
       meta: { 
           title: 'Sparking',
@@ -34,12 +34,18 @@ const router: VueRouter = new VueRouter({
       }
     },
     {
+      path: '/parking',
+      name: 'Parking',
+      component: () => import('../views/Parking.vue'),
+      props: route => ({ id: route.query.id }),
+      meta: { 
+        float: true 
+      }
+    },
+    {
       path: '/dashboard',
       name: 'Dashboard',
       component: () => import('../views/Dashboard.vue'),
-      meta: { 
-        requiresAuth: true 
-      },
       children: [
         {
           path: '',
@@ -56,7 +62,7 @@ const router: VueRouter = new VueRouter({
           component: () => import('../views/driver/Garage.vue'),
           meta: { 
               title: 'My Garage - Sparking',
-              requiresAuth: true 
+              requiresRole: ['driver', 'policeman'] 
           }
         },
         {
@@ -66,7 +72,7 @@ const router: VueRouter = new VueRouter({
           props: true,
           meta: {
               title: 'My Vehicle - Sparking',
-              requiresAuth: true 
+              requiresRole: ['driver', 'policeman'] 
           }
         },
         {
@@ -75,7 +81,7 @@ const router: VueRouter = new VueRouter({
           component: () => import('../views/driver/Vehicle.vue'),
           meta: {
               title: 'New Vehicle - Sparking',
-              requiresAuth: true 
+              requiresRole: ['driver', 'policeman'] 
           }
         }
       ]
@@ -103,20 +109,26 @@ const router: VueRouter = new VueRouter({
     { 
       path: '*', 
       beforeEnter: (to, from, next) => {
-        next('/')
+        next('/map')
       }
     }
   ]
 })
 
 router.beforeEach(async (to, from, next) => {
-  if (to.meta.requiresAuth !== undefined) await onAuthStateInit()
-  
-  if (to.meta.requiresAuth == true && !store.getters.isLogged) next({ path: '/login', query: { redirect: to.fullPath } })
-  else if (to.meta.requiresAuth == false && store.getters.isLogged) next('/dashboard')
-  else if (to.meta.requiresAdmin == true && !store.getters.isLoggedAdmin) next('/')
-  else if (to.meta.requiresAdmin == false && store.getters.isLoggedAdmin) next('/admin/dashboard')
-  else next(); // make sure to always call next()!
+  if (to.meta.requiresAuth !== undefined) {
+    await onAuthStateInit()
+    if (to.meta.requiresAuth == true && !store.getters.isLogged) next({ path: '/login', query: { redirect: to.fullPath } })
+    else if (to.meta.requiresAuth == false && store.getters.isLogged) next('/dashboard')
+    else if (to.meta.requiresAdmin == true && !store.getters.isLoggedAdmin) next('/map')
+    else if (to.meta.requiresAdmin == false && store.getters.isLoggedAdmin) next('/admin/dashboard')
+    else next(); // make sure to always call next()!
+  } else if (to.meta.requiresRole !== undefined) {
+    await onAuthStateInit()
+    if (!store.getters.isLogged) next({ path: '/login', query: { redirect: to.fullPath } })
+    else if (!to.meta.requiresRole.includes(store.getters.userRole)) next('/map')
+    else next()
+  } else next()
 
   if (to.meta.title !== undefined) document.title = to.meta.title
   else document.title = 'Sparking'

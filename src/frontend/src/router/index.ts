@@ -34,10 +34,20 @@ const router: VueRouter = new VueRouter({
       }
     },
     {
-      path: '/parking',
+      path: '/map/parking',
+      name: 'NewParking',
+      component: () => import('../views/Parking.vue'),
+      props: route => ( route.query ),
+      meta: { 
+        float: true,
+        requiresRole: ['municipality'] 
+      }
+    },
+    {
+      path: '/map/parking/:id',
       name: 'Parking',
       component: () => import('../views/Parking.vue'),
-      props: route => ({ id: route.query.id }),
+      props: true,
       meta: { 
         float: true 
       }

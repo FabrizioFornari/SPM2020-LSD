@@ -10,22 +10,40 @@
       <router-link to="/dashboard" v-else class="userIcon"><img src="./assets/user.svg"></router-link>
     </div>
 
-    <div id="main" v-if="$route.fullPath !== '/'">
+    <div id="float" v-if="$route.meta.float && ready">
+      <router-link id="close" to="/" />
+      <router-view :key="$route.fullPath"/>
+    </div>
+    <div id="main" v-else-if="$route.name !== 'Home'">
       <div class="page">
         <router-view :key="$route.fullPath"/>
       </div>
       <router-link to="/" id="backhome"></router-link>
     </div>
-    <Map />
+    
+    <Map v-if="ready" />
   </div>
 </template>
 
 <script>
-import Map from '@/components/Map.vue' // @ is an alias to /src
+import Map from '@/components/Map.vue'
 
 export default {
+  data() {
+    return {
+      ready: false
+    }
+  },
   components: {
     Map
+  },
+  async created() {
+    let center
+    if (this.$route.query.parking) center = await this.$store.dispatch("coordParking", this.$route.query.parking)
+    else if (Object.keys(this.$route.query).length > 0) this.$router.push('/')
+    if (!center) center = [45.449534, 9.179764] 
+    this.$store.commit("setCenter", center)
+    this.ready = true
   }
 } 
 </script>
@@ -73,6 +91,34 @@ a:hover {
 
 #nav-mobile {
   display: none;
+}
+
+#float {
+  width: 30vw;
+  min-width: 300px;
+  height: 100vh;
+  right: 0;
+  padding: 20px;
+  background-color: white;
+  border-radius: 20px 0 0 20px;
+  box-shadow: 0 0 30px #00000022;
+  position: fixed;
+  z-index: 100;
+
+  & #close {
+    color: #00000033;
+    
+    &::after {
+      top: 0;
+      right: 15px;
+      font-size: 30px;
+      content: "\00d7";
+      position: absolute;
+    }
+    &:hover {
+      color: #00000099;
+    }
+  }
 }
 
 #main {
@@ -145,9 +191,12 @@ label {
     
     & > .input {
         width: 100%;
+        padding: 15px 20px 10px 20px;
         border: 1px solid #00000019;
         border-radius: 8px;
-        padding: 15px 20px 10px 20px;
+        background-color: white;
+        outline: none;
+        transition: 0.3s;
 
         &:hover,
         &:focus {
@@ -168,7 +217,6 @@ label {
     &:focus-within > .input,
     & .input:valid {
         opacity: 1;
-        transition: 0.4s;
     }
 
     &:focus-within > span,
@@ -221,6 +269,14 @@ label {
       width: 25px;
       transition: .1s;
     }
+  }
+
+  #float {
+    width: 100vw;
+    min-width: 100vw;
+    height: 140px;
+    bottom: 0;
+    border-radius: 15px 15px 0 0;
   }
 
   #main {

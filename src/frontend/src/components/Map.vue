@@ -1,34 +1,35 @@
 <template>
-    <div class="map">
-        <l-map id="homeMap" ref="homeMap"
-            :zoom="zoom"
-            :minZoom="minZoom"
-            :maxZoom="maxZoom"
-            :center="center"
-            :options="mapOptions"
-            @ready="handleEvents"
-            @update:zoom="hideMarkers"
-            @click="addParking">
-            <l-tile-layer :url="url" :attribution="attribution"/>
-            <l-search :options="searchOptions" />
-            <l-routing :waypoints="waypoints" :icon="myMarkerIcon" :key="waypoints" />
-            <l-locate-control :options="{icon: 'fa fa-crosshairs'}" />
-            <l-control class="leaflet-bar leaflet-control" :position="'topleft'"> 
-                <a class="autoSearch fa fa-repeat" v-bind:class="{ active: autoSearch }" @click="autoSearch = !autoSearch" /> 
-            </l-control>
-            <l-group v-if="markerVisible">
-                <l-marker v-for="(marker, index) in markers"  
-                    :lat-lng="[marker.lat, marker.lon]" 
-                    :icon="myMarkerIcon"
-                    :key="index">
-                    <l-popup>
-                        <b>{{ marker.name }}</b> <br>
-                        <button @click="findRoute(marker.lat, marker.lon)">Indicazioni</button>
-                    </l-popup>
-                </l-marker>
-            </l-group>
-        </l-map>
-    </div>
+    <l-map id="map" ref="map"
+        :zoom="zoom"
+        :minZoom="minZoom"
+        :maxZoom="maxZoom"
+        :center="center"
+        :options="mapOptions"
+        @ready="handleEvents"
+        @update:zoom="hideMarkers"
+        @click="addParking">
+        <l-tile-layer :url="url" :attribution="attribution"/>
+        <l-search :options="searchOptions" />
+        <l-routing :waypoints="waypoints" :icon="myMarkerIcon" :key="waypoints" />
+        <l-locate-control :options="{icon: 'fa fa-crosshairs'}" />
+        <l-control class="leaflet-bar leaflet-control" :position="'topleft'"> 
+            <a class="autoSearch fa fa-repeat" v-bind:class="{ active: autoSearch }" @click="autoSearch = !autoSearch" /> 
+        </l-control>
+        <l-marker v-if="active" :lat-lng="active"
+                :icon="myMarkerIcon"/>
+        <l-group v-if="markerVisible">
+            <l-marker v-for="marker in markers"
+                :lat-lng="[marker.lat, marker.lon]"
+                :icon="myMarkerIcon"
+                :key="marker.id"
+                @click="showParking(marker.id)">
+                <!--<l-popup>
+                    <b>{{ marker.name }}</b> <br>
+                    <button @click="findRoute(marker.lat, marker.lon)">Indicazioni</button>
+                </l-popup>-->
+            </l-marker>
+        </l-group>
+    </l-map>
 </template>
 
 <script>
@@ -39,11 +40,10 @@ import Geosearch from '@/components/Geosearch'
 import Routing from '@/components/Routing'
 import L, { latLng } from 'leaflet'
 import 'leaflet/dist/leaflet.css'
-import { fireStore, geoPoint } from '@/firebase'
+import { fireStore, fireAuth, geoPoint } from '@/firebase'
 import * as turf from '@turf/turf'
-import municipalityApi from './../api/municipality'
-import { fireAuth } from './../firebase'
-import store from '@/store/auth'
+import municipalityApi from '@/api/municipality'
+import store from '@/store'
 
 export default {
     name: 'spark-map',  
@@ -57,7 +57,6 @@ export default {
             zoom: 11,
             minZoom: 3,
             maxZoom: 17,
-            center: latLng(45.449534, 9.179764),
             url: 'https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png',
             // 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
             attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
@@ -87,7 +86,6 @@ export default {
         'l-map': LMap,
         'l-tile-layer': LTileLayer,
         'l-marker': LMarker,
-        'l-popup': LPopup,
         'l-group': LLayerGroup,
         'l-control': LControl,
         'l-locate-control': Vue2LeafletLocatecontrol,
@@ -96,6 +94,7 @@ export default {
     },
     methods: {
         handleEvents(map) {
+            this.parseAreas(map.getBounds(), map)
             map.on('geosearch/showlocation', (ev) => {
                 this.locSearch = true
                 this.parseAreas(L.latLngBounds(ev.location.bounds), map)
@@ -114,14 +113,24 @@ export default {
         },
 
         async addParking(ev) {
-            const newParking = {
-                name: "prova",
-                lat: ev.latlng.lat,
-                lon: ev.latlng.lng
+            if (store.getters.userRole == 'municipality') {
+                this.$router.push({ path: '/map/parking', query: { c: ev.latlng }})
+                this.$store.commit("setActive", ev.latlng)
             }
-            this.markers.push(newParking)
-            const token = await fireAuth.currentUser.getIdToken()
-            municipalityApi.addParking(store.getters.user.uid, token, newParking)
+                /*const newParking = {
+                    name: "prova",
+                    lat: ev.latlng.lat,
+                    lon: ev.latlng.lng
+                }
+                this.markers.push(newParking)
+                const token = await fireAuth.currentUser.getIdToken()
+                municipalityApi.addParking(store.getters.userUid, token, newParking)
+            }*/
+        },
+
+        async showParking(id) {
+            this.$router.push('/map/parking/'+id)
+            this.$store.commit("setCenter", latLng(await this.$store.dispatch("coordParking", id)))
         },
 
         findParkings(bounds) {
@@ -133,6 +142,7 @@ export default {
                     console.log(querySnapshot.size, "new parkings were found")
                     querySnapshot.forEach((doc) => {
                         this.markers.push(doc.data())
+                        this.$store.commit("addParking", doc.data())
                     })
                 })
                 .catch((error) => {
@@ -211,13 +221,20 @@ export default {
         hideMarkers(zoom) {
             zoom >= 9 ? (this.markerVisible = true) : (this.markerVisible = false)
         }
+    },
+    computed: {
+        center() { return this.$store.getters.center },
+        active() { return this.$store.getters.active }
+    },
+    watch: {
+        center(newStatus, oldStatus) { return },
+        active(newStatus, oldStatus) { return }
     }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-#homeMap {
+#map {
     width: 100%;
     height: 100vh;
     z-index: 1;
@@ -231,6 +248,13 @@ export default {
     &.active {
         color: white;
         background-color: rgb(41, 134, 255);
+    }
+}
+
+
+@media (max-width: 400px) {
+    #map {
+        height: calc(100vh - 60px);
     }
 }
 </style>

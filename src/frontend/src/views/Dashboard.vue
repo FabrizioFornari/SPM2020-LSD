@@ -66,6 +66,7 @@ export default {
     flex-flow: column;
     justify-content: center;
     display: flex;
+    transition: 0.3s;
 
     &.action {
       padding: 10px;

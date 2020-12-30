@@ -18,12 +18,12 @@
 export default {
     name: 'garage',
     computed: {
-        status () { return this.$store.getters.driver.status },
-        vehicles () { return this.$store.getters.driver.profile.vehicles }
+        status() { return this.$store.getters.driver.status },
+        vehicles() { return this.$store.getters.driver.profile.vehicles }
     },
     watch: {
-        status (newStatus, oldStatus) { return },
-        vehicles (newDriver, oldDriver) { return }
+        status(newStatus, oldStatus) { return },
+        vehicles(newDriver, oldDriver) { return }
     }
 }
 </script>

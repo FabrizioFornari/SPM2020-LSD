@@ -45,7 +45,7 @@ export default {
   methods: {
     async signIn() {
       await login(this.form.email, this.form.password)
-      this.$router.push(this.$route.query.redirect || '/')
+      this.$router.push(this.$route.query.redirect || '/map')
       this.form.email = ""
       this.form.password = ""
     }

@@ -1,5 +1,5 @@
 <template>
-    <div class="vehicle">
+    <form class="vehicle" @submit.prevent="!id ? addVehicle() : updateVehicle()">
         <div class="details">
             <label>
                 <input type="text" class="input" v-model="vehicle.name" required>
@@ -22,19 +22,17 @@
             </label>
         </div>
         
-        <div v-if="!id" class="actions">
-            <button class="action save" @click="addVehicle()">Add</button>
+        <div class="actions">
+            <button v-if="!id" class="action save" type="submit">Add</button>
+            <button v-else class="action save" type="submit">Save</button>
             <router-link class="action cancel" to="/dashboard/garage">Cancel</router-link>
         </div>
-        <div v-else class="actions">
-            <button class="action save" @click="updateVehicle()">Save</button>
-            <router-link class="action cancel" to="/dashboard/garage">Cancel</router-link>
-        </div>
-    </div>
+    </form>
 </template>
 
 <script>
-import { fireAuth, fireStore } from '@/firebase'
+import { fireStore } from '@/firebase'
+import api from '@/api/driver'
 
 export default {
     data() {
@@ -53,7 +51,7 @@ export default {
     },
     methods: {
         async addVehicle() {
-            const token = await fireAuth.currentUser.getIdToken()
+            api.addVehicle(this.vehicle)
         },
         async updateVehicle() {
             const vehicles = {[this.vehicle.id]: {id: this.vehicle.id, name: this.vehicle.name, type: this.vehicle.type}}
@@ -61,7 +59,6 @@ export default {
             batch.update(fireStore.collection('Vehicles').doc(this.vehicle.id), this.vehicle)
             batch.set(fireStore.collection('Users').doc(this.vehicle.owner), { vehicles }, { merge: true })
             batch.commit().then(() => {
-                alert("UPDATED")
                 this.$store.commit("addVehicle", this.vehicle)
                 this.$router.push('/dashboard/garage')
             })

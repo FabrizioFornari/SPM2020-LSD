@@ -1,28 +1,30 @@
 <template>
   <div class="menu">
-    <div class="choices">
-      <router-link class="choice" id="profileButton" to="/dashboard/profile">
-          <h3> View Profile </h3> 
-          <p> See your private account details and modify them </p>
-      </router-link>
-      <router-link class="choice" id="garageButton" to="/dashboard/garage"> 
-          <h3> My Garage! </h3> 
-          <p> Watch all your vehicles, add more or modify existing ones </p>
-      </router-link>
-    </div>
+    <component :is="role"></component>
     <div class="choice action logout" id="logoutButton" @click="signOut()"> Logout </div>
   </div>
 </template>
 
 <script>
+import driverMenu from './driver/Menu'
+import municipalityMenu from './municipality/Menu'
 import { logout } from '@/firebase'
 
 export default {
   name: 'choices',
+  data() {
+    return {
+      role: this.$store.getters.userRole + 'Menu'
+    }
+  },
   methods: {
     signOut() {
       logout()
     }
+  },
+  components: {
+    driverMenu,
+    municipalityMenu
   }
 }
 </script>

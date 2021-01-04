@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import api from '@/api/admin-auth'
+import { fireAuth } from '@/firebase'
 
 const auth = {
     state: {
@@ -9,7 +10,7 @@ const auth = {
         user: {
             loggedIn: false,
             role: null,
-            data: null
+            data: {}
         }
     },
     mutations: {
@@ -22,6 +23,9 @@ const auth = {
         SET_USER_ROLE(state, role) {
             state.user.role = role
         },
+        SET_USER_TOKEN(state, token) {
+            state.user.data.token = token
+        },
         SET_USER(state, data) {
             state.user.data = data
         }
@@ -31,6 +35,7 @@ const auth = {
         isLogged: state => state.user.loggedIn,
         userRole: state => state.user.role,
         userUid: state => state.user.data.uid,
+        userToken: state => state.user.data.token,
         user: state => state.user.data
     },
     actions: {
@@ -77,11 +82,20 @@ const auth = {
                 })
             } else {
                 commit("SET_USER_ROLE", null)
-                commit("SET_USER", null)
+                commit("SET_USER", {})
             }
         },
         fetchRole({ commit }, role) {
             if (role) commit("SET_USER_ROLE", role)
+        },
+        async fetchAccess({ commit, rootGetters }) {
+            if (!rootGetters.isLogged) return null
+            let token = rootGetters.userToken
+            if (!token) {
+                token = await fireAuth.currentUser.getIdToken()
+                commit("SET_USER_TOKEN", token)
+            }
+            return { uid: rootGetters.userUid, token: token }
         }
     }
 }

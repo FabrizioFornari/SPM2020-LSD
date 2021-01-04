@@ -8,6 +8,10 @@
             <h3> My Garage </h3> 
             <p> Watch all your vehicles, add more or modify existing ones </p>
         </router-link>
+        <router-link class="choice" id="pocketButton" to="/dashboard/pocket"> 
+            <h3> My Pocket </h3> 
+            <p> Save your cards, charge the app credit and keep track of your tickets </p>
+        </router-link>
     </div>
 </template>
 

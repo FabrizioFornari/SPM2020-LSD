@@ -2,7 +2,7 @@
     <div class="choices">
         <router-link class="choice" id="profileButton" to="/dashboard/profile">
             <h3> View Profile </h3> 
-            <p> See the municipality account details and modify them </p>
+            <p> See the municipality account's details and modify them </p>
         </router-link>
         <router-link class="choice" id="garageButton" to="/dashboard/parkings"> 
             <h3> All Parkings </h3> 

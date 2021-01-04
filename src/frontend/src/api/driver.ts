@@ -1,9 +1,13 @@
 import AXIOS from '@/config/axios'
-import { fireAuth } from '@/firebase';
+import store from '@/store'
 
 export default {
     async addVehicle(vehicle) {
-        const token = await fireAuth.currentUser.getIdToken()
-        return AXIOS.post(`/add/vehicle/`+this.$store.getters.user.uid+'/'+token,vehicle);
+        const access = await store.dispatch("fetchAccess")
+        return AXIOS.post(`/add/vehicle/`+access.uid+'/'+access.token, vehicle)
+    },
+    async buyTicket(ticket) {
+        const access = await store.dispatch("fetchAccess")
+        return AXIOS.post(`/buy/ticket/`+access.uid+'/'+access.token, ticket)
     }
 }

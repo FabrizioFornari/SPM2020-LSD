@@ -1,7 +1,17 @@
 import AXIOS from '@/config/axios'
+import store from '@/store'
 
 export default {
-    addParking(uid: string, token: string, parking) {
-        return AXIOS.post(`/municipality/`+uid+'/'+token+'/insert/parking/'+parking.name+'/'+parking.lat+'/'+parking.lon+'/'+true);
+    async addParking(parking) {
+        const access = await store.dispatch("fetchAccess")
+        return AXIOS.post(`/add/parking/`+access.uid+'/'+access.token, parking)
+    },
+    async editParking(parking) {
+        const access = await store.dispatch("fetchAccess")
+        return AXIOS.post(`/edit/parking/`+access.uid+'/'+access.token, parking)
+    },
+    async removeParking(parkingId) {
+        const access = await store.dispatch("fetchAccess")
+        return AXIOS.post(`/remove/parking/`+access.uid+'/'+access.token+'/'+parkingId)
     }
 }

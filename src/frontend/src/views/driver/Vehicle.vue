@@ -51,7 +51,8 @@ export default {
     },
     methods: {
         async addVehicle() {
-            api.addVehicle(this.vehicle)
+            await api.addVehicle(this.vehicle)
+            this.$router.push('/dashboard/garage')
         },
         async updateVehicle() {
             const vehicles = {[this.vehicle.id]: {id: this.vehicle.id, name: this.vehicle.name, type: this.vehicle.type}}

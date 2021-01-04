@@ -15,8 +15,7 @@
         <l-control class="leaflet-bar leaflet-control" :position="'topleft'"> 
             <a class="autoSearch fa fa-repeat" v-bind:class="{ active: autoSearch }" @click="autoSearch = !autoSearch" /> 
         </l-control>
-        <l-marker v-if="active" :lat-lng="active"
-                :icon="myMarkerIcon"/>
+        <l-marker v-if="active" :lat-lng="active" :icon="myMarkerIcon"/>
         <l-group v-if="markerVisible">
             <l-marker v-for="marker in markers"
                 :lat-lng="[marker.lat, marker.lon]"
@@ -40,7 +39,7 @@ import Geosearch from '@/components/Geosearch'
 import Routing from '@/components/Routing'
 import L, { latLng } from 'leaflet'
 import 'leaflet/dist/leaflet.css'
-import { fireStore, fireAuth, geoPoint } from '@/firebase'
+import { fireStore, geoPoint } from '@/firebase'
 import * as turf from '@turf/turf'
 import municipalityApi from '@/api/municipality'
 import store from '@/store'
@@ -61,7 +60,8 @@ export default {
             // 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
             attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
             mapOptions: {
-                zoomSnap: 0.5
+                zoomDelta: 0.5,
+                zoomSnap: 0.25
             },
 
             userPosition: null,
@@ -101,7 +101,7 @@ export default {
             })
             map.on('moveend', () => {
                 if (this.locSearch) this.locSearch = false
-                else if (this.autoSearch && map.getZoom() >= 10) this.parseAreas(map.getBounds(), map)
+                else if (this.autoSearch && map.getZoom() > 10) this.parseAreas(map.getBounds(), map)
             })
             map.on('locationfound', (ev) => {
                 this.userPosition = ev.latlng
@@ -113,10 +113,9 @@ export default {
         },
 
         async addParking(ev) {
-            if (store.getters.userRole == 'municipality') {
-                this.$router.push({ path: '/map/parking', query: { c: ev.latlng }})
-                this.$store.commit("setActive", ev.latlng)
-            }
+            if (store.getters.userRole == 'municipality')
+                this.$router.push({ path: '/map/parking', query: { c: ev.latlng.lat + ',' + ev.latlng.lng }})
+                
                 /*const newParking = {
                     name: "prova",
                     lat: ev.latlng.lat,
@@ -219,7 +218,7 @@ export default {
         },
         
         hideMarkers(zoom) {
-            zoom >= 9 ? (this.markerVisible = true) : (this.markerVisible = false)
+            zoom > 9.5 ? (this.markerVisible = true) : (this.markerVisible = false)
         }
     },
     computed: {

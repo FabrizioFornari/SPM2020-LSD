@@ -51,7 +51,7 @@ export default {
     box-shadow: 0 10px 20px rgba(0,0,0,.09803921568627451);
     transform: translateX(-50%);
     overflow: hidden;
-    position: absolute;
+    position: fixed;
     cursor: auto;
 
     form {
@@ -84,7 +84,7 @@ export default {
       width: 100%;
       max-width: 100%;
       min-width: 100%;
-      bottom: 0;
+      bottom: 60px;
       border-radius: 15px 15px 0 0;
     }
   }

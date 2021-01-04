@@ -56,8 +56,9 @@ export async function login(email: string, password: string) {
         await fireAuth.signInWithEmailAndPassword(email, password)
         await getRole(fireAuth.currentUser)   
         console.log("Logged in")
+        return
     } catch (error) {
-        console.log(error)
+        return(error.message)
     }
 }
 

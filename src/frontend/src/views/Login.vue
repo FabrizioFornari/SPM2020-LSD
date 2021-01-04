@@ -3,7 +3,7 @@
     <div class="row justify-content-center">
       <div class="col-md-12">
         <div class="card-body">
-          <div v-if="error" class="alert alert-danger">{{error}}</div>
+          <div v-if="error" class="alert alert-danger">{{ error }}</div>
           <form @submit.prevent="signIn">
             <label>
               <input type="email" id="emailLogin" class="input" value required autofocus v-model="form.email">
@@ -44,10 +44,9 @@ export default {
   },
   methods: {
     async signIn() {
-      await login(this.form.email, this.form.password)
-      this.$router.push(this.$route.query.redirect || '/map')
-      this.form.email = ""
-      this.form.password = ""
+      this.error = null
+      this.error = await login(this.form.email, this.form.password)
+      if (!this.error) this.$router.push(this.$route.query.redirect || '/map')
     }
   }
 }

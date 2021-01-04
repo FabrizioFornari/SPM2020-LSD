@@ -5,20 +5,20 @@
       <router-link to="/dashboard" v-else id="profileMenu">Profile</router-link>
     </div>
     <div id="nav-mobile">
-      <router-link to="/" class="mapIcon"><img src="./assets/map.svg"></router-link>
+      <router-link to="/map" class="mapIcon"><img src="./assets/map.svg"></router-link>
       <router-link to="/login" v-if="!this.$store.getters.isLogged"><img src="./assets/user.svg"></router-link> 
       <router-link to="/dashboard" v-else class="userIcon"><img src="./assets/user.svg"></router-link>
     </div>
 
     <div id="float" v-if="$route.meta.float && ready">
-      <router-link id="close" to="/" />
-      <router-view :key="$route.fullPath"/>
+      <router-link to="/map" id="close" />
+      <router-view :key="$route.fullPath" />
     </div>
     <div id="main" v-else-if="$route.name !== 'Home'">
       <div class="page">
-        <router-view :key="$route.fullPath"/>
+        <router-view :key="$route.fullPath" />
       </div>
-      <router-link to="/" id="backhome"></router-link>
+      <router-link to="/map" id="backhome" />
     </div>
     
     <Map v-if="ready" />
@@ -40,7 +40,7 @@ export default {
   async created() {
     let center
     if (this.$route.query.parking) center = await this.$store.dispatch("coordParking", this.$route.query.parking)
-    else if (Object.keys(this.$route.query).length > 0) this.$router.push('/')
+    else if (Object.keys(this.$route.query).length > 0) this.$router.push('/map')
     if (!center) center = [45.449534, 9.179764] 
     this.$store.commit("setCenter", center)
     this.ready = true
@@ -94,14 +94,13 @@ a:hover {
 }
 
 #float {
-  width: 30vw;
-  min-width: 300px;
+  width: 350px;
   height: 100vh;
   right: 0;
-  padding: 20px;
+  padding: 25px 0;
   background-color: white;
-  border-radius: 20px 0 0 20px;
   box-shadow: 0 0 30px #00000022;
+  overflow-y: auto;
   position: fixed;
   z-index: 100;
 
@@ -123,10 +122,8 @@ a:hover {
 
 #main {
   width: max-content;
-  min-width: 400px;
   height: 100vh;
   right: 0;
-  background-color: #fff;
   box-shadow: 0 0 30px #00000022;
   position: fixed;
   z-index: 2;
@@ -137,12 +134,18 @@ a:hover {
     top: 0;
     left: 0;
     position: fixed;
+
+    &:hover {
+      background-color: #00000011;
+      cursor: url('assets/cross.png'), pointer;
+    }
   }
 
   .page {
     height: 100%;
     padding-top: 30px;
     padding-bottom: 10px;
+    background-color: #fff;
     overflow-x: hidden;
     overflow-y: auto;
     position: relative;
@@ -160,7 +163,6 @@ a:hover {
 
 .justify-content-center {
   height: 100%;
-  min-height: 300px;
   align-items: center;
 }
 
@@ -181,12 +183,17 @@ a:hover {
 }
 
 form {
+  width: inherit;
   flex-flow: column;
   display: flex;
+
+  & .details {
+    margin: 0 15px;
+  }
 }
 
 label {
-    margin: 15px !important;
+    margin: 15px 0 !important;
     display: flex !important;
     
     & > .input {
@@ -274,7 +281,7 @@ label {
   #float {
     width: 100vw;
     min-width: 100vw;
-    height: 140px;
+    height: 170px;
     bottom: 0;
     border-radius: 15px 15px 0 0;
   }

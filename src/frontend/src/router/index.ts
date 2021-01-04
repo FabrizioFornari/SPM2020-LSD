@@ -13,6 +13,10 @@ const router: VueRouter = new VueRouter({
       name: 'Home',
       meta: { 
           title: 'Sparking',
+      },
+      beforeEnter: (to, from, next) => {
+        store.commit("setActive", null)
+        next()
       }
     },
     {
@@ -41,6 +45,10 @@ const router: VueRouter = new VueRouter({
       meta: { 
         float: true,
         requiresRole: ['municipality'] 
+      },
+      beforeEnter: (to, from, next) => {
+        if (!to.query.c) next('/map')
+        else next()
       }
     },
     {

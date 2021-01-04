@@ -19,6 +19,7 @@ const parking = {
         },
         setActive(state, active) {
             state.active = active
+            state.center = active
         }
     },
     getters: {

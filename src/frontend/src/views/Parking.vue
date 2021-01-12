@@ -1,44 +1,57 @@
 <template>
     <form v-if="id && !edit">
         <div class="details">
-            <h3>{{ parking.name }}</h3>
-            <div>{{ parking.address }}, {{ parking.city }}</div>
+            <h3><b>{{ parking.name }}</b></h3>
+            <div class="address">{{ parking.address }}, {{ parking.city }}</div>
+            <p class="sub">Parking slots</p>
+            <div v-for="(amount, type) in parking.slots" :key="type">{{type}}: {{amount}}</div>
+            <p class="sub">Opening Days</p>
+            <div v-for="(day, d) of parking.days" :key="d">{{weekday[d]}}: {{day.start}} - {{day.end}}</div>
+            <p class="sub">Price</p>
+            <div>{{ parking.price }}/hour</div>
         </div>
         <div class="actions" v-if="this.$store.getters.userUid == parking.municipalityId">
             <button class="action save" @click="edit = true">Edit</button>
-            <button class="action save" type="submit">Cancel</button>
+            <router-link class="action cancel" to="/map">Cancel</router-link>
         </div>
         <div class="actions" v-else>
-            <button class="action save" type="submit">Route</button>
-            <button class="action save" type="submit" v-if="this.$store.getters.userRole != 'municipality'">Buy</button>
-            <button class="action save" type="submit" v-if="this.$store.getters.userRole != 'municipality'">Pin it</button>
+            <button class="action save" @click.prevent="findRoute">Route</button>
+            <button class="action save" v-if="this.$store.getters.userRole != 'municipality'">Buy</button>
+            <button class="action save" v-if="this.$store.getters.userRole != 'municipality'">Pin it</button>
         </div>
     </form>
     <form v-else @submit.prevent="edit ? editParking() : addParking()">
         <div class="details">
-            <h3 v-if="edit">Edit Parking</h3>
-            <h3 v-else>New Parking</h3>
-            <div>{{ parking.address }}, {{ parking.city }}</div>
+            <h3 v-if="edit"><b>Edit Parking</b></h3>
+            <h3 v-else><b>New Parking</b></h3>
+            <div class="address">{{ parking.address }}, {{ parking.city }}</div>
             <label>
                 <input type="text" class="input" v-model="parking.name" required autofocus>
                 <span>Name</span>
             </label>
-            <label>
-                <input type="number" min="0" class="input" v-model.number="slots.car">
-                <span>Car slots</span>
+
+            <p class="sub">Parking slots</p>
+            <div class="slider">
+                <a v-for="type in $store.getters.vehicleTypes" :key="type" v-show="!(type in slots)" @click="$set(slots, type)">
+                    {{ type }}
+                </a>
+            </div>
+            <label :class="{ 'removable' : Object.keys(slots).length > 1}" v-for="(slot, type) in slots" :key="type">
+                <input type="number" min="1" class="input" v-model.number="slots[type]" required>
+                <span>{{ type }} slots</span>
+                <a v-if="Object.keys(slots).length > 1" @click="$delete(slots, type)">-</a>
             </label>
+
+            <p class="sub">Time and Price</p>
             <label>
-                <input type="number" min="0" class="input" v-model.number="slots.handicap">
-                <span>Handicap slots</span>
-            </label>
-            <label>
-                <input type="number" min="0" class="input" v-model.number="slots.motorcycle">
-                <span>Motorcycle slots</span>
-            </label>
-            <label>
-                <input type="time" class="input" v-model="parking.time" required>
-                <input type="time" class="input" v-model="parking.time" required>
-                <span>Opening time</span>
+                <label>
+                    <input type="time" class="input" v-model="days.time" required>
+                    <span>From</span>
+                </label>
+                <label>
+                    <input type="time" class="input" v-model="days.time" required>
+                    <span>To</span>
+                </label>
             </label>
             <label>
                 <input type="number" min="0" step=".01" class="input" v-model.number="parking.price" required>
@@ -63,12 +76,16 @@ export default {
     name: 'Parking',
     data() {
         return {
+            weekday: ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
             parking: {
                 address: null,
                 city: null,
                 name: null
             },
-            slots: {},
+            slots: {
+                car: 1
+            },
+            days: {},
             edit: false
         }
     },
@@ -83,13 +100,20 @@ export default {
     methods: {
         async addParking() {
             this.parking.slots = this.slots
+            this.parking.days = this.days
             console.log(this.parking)
+        },
+        findRoute() {
+            this.$store.dispatch("fetchWaypoints", latLng(this.parking.lat, this.parking.lon))
         }
     },
     async created() {
         if (this.id) {
-            this.parking = await this.$store.dispatch("fetchParking", this.id)
-            if (this.parking) this.$store.commit("setActive", latLng(this.parking.lat, this.parking.lon))
+            this.parking = { ...await this.$store.dispatch("fetchParking", this.id)}
+            if (this.parking) {
+                this.slots = this.parking.slots
+                this.$store.commit("setActive", latLng(this.parking.lat, this.parking.lon))
+            }
             else this.$router.push('/map')
         }
         else if (this.c && this.c.indexOf(',') > -1) {
@@ -114,6 +138,51 @@ export default {
 <style lang="scss" scoped>
 .details {
     text-align: left;
+    padding: 0 10px;
+    padding-bottom: 60px;
+
+    .address {
+        font-style: italic;
+    }
+
+    .sub {
+        margin-top: 35px;
+    }
+
+    .slider {
+        display: flex;
+
+        & a {
+            margin-right: 10px;
+            padding: 0 10px;
+            border: 1px solid #00000033;
+            border-radius: 30px;
+
+            &:hover {
+                border: 1px solid black;
+            }      
+        }
+    }
+
+    .removable {
+        align-items: center;
+        margin-right: 45px !important;
+
+        & > a {
+            width: 30px;
+            height: 30px;
+            right: -45px;
+            border-radius: 100%;
+            background-color: #00000013;
+            display: flex;
+            justify-content: center;
+            position: absolute;
+
+            &:hover {
+                background-color: #f71b1b62;
+            }      
+        }
+    }
 }
 
 .actions {
@@ -121,14 +190,17 @@ export default {
     height: 60px;
     bottom: 0;
     background-color: white;
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+    justify-content: space-evenly;
     position: fixed;
 
     &::before {
         content: "";
-        width: 85%;
+        width: 90%;
         height: 1px;
         top: 0;
-        left: 7.5%;
         background-color: #ddd;
         position: absolute;
     }

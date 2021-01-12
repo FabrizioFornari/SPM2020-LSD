@@ -10,7 +10,7 @@
         @click="addParking">
         <l-tile-layer :url="url" :attribution="attribution"/>
         <l-search :options="searchOptions" />
-        <l-routing :waypoints="waypoints" :icon="myMarkerIcon" :key="waypoints" />
+        <l-routing v-if="waypoints" :waypoints="waypoints" :icon="myMarkerIcon" :key="waypoints" />
         <l-locate-control :options="{icon: 'fa fa-crosshairs'}" />
         <l-control class="leaflet-bar leaflet-control" :position="'topleft'"> 
             <a class="autoSearch fa fa-repeat" v-bind:class="{ active: autoSearch }" @click="autoSearch = !autoSearch" /> 
@@ -22,10 +22,6 @@
                 :icon="myMarkerIcon"
                 :key="marker.id"
                 @click="showParking(marker.id)">
-                <!--<l-popup>
-                    <b>{{ marker.name }}</b> <br>
-                    <button @click="findRoute(marker.lat, marker.lon)">Indicazioni</button>
-                </l-popup>-->
             </l-marker>
         </l-group>
     </l-map>
@@ -73,7 +69,6 @@ export default {
                 iconUrl: require('leaflet/dist/images/marker-icon.png'),
                 shadowUrl: require('leaflet/dist/images/marker-shadow.png')
             }),
-            waypoints: [],
 
             searchOptions: {
                 provider: new OpenStreetMapProvider(),
@@ -104,32 +99,21 @@ export default {
                 else if (this.autoSearch && map.getZoom() > 10) this.parseAreas(map.getBounds(), map)
             })
             map.on('locationfound', (ev) => {
-                this.userPosition = ev.latlng
+                this.$store.commit('setUserPosition', ev.latlng)
             })
             map.on('locationerror', (ev) => {
                 alert(ev)
-                this.userPosition = null
+                this.$store.commit('setUserPosition', null)
             })
         },
 
         async addParking(ev) {
             if (store.getters.userRole == 'municipality')
                 this.$router.push({ path: '/map/parking', query: { c: ev.latlng.lat + ',' + ev.latlng.lng }})
-                
-                /*const newParking = {
-                    name: "prova",
-                    lat: ev.latlng.lat,
-                    lon: ev.latlng.lng
-                }
-                this.markers.push(newParking)
-                const token = await fireAuth.currentUser.getIdToken()
-                municipalityApi.addParking(store.getters.userUid, token, newParking)
-            }*/
         },
 
         async showParking(id) {
             this.$router.push('/map/parking/'+id)
-            this.$store.commit("setCenter", latLng(await this.$store.dispatch("coordParking", id)))
         },
 
         findParkings(bounds) {
@@ -147,11 +131,6 @@ export default {
                 .catch((error) => {
                     console.log("Error getting documents: ", error);
                 })
-        },
-
-        findRoute(lat, lng) {
-            if (this.userPosition) this.waypoints = [this.userPosition, latLng(lat, lng)]
-            else alert("You have to set a starting point or you position to start routing")
         },
 
         parseAreas(bounds, map) {
@@ -223,11 +202,13 @@ export default {
     },
     computed: {
         center() { return this.$store.getters.center },
-        active() { return this.$store.getters.active }
+        active() { return this.$store.getters.active },
+        waypoints() { return this.$store.getters.waypoints }
     },
     watch: {
         center(newStatus, oldStatus) { return },
-        active(newStatus, oldStatus) { return }
+        active(newStatus, oldStatus) { return },
+        waypoints(newStatus, oldStatus) { return }
     }
 }
 </script>

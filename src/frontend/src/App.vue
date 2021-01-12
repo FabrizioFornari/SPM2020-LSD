@@ -38,10 +38,7 @@ export default {
     Map
   },
   async created() {
-    let center
-    if (this.$route.query.parking) center = await this.$store.dispatch("coordParking", this.$route.query.parking)
-    else if (Object.keys(this.$route.query).length > 0) this.$router.push('/map')
-    if (!center) center = [45.449534, 9.179764] 
+    const center = [45.449534, 9.179764] 
     this.$store.commit("setCenter", center)
     this.ready = true
   }
@@ -60,6 +57,11 @@ body {
 
 a:hover {
   text-decoration: none !important;
+  cursor: pointer;
+}
+
+button {
+  border: none;
 }
 
 #app {
@@ -170,7 +172,7 @@ a:hover {
   height: 100%;
   max-width: 100% !important;
   min-width: 400px;
-  padding: 0 6% !important;
+  padding: 0 5% !important;
   flex-flow: column;
   display: flex;
 
@@ -195,20 +197,41 @@ form {
 label {
     margin: 15px 0 !important;
     display: flex !important;
+    flex: 1 1 auto;
+    border: 1px solid #00000019;
+    background-color: white;
+    border-radius: 8px;
+    transition: 0.3s;
+    position: relative;
+
+    & > label {
+      margin: 0 !important;
+      border: none !important;
+      flex: 1 1 auto;
+
+      &::after {
+        content: '';
+        height: 60%;
+        align-self: center;
+        border-right: 1px solid #00000019;
+        transition: .3s;
+      }
+
+      &:hover::after {
+        border-right: 1px solid #00000033;
+      }
+
+      &:last-child::after {
+        border-right: none;
+      }
+    }
     
     & > .input {
         width: 100%;
         padding: 15px 20px 10px 20px;
-        border: 1px solid #00000019;
+        border: none;
         border-radius: 8px;
-        background-color: white;
         outline: none;
-        transition: 0.3s;
-
-        &:hover,
-        &:focus {
-            border: 1px solid #00000033;
-        }
     }
 
     & > span {
@@ -221,9 +244,9 @@ label {
         transition: 0.2s;
     }
 
-    &:focus-within > .input,
-    & .input:valid {
-        opacity: 1;
+    &:hover,
+    &:focus-within {
+      border: 1px solid #00000033;
     }
 
     &:focus-within > span,
@@ -244,7 +267,6 @@ label {
     height: 60px;
     bottom: 0;
     background-color: #fff;
-    box-shadow: 0 10 20px #00000019;
     display: flex;
     flex-flow: row;
     align-items: center;
@@ -254,7 +276,7 @@ label {
 
     &::before {
       content: "";
-      width: 85%;
+      width: 90%;
       height: 1px;
       top: 0;
       background-color: #ddd;

@@ -102,6 +102,7 @@ button {
   padding: 25px 0;
   background-color: white;
   box-shadow: 0 0 30px #00000022;
+  overflow-x: hidden;
   overflow-y: auto;
   position: fixed;
   z-index: 100;
@@ -192,70 +193,69 @@ form {
   & .details {
     margin: 0 15px;
   }
+
+  & .label {
+      margin: 15px 0 !important;
+      display: flex !important;
+      flex: 1 1 100%;
+      border: 1px solid #00000019;
+      background-color: white;
+      border-radius: 8px;
+      transition: 0.3s;
+      position: relative;
+
+      & > .label {
+        margin: 0 !important;
+        border: none !important;
+        flex: 1 1 auto;
+
+        &::after {
+          content: '';
+          height: 60%;
+          align-self: center;
+          border-right: 1px solid #00000019;
+          transition: .3s;
+        }
+
+        &:hover::after {
+          border-right: 1px solid #00000033;
+        }
+
+        &:last-child::after {
+          border-right: none;
+        }
+      }
+      
+      & > .input {
+          width: 100%;
+          padding: 15px 20px 10px 20px;
+          border: none;
+          border-radius: 8px;
+          outline: none;
+      }
+
+      & > span {
+          margin-left: 10px;
+          padding: 0 10px;
+          background-color: white;
+          color: #555;
+          align-self: center;
+          position: absolute;
+          transition: 0.2s;
+      }
+
+      &:hover,
+      &:focus-within {
+        border: 1px solid #00000033;
+      }
+
+      &:focus-within > span,
+      & .input:valid + span {
+          margin-bottom: 50px;
+          font-size: 10px;
+      }
+  }
 }
-
-label {
-    margin: 15px 0 !important;
-    display: flex !important;
-    flex: 1 1 auto;
-    border: 1px solid #00000019;
-    background-color: white;
-    border-radius: 8px;
-    transition: 0.3s;
-    position: relative;
-
-    & > label {
-      margin: 0 !important;
-      border: none !important;
-      flex: 1 1 auto;
-
-      &::after {
-        content: '';
-        height: 60%;
-        align-self: center;
-        border-right: 1px solid #00000019;
-        transition: .3s;
-      }
-
-      &:hover::after {
-        border-right: 1px solid #00000033;
-      }
-
-      &:last-child::after {
-        border-right: none;
-      }
-    }
-    
-    & > .input {
-        width: 100%;
-        padding: 15px 20px 10px 20px;
-        border: none;
-        border-radius: 8px;
-        outline: none;
-    }
-
-    & > span {
-        margin-left: 10px;
-        padding: 0 10px;
-        background-color: white;
-        color: #555;
-        align-self: center;
-        position: absolute;
-        transition: 0.2s;
-    }
-
-    &:hover,
-    &:focus-within {
-      border: 1px solid #00000033;
-    }
-
-    &:focus-within > span,
-    & .input:valid + span {
-        margin-bottom: 50px;
-        font-size: 10px;
-    }
-}
-
 
 @media (max-width: 400px) {
   #nav {

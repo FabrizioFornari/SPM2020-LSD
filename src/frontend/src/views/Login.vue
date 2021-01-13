@@ -5,12 +5,12 @@
         <div class="card-body">
           <div v-if="error" class="alert alert-danger">{{ error }}</div>
           <form @submit.prevent="signIn">
-            <label>
+            <label class="label">
               <input type="email" id="emailLogin" class="input" value required autofocus v-model="form.email">
               <span>Email</span>
             </label>
 
-            <label>
+            <label class="label">
               <input type="password" id="passwordLogin" class="input" required v-model="form.password"/>
               <span>Password</span>
             </label>

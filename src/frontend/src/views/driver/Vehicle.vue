@@ -1,19 +1,19 @@
 <template>
     <form class="vehicle" @submit.prevent="!id ? addVehicle() : updateVehicle()">
         <div class="details">
-            <label>
+            <label class="label">
                 <input type="text" class="input" v-model="vehicle.name" required>
                 <span>Name</span>
             </label>
-            <label>
+            <label class="label">
                 <input type="text" class="input" v-model="vehicle.plate" required>
                 <span>Plate</span>
             </label>
-            <label>
+            <label class="label">
                 <input type="text" class="input" v-model="vehicle.cod" required>
                 <span>Code</span>
             </label>
-            <label> 
+            <label class="label"> 
                 <select class="input" v-model="vehicle.type" required>
                     <option value="other">Other</option>
                     <option value="car">Car</option>
@@ -77,8 +77,8 @@ export default {
 
     .details {
         flex: 1 1 auto;
-        flex-flow: column;
-        justify-content: center;
+        flex-flow: row wrap;
+        align-content: center;
         display: flex;
     }
 

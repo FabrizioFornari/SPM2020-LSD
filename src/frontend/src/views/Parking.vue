@@ -5,7 +5,7 @@
             <div class="address">{{ parking.address }}, {{ parking.city }}</div>
             <p class="sub">Parking slots</p>
             <div v-for="(amount, type) in parking.slots" :key="type">{{type}}: {{amount}}</div>
-            <p class="sub">Opening Days</p>
+            <p class="sub">Opening time</p>
             <div v-for="(day, d) of parking.days" :key="d">{{weekday[d]}}: {{day.start}} - {{day.end}}</div>
             <p class="sub">Price</p>
             <div>{{ parking.price }}/hour</div>
@@ -25,8 +25,8 @@
             <h3 v-if="edit"><b>Edit Parking</b></h3>
             <h3 v-else><b>New Parking</b></h3>
             <div class="address">{{ parking.address }}, {{ parking.city }}</div>
-            <label>
-                <input type="text" class="input" v-model="parking.name" required autofocus>
+            <label class="label">
+                <input type="text" class="input" v-model.trim="parking.name" required autofocus>
                 <span>Name</span>
             </label>
 
@@ -36,27 +36,34 @@
                     {{ type }}
                 </a>
             </div>
-            <label :class="{ 'removable' : Object.keys(slots).length > 1}" v-for="(slot, type) in slots" :key="type">
+            <label class="label" :class="{ 'removable' : Object.keys(slots).length > 1}" v-for="(slot, type) in slots" :key="type">
                 <input type="number" min="1" class="input" v-model.number="slots[type]" required>
                 <span>{{ type }} slots</span>
                 <a v-if="Object.keys(slots).length > 1" @click="$delete(slots, type)">-</a>
             </label>
 
-            <p class="sub">Time and Price</p>
-            <label>
-                <label>
+            <p class="sub">Opening time</p>
+            <label class="label">
+                <label class="label">
                     <input type="time" class="input" v-model="days.time" required>
                     <span>From</span>
                 </label>
-                <label>
+                <label class="label">
                     <input type="time" class="input" v-model="days.time" required>
                     <span>To</span>
                 </label>
             </label>
-            <label>
+            <label class="label">
                 <input type="number" min="0" step=".01" class="input" v-model.number="parking.price" required>
                 <span>Price/h</span>
             </label>
+
+            <p class="sub">Extra info</p>
+            <b-form-checkbox
+                v-for="(value, info) in infos"
+                v-model="parking[info]"
+                :key="info"> {{ info }}
+            </b-form-checkbox>
         </div>
 
         <div class="actions">
@@ -86,6 +93,10 @@ export default {
                 car: 1
             },
             days: {},
+            infos: {
+                reservation: false,
+                guarded: true
+            },
             edit: false
         }
     },
@@ -109,9 +120,9 @@ export default {
     },
     async created() {
         if (this.id) {
-            this.parking = { ...await this.$store.dispatch("fetchParking", this.id)}
+            this.parking = { ...await this.$store.dispatch("fetchParking", this.id) }
             if (this.parking) {
-                this.slots = this.parking.slots
+                this.slots = { ...this.parking.slots }
                 this.$store.commit("setActive", latLng(this.parking.lat, this.parking.lon))
             }
             else this.$router.push('/map')
@@ -139,7 +150,7 @@ export default {
 .details {
     text-align: left;
     padding: 0 10px;
-    padding-bottom: 60px;
+    padding-bottom: 80px;
 
     .address {
         font-style: italic;
@@ -195,6 +206,7 @@ export default {
     align-items: center;
     justify-content: space-evenly;
     position: fixed;
+    z-index: 5;
 
     &::before {
         content: "";

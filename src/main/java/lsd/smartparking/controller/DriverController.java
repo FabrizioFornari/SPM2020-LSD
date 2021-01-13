@@ -1,7 +1,5 @@
 package lsd.smartparking.controller;
 
-import java.util.UUID;
-
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;

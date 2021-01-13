@@ -88,7 +88,8 @@ public class Parking {
 	}
 
 	public void setSlots(HashMap<String, Integer> slots) {
-		if (!slots.isEmpty()) this.slots = slots;
+		if (!slots.isEmpty()) throw new IllegalArgumentException("Invalid parking slots");
+		this.slots = slots;
 	}
 
 }

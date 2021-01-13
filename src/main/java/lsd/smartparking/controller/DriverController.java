@@ -12,11 +12,14 @@ import com.google.gson.Gson;
 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import lsd.smartparking.model.Car;
+import lsd.smartparking.model.Policeman;
+import lsd.smartparking.model.Vehicle;
 
 @RestController()
 @RequestMapping("/api")
@@ -24,15 +27,14 @@ public class DriverController extends TokenChecker {
 
     private final String role = "driver";
 	Firestore db = FirestoreClient.getFirestore();
-    CollectionReference carRef = db.collection("Cars");
+    CollectionReference vehicleRef = db.collection("Vehicles");
 
     
-    @PostMapping("car/{uid}/{token}/{cod}/{plate}/{name}")
-    public @ResponseBody String addCar(@PathVariable("uid") String uid, @PathVariable("token") String token,
-            @PathVariable("cod") String cod, @PathVariable("plate") String plate, @PathVariable("name") String name) throws FirebaseAuthException {
-        if (checkToken(uid, token, role)) {
-            Car c = new Car(UUID.randomUUID().toString(), cod, plate, name, uid);
-    		ApiFuture<DocumentReference> addedDocRef = carRef.add(c);
+    @PostMapping("add/vehicle/{driverId}/{token}")
+    public @ResponseBody String addVehicle(@PathVariable("driverId") String driverId, @PathVariable("token") String token,
+    		@RequestBody Vehicle vehicle) throws FirebaseAuthException {
+        if (checkToken(driverId, token, role)) {
+    		ApiFuture<DocumentReference> addedDocRef = vehicleRef.add(vehicle);
 	        return (new Gson().toJson(addedDocRef));
         }
         return "Error";

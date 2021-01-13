@@ -2,7 +2,7 @@ package lsd.smartparking.model;
 
 import java.util.HashMap;
 
-abstract class Vehicle {
+public class Vehicle {
     
     private String id;
 	private String name;

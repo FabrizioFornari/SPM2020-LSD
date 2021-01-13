@@ -7,8 +7,21 @@ public class Vehicle {
     private String id;
 	private String name;
     private String type;
+    private String cod;
 	private String owner;
+	private String plate;
 	private HashMap<String, String> sharedOwners;
+	
+	public Vehicle() { }
+
+	public Vehicle(String id, String name, String cod, String type, String owner, String plate) {
+		this.setId(id);
+		this.setCod(cod);
+		this.setPlate(plate);
+		this.setType(type);
+		this.setName(name);
+		this.setOwner(owner);
+	}
     
 
 	public String getId() {
@@ -32,6 +45,12 @@ public class Vehicle {
 	}
 	
 	public void setType(String type) {
+		if (!type.equals("car") &&
+			!type.equals("motorcycle") &&
+			!type.equals("bicycle") &&
+			!type.equals("caravan") &&
+			!type.equals("handicap"))
+			throw new IllegalArgumentException("Invalid vehicle type");
 		this.type = type;
 	}
 	
@@ -57,6 +76,22 @@ public class Vehicle {
 	
 	public void removeOwner(String id) {
 		this.sharedOwners.remove(id);
+	}
+
+	public String getPlate() {
+		return plate;
+	}
+
+	public void setPlate(String plate) {
+		this.plate = plate;
+	}
+
+	public String getCod() {
+		return cod;
+	}
+
+	public void setCod(String cod) {
+		this.cod = cod;
 	}
 
 }

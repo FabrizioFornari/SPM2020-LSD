@@ -12,12 +12,11 @@ public class Ticket {
 	public Ticket() { }
 
 	public Ticket(String id, String payee, long emission, long expiration, String parking) {
-		super();
-		this.id = id;
-		this.payee = payee;
-		this.emission = emission;
-		this.expiration = expiration;
-		this.parking = parking;
+		this.setId(id);
+		this.setParking(parking);
+		this.setPayee(payee);
+		this.setEmission(emission);
+		this.setExpiration(expiration);
 	}
 	
 	public String getId() {

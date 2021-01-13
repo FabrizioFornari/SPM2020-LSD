@@ -11,17 +11,19 @@ public class Parking {
 	private String municipalityId;
 	private boolean guarded;
 	private HashMap<Integer, Day> days;
+	private HashMap<String, Integer> slots;
 	
 	
 	public Parking() { }
 
-	public Parking(String id, String name, double lat, double lon, boolean guarded, String municipalityId) {
+	public Parking(String id, String name, double lat, double lon, boolean guarded, String municipalityId, HashMap<String, Integer> slots) {
 		this.setId(id);
 		this.setName(name);
 		this.setLat(lat);
 		this.setLon(lon);
 		this.setMunicipalityId(municipalityId);
 		this.setDays(new HashMap<Integer, Day>());
+		this.setSlots(slots);
 		this.setGuarded(guarded);
 	}
 
@@ -79,6 +81,14 @@ public class Parking {
 
 	public void setGuarded(boolean guarded) {
 		this.guarded = guarded;
+	}
+
+	public HashMap<String, Integer> getSlots() {
+		return slots;
+	}
+
+	public void setSlots(HashMap<String, Integer> slots) {
+		if (!slots.isEmpty()) this.slots = slots;
 	}
 
 }

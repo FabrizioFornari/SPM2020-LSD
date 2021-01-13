@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import lsd.smartparking.model.Policeman;
 import lsd.smartparking.model.Vehicle;
 
 @RestController()

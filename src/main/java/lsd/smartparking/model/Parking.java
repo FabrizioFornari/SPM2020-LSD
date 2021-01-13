@@ -8,6 +8,7 @@ public class Parking {
 	private String id;
 	private double lat;
 	private double lon;
+	private double price;
 	private String municipalityId;
 	private boolean guarded;
 	private HashMap<Integer, Day> days;
@@ -16,11 +17,12 @@ public class Parking {
 	
 	public Parking() { }
 
-	public Parking(String id, String name, double lat, double lon, boolean guarded, String municipalityId, HashMap<String, Integer> slots) {
+	public Parking(String id, String name, double lat, double lon, double price, boolean guarded, String municipalityId, HashMap<String, Integer> slots) {
 		this.setId(id);
 		this.setName(name);
 		this.setLat(lat);
 		this.setLon(lon);
+		this.setPrice(price);
 		this.setMunicipalityId(municipalityId);
 		this.setDays(new HashMap<Integer, Day>());
 		this.setSlots(slots);
@@ -90,6 +92,15 @@ public class Parking {
 	public void setSlots(HashMap<String, Integer> slots) {
 		if (!slots.isEmpty()) throw new IllegalArgumentException("Invalid parking slots");
 		this.slots = slots;
+	}
+
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		if (price <= 0) throw new IllegalArgumentException("Invalid parking price");
+		this.price = price;
 	}
 
 }

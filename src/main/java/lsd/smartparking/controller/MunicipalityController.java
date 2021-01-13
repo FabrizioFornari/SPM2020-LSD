@@ -9,6 +9,7 @@ import java.util.concurrent.ExecutionException;
 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +26,7 @@ import com.google.firebase.cloud.FirestoreClient;
 import com.google.gson.Gson;
 
 import lsd.smartparking.model.Day;
+import lsd.smartparking.model.Driver;
 import lsd.smartparking.model.Parking;
 import lsd.smartparking.model.Round;
 
@@ -65,34 +67,27 @@ public class MunicipalityController extends TokenChecker {
     	return "Error";
     }
     
-    @PostMapping("/{municipalityId}/{token}/insert/parking/{name}/{lat}/{lon}/{guarded}")
+    @PostMapping("/add/parking/{municipalityId}/{token}")
     public @ResponseBody String addParking(@PathVariable("municipalityId") String municipalityId, @PathVariable("token") String token,
-    		@PathVariable("name") String name, @PathVariable("lat") double lat,
-    		@PathVariable("lon") double lon, @PathVariable("guarded") boolean guarded) throws InterruptedException, ExecutionException, FirebaseAuthException {
+    		@RequestBody Parking parking) throws InterruptedException, ExecutionException, FirebaseAuthException {
     	if (checkToken(municipalityId, token, role)) {
-    		Parking p = new Parking(UUID.randomUUID().toString(), name, lat, lon, guarded, municipalityId);
-    		ApiFuture<DocumentReference> addedDocRef = parkingRef.add(p);
+    		ApiFuture<DocumentReference> addedDocRef = parkingRef.add(parking);
 	        return (new Gson().toJson(addedDocRef));
     	}
     	return "Error";
     }
     
-    @PostMapping("/{municipalityId}/{token}/edit/parking/{uid}/{name}/{lat}/{lon}")
+    @PostMapping("/edit/parking/{municipalityId}/{token}")
     public @ResponseBody String editParking(@PathVariable("municipalityId") String municipalityId, @PathVariable("token") String token,
-    		@PathVariable("uid") String uid, @PathVariable("name") String name, @PathVariable("lat") double lat,
-    		@PathVariable("lon") double lon) throws InterruptedException, ExecutionException, FirebaseAuthException {
+    		@RequestBody Parking parking) throws InterruptedException, ExecutionException, FirebaseAuthException {
     	if (checkToken(municipalityId, token, role)) {
-    		Map<String, Object> parkingFields = new HashMap<>();
-    		parkingFields.put("name", name);
-    		parkingFields.put("lat", lat);
-    		parkingFields.put("lon", lon);
-    		ApiFuture<WriteResult> editedParking = parkingRef.document(uid).update(parkingFields);
+    		ApiFuture<WriteResult> editedParking = parkingRef.document(parking.getId()).set(parking);
 	        return (new Gson().toJson(editedParking));
     	}
     	return "Error";
     }
     
-    @PostMapping("/{municipalityId}/{token}/edit/parking/{uid}/{dayNumber}/{start}/{end}/{closed}")
+    /* @PostMapping("/{municipalityId}/{token}/edit/parking/{uid}/{dayNumber}/{start}/{end}/{closed}")
     public @ResponseBody String editParkingDays(@PathVariable("municipalityId") String municipalityId, @PathVariable("token") String token,
     		@PathVariable("uid") String uid, @PathVariable("dayNumber") String dayNumber, @PathVariable("start") int start,
     		@PathVariable("end") int end, @PathVariable("closed") boolean closed) throws InterruptedException, ExecutionException, FirebaseAuthException {
@@ -114,13 +109,13 @@ public class MunicipalityController extends TokenChecker {
 	        return (new Gson().toJson(editedParkingRounds));
     	}
     	return "Error";
-    }
+    } */
     
-    @PostMapping("/{municipalityId}/{token}/delete/parking/{id}/")
-    public @ResponseBody String deleteParking(@PathVariable("municipalityId") String municipalityId, @PathVariable("token") String token,
-    		@PathVariable("id") String id) throws InterruptedException, ExecutionException, FirebaseAuthException {
+    @PostMapping("/remove/parking/{municipalityId}/{token}/{parkingId}")
+    public @ResponseBody String removeParking(@PathVariable("municipalityId") String municipalityId, @PathVariable("token") String token,
+    		@PathVariable("parkingId") String parkingId) throws InterruptedException, ExecutionException, FirebaseAuthException {
     	if (checkToken(municipalityId, token, role)) {
-    		ApiFuture<WriteResult> writeResult = parkingRef.document(id).delete();
+    		ApiFuture<WriteResult> writeResult = parkingRef.document(parkingId).delete();
 	        return (new Gson().toJson(writeResult));
     	}
     	return "Error";

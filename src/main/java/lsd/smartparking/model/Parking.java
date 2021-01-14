@@ -90,7 +90,7 @@ public class Parking {
 	}
 
 	public void setSlots(HashMap<String, Integer> slots) {
-		if (!slots.isEmpty()) throw new IllegalArgumentException("Invalid parking slots");
+		if (slots.isEmpty()) throw new IllegalArgumentException("Invalid parking slots");
 		for (String vehicleType : slots.keySet()) {
 			if (!vehicleType.equals("car") &&
 				!vehicleType.equals("motorcycle") &&
@@ -108,7 +108,7 @@ public class Parking {
 	}
 
 	public void setPrice(double price) {
-		if (price <= 0) throw new IllegalArgumentException("Invalid parking price");
+		if (price < 0) price = 0;
 		this.price = price;
 	}
 

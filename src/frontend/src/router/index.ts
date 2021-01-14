@@ -61,6 +61,16 @@ const router: VueRouter = new VueRouter({
       }
     },
     {
+      path: '/buy/ticket/:id',
+      name: 'NewTicket',
+      component: () => import('../views/driver/Ticket.vue'),
+      props: true,
+      meta: { 
+        float: true,
+        requiresRole: ['driver', 'policeman'] 
+      }
+    },
+    {
       path: '/dashboard',
       name: 'Dashboard',
       component: () => import('../views/Dashboard.vue'),

@@ -3,7 +3,7 @@
     <div class="row justify-content-center">
       <div class="col-md-12">
         <div class="card-body">
-          Register as: 
+          <h1><b>Register</b></h1>as:          
           <select id="mySelect" v-model="type">
             <option value="driver">Driver</option>
             <option value="policeman">Policeman</option>

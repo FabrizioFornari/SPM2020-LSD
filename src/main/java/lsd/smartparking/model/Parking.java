@@ -91,6 +91,15 @@ public class Parking {
 
 	public void setSlots(HashMap<String, Integer> slots) {
 		if (!slots.isEmpty()) throw new IllegalArgumentException("Invalid parking slots");
+		for (String vehicleType : slots.keySet()) {
+			if (!vehicleType.equals("car") &&
+				!vehicleType.equals("motorcycle") &&
+				!vehicleType.equals("bicycle") &&
+				!vehicleType.equals("caravan") &&
+				!vehicleType.equals("handicap")) {
+					throw new IllegalArgumentException("Invalid vehicle type");
+			}
+		}
 		this.slots = slots;
 	}
 

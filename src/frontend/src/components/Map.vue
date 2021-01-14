@@ -10,16 +10,16 @@
         @click="addParking">
         <l-tile-layer :url="url" :attribution="attribution"/>
         <l-search :options="searchOptions" />
-        <l-routing v-if="waypoints" :waypoints="waypoints" :icon="myMarkerIcon" :key="waypoints" />
+        <l-routing v-if="waypoints" :waypoints="waypoints" :icon="activeIcon" :key="waypoints" />
         <l-locate-control :options="{icon: 'fa fa-crosshairs'}" />
         <l-control class="leaflet-bar leaflet-control" :position="'topleft'"> 
             <a class="autoSearch fa fa-repeat" v-bind:class="{ active: autoSearch }" @click="autoSearch = !autoSearch" /> 
         </l-control>
-        <l-marker v-if="active" :lat-lng="active" :icon="myMarkerIcon"/>
+        <l-marker v-if="active" :lat-lng="active" :icon="activeIcon" :zIndexOffset="10" />
         <l-group v-if="markerVisible">
-            <l-marker v-for="marker in markers"
+            <l-marker v-for="marker in parkings"
                 :lat-lng="[marker.lat, marker.lon]"
-                :icon="myMarkerIcon"
+                :icon="markerIcon"
                 :key="marker.id"
                 @click="showParking(marker.id)">
             </l-marker>
@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { LMap, LTileLayer, LMarker, LPopup, LLayerGroup, LControl } from 'vue2-leaflet'
+import { LMap, LTileLayer, LMarker, LLayerGroup, LControl } from 'vue2-leaflet'
 import Vue2LeafletLocatecontrol from 'vue2-leaflet-locatecontrol/Vue2LeafletLocatecontrol'
 import { OpenStreetMapProvider } from 'leaflet-geosearch'
 import Geosearch from '@/components/Geosearch'
@@ -62,11 +62,16 @@ export default {
 
             userPosition: null,
             markerVisible: true,
-            markers: [],
-            myMarkerIcon: L.icon({
+            markerIcon: L.icon({
                 popupAnchor: [0, -40],
                 iconAnchor: [12, 40],
                 iconUrl: require('leaflet/dist/images/marker-icon.png'),
+                shadowUrl: require('leaflet/dist/images/marker-shadow.png')
+            }),
+            activeIcon: L.icon({
+                popupAnchor: [0, -40],
+                iconAnchor: [12, 40],
+                iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
                 shadowUrl: require('leaflet/dist/images/marker-shadow.png')
             }),
 
@@ -124,7 +129,7 @@ export default {
                 .then((querySnapshot) => {
                     console.log(querySnapshot.size, "new parkings were found")
                     querySnapshot.forEach((doc) => {
-                        this.markers.push(doc.data())
+                        //this.markers.push(doc.data())
                         this.$store.commit("addParking", doc.data())
                     })
                 })
@@ -203,12 +208,14 @@ export default {
     computed: {
         center() { return this.$store.getters.center },
         active() { return this.$store.getters.active },
+        parkings() { return this.$store.getters.parkings },
         waypoints() { return this.$store.getters.waypoints }
     },
     watch: {
-        center(newStatus, oldStatus) { return },
-        active(newStatus, oldStatus) { return },
-        waypoints(newStatus, oldStatus) { return }
+        center() { return },
+        active() { return },
+        parkings() { return },
+        waypoints() { return }
     }
 }
 </script>

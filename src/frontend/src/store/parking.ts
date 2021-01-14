@@ -1,44 +1,23 @@
 import { fireStore } from '@/firebase'
+import Vue from 'vue'
 
 const parking = {
     state: {
         parkings: {},
-        vehicleTypes: ['car', 'motorcycle', 'caravan', 'bicycle', 'handicap'],
-        center: [],
-        active: null,
-        waypoints: null,
-        userPosition: null
+        vehicleTypes: ['car', 'motorcycle', 'caravan', 'bicycle', 'handicap']
     },
     mutations: {
         addParking(state, parking) {
-            state.parkings[parking.id] = parking
+            Vue.set(state.parkings, parking.id, parking)
         },
         addParkings(state, parkings) {
-            for (const key in parkings)
-                state.parkings[key] = parkings[key]
-        },
-        setCenter(state, center) {
-            state.center = center
-        },
-        setActive(state, active) {
-            state.active = active
-            state.center = active
-        },
-        setDestination(state, end) {
-            state.waypoints = null
-            state.waypoints = [state.userPosition, end]
-        },
-        setUserPosition(state, pos) {
-            state.userPosition = pos
+            for (const id in parkings)
+                Vue.set(state.parkings, id, parkings[id])
         }
     },
     getters: {
         parkings: state => state.parkings,
-        vehicleTypes: state => state.vehicleTypes,
-        center: state => state.center,
-        active: state => state.active,
-        waypoints: state => state.waypoints,
-        userPosition: state => state.userPosition
+        vehicleTypes: state => state.vehicleTypes
     },
     actions: {
         async fetchParking({ commit, rootGetters }, id) {
@@ -53,10 +32,6 @@ const parking = {
             const parking = await fireStore.collection('Parkings').doc(id).get()
             if (!parking.exists) return null
             return [parking.data().lat, parking.data().lon]
-        },
-        async fetchWaypoints({ commit, rootGetters }, destination) {
-            if (rootGetters.userPosition) commit('setDestination', destination)
-            else alert("You have to set a starting point or you position to start routing")
         }
     }
 }

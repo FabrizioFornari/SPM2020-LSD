@@ -13,16 +13,16 @@
 
           <form @submit="register">
             <div v-if="type != 'municipality'">
-              <label>
+              <label class="label">
                 <input type="text" class="input" value required autofocus v-model="form.name">
                 <span>Name</span>
               </label>
-              <label>
+              <label class="label">
                 <input type="text" class="input" value required v-model="form.surname">
                 <span>Surname</span>
               </label>
               <div v-if="type == 'policeman'">
-                <label>
+                <label class="label">
                   <input type="text" class="input" value required v-model="form.municipalityId">
                   <span>Municipality</span>
                 </label>
@@ -30,29 +30,29 @@
             </div>
 
             <div v-else>
-              <label>
+              <label class="label">
                 <input type="text" class="input" value required autofocus v-model="form.city">
                 <span>City</span>
               </label>
-              <label>
+              <label class="label">
                 <input type="text" class="input" value required v-model="form.province">
                 <span>Province</span>
               </label>
-              <label>
+              <label class="label">
                 <input type="text" class="input" value required v-model="form.region">
                 <span>Region</span>
               </label>
             </div>
 
-            <label>
+            <label class="label">
               <input type="email" class="input" value required v-model="form.email">
               <span>Email</span>
             </label>
-            <label>
+            <label class="label">
               <input type="password" class="input" required v-model="form.password">
               <span>Password</span>
             </label>
-            <label>
+            <label class="label">
               <input type="password" class="input" required v-model="form.passwordConf">
               <span>Confirm Password</span>
             </label>

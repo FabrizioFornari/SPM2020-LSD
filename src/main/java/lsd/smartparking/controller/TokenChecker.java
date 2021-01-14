@@ -11,8 +11,8 @@ abstract class TokenChecker {
 
 	boolean checkToken(String uid, String token, String role) throws FirebaseAuthException {
     	FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(token);
-    	String decodedUid = decodedToken.getUid();
-    	if (decodedUid.equals(uid) && decodedToken.getClaims().get("role") == role) return true;
+		String decodedUid = decodedToken.getUid();
+    	if (decodedUid.equals(uid) && decodedToken.getClaims().get("role").equals(role)) return true;
 		return false;
 	}
 

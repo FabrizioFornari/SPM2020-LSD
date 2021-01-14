@@ -10,10 +10,16 @@
       <router-link to="/dashboard" v-else class="userIcon"><img src="./assets/user.svg"></router-link>
     </div>
 
-    <div id="float" v-if="$route.meta.float && ready">
+    <vue-resizable id="float" v-if="$route.meta.float && ready"
+        class="resizable"
+        ref="resizableComponent"
+        :active="['t']"
+        :fit-parent="fit"
+        :height="170"
+        :min-height="170">
       <router-link to="/map" id="close" />
       <router-view :key="$route.fullPath" />
-    </div>
+    </vue-resizable>
     <div id="main" v-else-if="$route.name !== 'Home'">
       <div class="page">
         <router-view :key="$route.fullPath" />
@@ -26,6 +32,7 @@
 </template>
 
 <script>
+import VueResizable from 'vue-resizable'
 import Map from '@/components/Map.vue'
 
 export default {
@@ -35,6 +42,7 @@ export default {
     }
   },
   components: {
+    VueResizable,
     Map
   },
   async created() {
@@ -96,16 +104,22 @@ button {
 }
 
 #float {
-  width: 350px;
-  height: 100vh;
-  right: 0;
+  left: auto !important;
+  right: 0 !important;
+  bottom: 0 !important;
   padding: 25px 0;
   background-color: white;
   box-shadow: 0 0 30px #00000022;
   overflow-x: hidden;
   overflow-y: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
   position: fixed;
   z-index: 100;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   & #close {
     color: #00000033;
@@ -119,6 +133,32 @@ button {
     }
     &:hover {
       color: #00000099;
+    }
+  }
+
+  .actions {
+    width: inherit;
+    height: 50px;
+    bottom: 0;
+    background-color: white;
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+    justify-content: space-evenly;
+    position: fixed;
+    z-index: 5;
+
+    &::before {
+        content: "";
+        width: 90%;
+        height: 1px;
+        top: 0;
+        background-color: #ddd;
+        position: absolute;
+    }
+
+    & .action {
+        margin: 15px;
     }
   }
 }
@@ -229,6 +269,7 @@ form {
       & > .input {
           width: 100%;
           padding: 15px 20px 10px 20px;
+          background-color: white;
           border: none;
           border-radius: 8px;
           outline: none;
@@ -254,6 +295,13 @@ form {
           margin-bottom: 50px;
           font-size: 10px;
       }
+  }
+}
+
+@media (min-width: 401px) {
+  #float {
+    width: 350px !important;
+    height: 100vh !important;
   }
 }
 
@@ -301,11 +349,22 @@ form {
   }
 
   #float {
-    width: 100vw;
+    width: 100vw !important;
     min-width: 100vw;
     height: 170px;
-    bottom: 0;
+    top: auto !important;
     border-radius: 15px 15px 0 0;
+
+    &::before {
+      content: '';
+      width: 40%;
+      height: 5px;
+      left: 30%;
+      margin-top: -18px;
+      border-radius: 10px;
+      background-color: #00000019;
+      position: fixed;
+    }
   }
 
   #main {

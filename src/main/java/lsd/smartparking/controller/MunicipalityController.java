@@ -32,7 +32,7 @@ import lsd.smartparking.model.Round;
 
 
 @RestController()
-@RequestMapping("/api/municipality")
+@RequestMapping("/api")
 public class MunicipalityController extends TokenChecker {
 	
     private final String role = "municipality";

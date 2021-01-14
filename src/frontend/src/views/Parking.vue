@@ -1,5 +1,5 @@
 <template>
-    <form v-if="id && !edit">
+    <form v-if="parking.id && !edit">
         <div class="details">
             <h3><b>{{ parking.name }}</b></h3>
             <div class="address">{{ parking.address }}, {{ parking.city }}</div>
@@ -12,15 +12,15 @@
         </div>
         <div class="actions" v-if="this.$store.getters.userUid == parking.municipalityId">
             <button class="action save" @click="edit = true">Edit</button>
-            <router-link class="action cancel" to="/map">Cancel</router-link>
+            <button class="action cancel" @click="edit = true">Remove</button>
         </div>
         <div class="actions" v-else>
             <button class="action save" @click.prevent="findRoute">Route</button>
-            <button class="action save" v-if="this.$store.getters.userRole != 'municipality'">Buy</button>
+            <router-link class="action save" v-if="this.$store.getters.userRole != 'municipality'" :to="'/buy/ticket/'+parking.id">Buy</router-link>
             <button class="action save" v-if="this.$store.getters.userRole != 'municipality'">Pin it</button>
         </div>
     </form>
-    <form v-else @submit.prevent="edit ? editParking() : addParking()">
+    <form v-else @submit.prevent="addParking()">
         <div class="details">
             <h3 v-if="edit"><b>Edit Parking</b></h3>
             <h3 v-else><b>New Parking</b></h3>
@@ -69,14 +69,13 @@
         <div class="actions">
             <button class="action save" type="submit" v-if="edit">Save</button>
             <button class="action save" type="submit" v-else>Add</button>
-            <router-link class="action cancel" to="/map">Cancel</router-link>
+            <button class="action cancel" @click="edit = false">Cancel</button>
         </div>
     </form>
 </template>
 
 <script>
 import axios from 'axios'
-import api from '@/api/municipality'
 import { latLng } from 'leaflet'
 
 export default {
@@ -85,6 +84,7 @@ export default {
         return {
             weekday: ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
             parking: {
+                id: null,
                 address: null,
                 city: null,
                 name: null
@@ -113,6 +113,16 @@ export default {
             this.parking.slots = this.slots
             this.parking.days = this.days
             console.log(this.parking)
+            //api.addParking(this.parking)
+            if (this.edit)  {
+                this.$store.commit("addParking", this.parking)
+                this.edit = false
+            } else {
+                this.parking.id = 'fihgfiefjhg'
+                this.parking.municipalityId = this.$store.getters.userUid
+                this.$store.commit("addParking", this.parking)
+                this.$router.push('/map/parking/'+this.parking.id)
+            }
         },
         findRoute() {
             this.$store.dispatch("fetchWaypoints", latLng(this.parking.lat, this.parking.lon))
@@ -127,7 +137,7 @@ export default {
             }
             else this.$router.push('/map')
         }
-        else if (this.c && this.c.indexOf(',') > -1) {
+        else if (this.c.indexOf(',') > -1) {
             const coords = this.c.split(',')
             await axios
                 .get('https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat='+coords[0]+'&lon='+coords[1]+'&zoom=16')
@@ -142,6 +152,7 @@ export default {
                     this.$router.push('/map')
                 })
         }
+        else this.$router.push('/map')
     }
 }
 </script>
@@ -193,32 +204,6 @@ export default {
                 background-color: #f71b1b62;
             }      
         }
-    }
-}
-
-.actions {
-    width: inherit;
-    height: 60px;
-    bottom: 0;
-    background-color: white;
-    display: flex;
-    flex-flow: row;
-    align-items: center;
-    justify-content: space-evenly;
-    position: fixed;
-    z-index: 5;
-
-    &::before {
-        content: "";
-        width: 90%;
-        height: 1px;
-        top: 0;
-        background-color: #ddd;
-        position: absolute;
-    }
-
-    & .action {
-        margin: 15px;
     }
 }
 </style>

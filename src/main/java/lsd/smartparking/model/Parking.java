@@ -10,6 +10,8 @@ public class Parking {
 	private double lon;
 	private double price;
 	private String municipalityId;
+	private String city;
+	private String address;
 	private boolean guarded;
 	private HashMap<Integer, Day> days;
 	private HashMap<String, Integer> slots;
@@ -17,11 +19,13 @@ public class Parking {
 	
 	public Parking() { }
 
-	public Parking(String id, String name, double lat, double lon, double price, boolean guarded, String municipalityId, HashMap<String, Integer> slots) {
+	public Parking(String id, String name, String city, String address, double lat, double lon, double price, boolean guarded, String municipalityId, HashMap<String, Integer> slots) {
 		this.setId(id);
 		this.setName(name);
 		this.setLat(lat);
 		this.setLon(lon);
+		this.setCity(city);
+		this.setAddress(address);
 		this.setPrice(price);
 		this.setMunicipalityId(municipalityId);
 		this.setDays(new HashMap<Integer, Day>());
@@ -110,6 +114,22 @@ public class Parking {
 	public void setPrice(double price) {
 		if (price < 0) price = 0;
 		this.price = price;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 }

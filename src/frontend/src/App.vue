@@ -14,7 +14,7 @@
         class="resizable"
         ref="resizableComponent"
         :active="['t']"
-        :fit-parent="fit"
+        :fit-parent="false"
         :height="170"
         :min-height="170">
       <router-link to="/map" id="close" />
@@ -104,6 +104,7 @@ button {
 }
 
 #float {
+  top: auto !important;
   left: auto !important;
   right: 0 !important;
   bottom: 0 !important;

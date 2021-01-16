@@ -61,7 +61,7 @@ public class SeleniumAdminTests {
 	
 	@Test
 	@Order(2)
-	  public void toggleMunicipality() throws Exception {
+	  public void testToggleMunicipality() throws Exception {
 	    driver.get("http://localhost:8098/admin/dashboard");
 	    driver.findElement(By.id("municipalityButtonAction")).click();
         Thread.sleep(2000);

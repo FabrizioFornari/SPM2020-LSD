@@ -24,6 +24,7 @@ const onAuthStateChangedPromise = new Promise((resolve, reject) => {
     fireAuth.onAuthStateChanged(async user => {
         store.dispatch("fetchUser", user)
         await getRole(user)
+        if (user) await store.dispatch('fetchDriver')
         resolve(user)
     }, err => {
         reject(err)
@@ -54,7 +55,7 @@ export async function signin(email: string, password: string, username: string) 
 export async function login(email: string, password: string) {
     try {
         await fireAuth.signInWithEmailAndPassword(email, password)
-        await getRole(fireAuth.currentUser)   
+        await getRole(fireAuth.currentUser)
         console.log("Logged in")
         return
     } catch (error) {

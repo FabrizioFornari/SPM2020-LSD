@@ -56,7 +56,7 @@ public class SeleniumAdminTests {
 	    driver.findElement(By.id("adminPassword")).clear();
 	    driver.findElement(By.id("adminPassword")).sendKeys("admin");
 	    driver.findElement(By.id("adminButtonLogin")).click();
-	    Thread.sleep(1000);
+	    Thread.sleep(2000);
 	  }
 	
 	@Test
@@ -64,9 +64,9 @@ public class SeleniumAdminTests {
 	  public void toggleMunicipality() throws Exception {
 	    driver.get("http://localhost:8098/admin/dashboard");
 	    driver.findElement(By.id("municipalityButtonAction")).click();
-        Thread.sleep(1000);
+        Thread.sleep(2000);
         driver.findElement(By.id("municipalityButtonAction")).click();
-	    Thread.sleep(1000);
+	    Thread.sleep(2000);
 	  }
 
 }

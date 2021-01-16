@@ -61,12 +61,13 @@ public class SeleniumAuthTests {
 	    driver.findElement(By.id("buttonLogin")).click();
         WebDriverWait wait1 = new WebDriverWait(driver, 3);
 	    wait1.until((ExpectedCondition<Boolean>) wd -> ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
+	    Thread.sleep(3000);
 	    driver.findElement(By.id("profileMenu")).click();
         WebDriverWait wait2 = new WebDriverWait(driver, 3);
 	    wait2.until((ExpectedCondition<Boolean>) wd -> ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
-	    Thread.sleep(1000);
+	    Thread.sleep(2000);
 	    driver.findElement(By.id("logoutButton")).click();
-	    Thread.sleep(1000);
+	    Thread.sleep(2000);
 	  }
 	
 	@Test
@@ -81,12 +82,13 @@ public class SeleniumAuthTests {
 	    driver.findElement(By.id("buttonLogin")).click();
         WebDriverWait wait1 = new WebDriverWait(driver, 3);
 	    wait1.until((ExpectedCondition<Boolean>) wd -> ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
+	    Thread.sleep(3000);
 	    driver.findElement(By.id("profileMenu")).click();
         WebDriverWait wait2 = new WebDriverWait(driver, 3);
 	    wait2.until((ExpectedCondition<Boolean>) wd -> ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
-	    Thread.sleep(1000);
+	    Thread.sleep(2000);
 	    driver.findElement(By.id("logoutButton")).click();
-	    Thread.sleep(1000);
+	    Thread.sleep(2000);
 	  }
 	
 	@Test
@@ -101,12 +103,13 @@ public class SeleniumAuthTests {
 	    driver.findElement(By.id("buttonLogin")).click();
         WebDriverWait wait1 = new WebDriverWait(driver, 3);
 	    wait1.until((ExpectedCondition<Boolean>) wd -> ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
+	    Thread.sleep(3000);
 	    driver.findElement(By.id("profileMenu")).click();
         WebDriverWait wait2 = new WebDriverWait(driver, 3);
 	    wait2.until((ExpectedCondition<Boolean>) wd -> ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
-	    Thread.sleep(1000);
+	    Thread.sleep(2000);
 	    driver.findElement(By.id("logoutButton")).click();
-	    Thread.sleep(1000);
+	    Thread.sleep(2000);
 	  }
 
 }

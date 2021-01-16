@@ -52,7 +52,7 @@ public class SeleniumDriverTests {
 	
 	@Test
 	@Order(1)
-	  public void testViewVehicle() throws Exception {
+	  public void testEditVehicle() throws Exception {
 		driver.get("http://localhost:8098/login");
 	    driver.findElement(By.xpath("//form")).click();
 	    driver.findElement(By.id("emailLogin")).clear();
@@ -75,9 +75,15 @@ public class SeleniumDriverTests {
 	    WebDriverWait wait4 = new WebDriverWait(driver, 3);
 	    wait4.until((ExpectedCondition<Boolean>) wd -> ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
 	    Thread.sleep(2000);
-	    driver.findElement(By.id("profileMenu")).click();
+	    driver.findElement(By.id("nameVehicle")).clear();
+	    driver.findElement(By.id("nameVehicle")).sendKeys("Cactus");
+	    driver.findElement(By.id("saveVehicle")).click();
 	    WebDriverWait wait5 = new WebDriverWait(driver, 3);
 	    wait5.until((ExpectedCondition<Boolean>) wd -> ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
+	    Thread.sleep(2000);
+	    driver.findElement(By.id("profileMenu")).click();
+	    WebDriverWait wait6 = new WebDriverWait(driver, 3);
+	    wait6.until((ExpectedCondition<Boolean>) wd -> ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
 	    Thread.sleep(2000);
 	  }
 	

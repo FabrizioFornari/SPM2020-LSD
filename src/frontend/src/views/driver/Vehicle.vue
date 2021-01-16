@@ -2,7 +2,7 @@
     <form class="vehicle" @submit.prevent="!id ? addVehicle() : updateVehicle()">
         <div class="details">
             <label class="label">
-                <input type="text" class="input" v-model="vehicle.name" required>
+                <input type="text" id="nameVehicle" class="input" v-model="vehicle.name" required>
                 <span>Name</span>
             </label>
             <label class="label">
@@ -23,7 +23,7 @@
         </div>
         
         <div class="actions">
-            <button v-if="!id" class="action save" type="submit">Add</button>
+            <button v-if="!id" class="action save" id="saveVehicle" type="submit">Add</button>
             <button v-else class="action save" type="submit">Save</button>
             <router-link class="action cancel" to="/dashboard/garage">Cancel</router-link>
         </div>

@@ -36,7 +36,7 @@
                     {{ type }}
                 </a>
             </div>
-            <label class="label" :class="{ 'removable' : Object.keys(slots).length > 1}" v-for="(slot, type) in slots" :key="type">
+            <label class="label" :class="{ 'removable' : Object.keys(slots).length > 1 }" v-for="(slot, type) in slots" :key="type">
                 <input type="number" min="1" class="input" v-model.number="slots[type]" required>
                 <span>{{ type }} slots</span>
                 <a v-if="Object.keys(slots).length > 1" @click="$delete(slots, type)">-</a>
@@ -66,16 +66,20 @@
             </b-form-checkbox>
         </div>
 
-        <div class="actions">
-            <button class="action save" type="submit" v-if="edit">Save</button>
-            <button class="action save" type="submit" v-else>Add</button>
+        <div class="actions" v-if="edit">
+            <button class="action save" type="submit">Save</button>
             <button class="action cancel" @click="edit = false">Cancel</button>
+        </div>
+        <div class="actions" v-else>
+            <button class="action save" type="submit">Add</button>
+            <router-link class="action cancel" to="/map">Cancel</router-link>
         </div>
     </form>
 </template>
 
 <script>
 import axios from 'axios'
+import api from '@/api/municipality'
 import { latLng } from 'leaflet'
 
 export default {
@@ -111,18 +115,19 @@ export default {
     methods: {
         async addParking() {
             this.parking.slots = this.slots
-            this.parking.days = this.days
+            //this.parking.days = this.days
             console.log(this.parking)
-            //api.addParking(this.parking)
-            if (this.edit)  {
-                this.$store.commit("addParking", this.parking)
-                this.edit = false
-            } else {
-                this.parking.id = 'fihgfiefjhg'
-                this.parking.municipalityId = this.$store.getters.userUid
-                this.$store.commit("addParking", this.parking)
-                this.$router.push('/map/parking/'+this.parking.id)
-            }
+            this.parking.municipalityId = this.$store.getters.userUid
+            api.addParking(this.parking).then(response => {
+                if (this.edit)  {
+                    this.$store.commit("addParking", this.parking)
+                    this.edit = false
+                } else {
+                    this.parking.id = response.data
+                    this.$store.commit("addParking", this.parking)
+                    this.$router.push('/map/parking/'+this.parking.id)
+                }
+            })
         },
         findRoute() {
             this.$store.dispatch("fetchWaypoints", latLng(this.parking.lat, this.parking.lon))

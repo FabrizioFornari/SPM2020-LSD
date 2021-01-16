@@ -5,7 +5,8 @@ const driver = {
         driver: {
             status: false,
             profile: {},
-            vehicles: {}
+            vehicles: {},
+            tickets: {}
         }
     },
     mutations: {
@@ -16,6 +17,9 @@ const driver = {
         addVehicle(state, vehicle) {
             state.driver.vehicles[vehicle.id] = vehicle
             state.driver.profile.vehicles[vehicle.id] = {id: vehicle.id, name: vehicle.name, type: vehicle.type}
+        },
+        addTicket(state, ticket) {
+            state.driver.tickets[ticket.id] = ticket
         }
     },
     getters: {

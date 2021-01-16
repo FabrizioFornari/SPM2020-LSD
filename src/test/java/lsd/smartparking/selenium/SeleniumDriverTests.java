@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import static org.junit.jupiter.api.Assertions.fail;
+
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -50,7 +52,7 @@ public class SeleniumDriverTests {
 	
 	@Test
 	@Order(1)
-	  public void testViewVehicle() throws Exception {
+	  public void testEditVehicle() throws Exception {
 		driver.get("http://localhost:8098/login");
 	    driver.findElement(By.xpath("//form")).click();
 	    driver.findElement(By.id("emailLogin")).clear();
@@ -60,25 +62,55 @@ public class SeleniumDriverTests {
 	    driver.findElement(By.id("buttonLogin")).click();
         WebDriverWait wait1 = new WebDriverWait(driver, 3);
 	    wait1.until((ExpectedCondition<Boolean>) wd -> ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
-	    Thread.sleep(1000);
+	    Thread.sleep(3000);
 	    driver.findElement(By.id("profileMenu")).click();
         WebDriverWait wait2 = new WebDriverWait(driver, 3);
 	    wait2.until((ExpectedCondition<Boolean>) wd -> ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
-	    Thread.sleep(1000);
+	    Thread.sleep(2000);
 	    driver.findElement(By.id("garageButton")).click();
 	    WebDriverWait wait3 = new WebDriverWait(driver, 3);
 	    wait3.until((ExpectedCondition<Boolean>) wd -> ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
-	    Thread.sleep(1000);
+	    Thread.sleep(2000);
 	    driver.findElement(By.className("vehicle")).click();
 	    WebDriverWait wait4 = new WebDriverWait(driver, 3);
 	    wait4.until((ExpectedCondition<Boolean>) wd -> ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
-	    Thread.sleep(1000);
-	    driver.findElement(By.id("profileMenu")).click();
+	    Thread.sleep(2000);
+	    driver.findElement(By.id("nameVehicle")).clear();
+	    driver.findElement(By.id("nameVehicle")).sendKeys("Cactus");
+	    driver.findElement(By.id("saveVehicle")).click();
 	    WebDriverWait wait5 = new WebDriverWait(driver, 3);
 	    wait5.until((ExpectedCondition<Boolean>) wd -> ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
-	    Thread.sleep(1000);
-	    driver.findElement(By.id("logoutButton")).click();
-	    Thread.sleep(1000);
+	    Thread.sleep(2000);
+	    driver.findElement(By.id("profileMenu")).click();
+	    WebDriverWait wait6 = new WebDriverWait(driver, 3);
+	    wait6.until((ExpectedCondition<Boolean>) wd -> ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
+	    Thread.sleep(2000);
+	  }
+	
+	@Test
+	@Order(2)
+	  public void testRouteToParking() throws Exception {
+		driver.get("http://localhost:8098/map");
+	    driver.findElement(By.className("glass")).clear();
+	    driver.findElement(By.className("glass")).sendKeys("Milano");
+	    driver.findElement(By.className("glass")).sendKeys(Keys.ENTER);
+	    WebDriverWait wait1 = new WebDriverWait(driver, 3);
+	    wait1.until((ExpectedCondition<Boolean>) wd -> ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
+        Thread.sleep(2000);
+        WebElement parentDiv = driver.findElement(By.className("leaflet-marker-pane"));
+        List<WebElement> markerList = parentDiv.findElements(By.tagName("img"));
+        markerList.get(0).click();
+	    WebDriverWait wait2 = new WebDriverWait(driver, 3);
+	    wait2.until((ExpectedCondition<Boolean>) wd -> ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
+	    Thread.sleep(2000);
+	    driver.findElement(By.className("leaflet-control-locate")).click();
+        WebDriverWait wait3 = new WebDriverWait(driver, 3);
+	    wait3.until((ExpectedCondition<Boolean>) wd -> ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
+	    Thread.sleep(2000);
+	    driver.findElement(By.id("routeButton")).click();
+        WebDriverWait wait4 = new WebDriverWait(driver, 3);
+	    wait4.until((ExpectedCondition<Boolean>) wd -> ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
+	    Thread.sleep(2000);
 	  }
 
 }

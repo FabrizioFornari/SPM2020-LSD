@@ -15,7 +15,7 @@
             <button class="action cancel" @click="edit = true">Remove</button>
         </div>
         <div class="actions" v-else>
-            <button class="action save" @click.prevent="findRoute">Route</button>
+            <button id="routeButton" class="action save" @click.prevent="findRoute">Route</button>
             <router-link class="action save" v-if="this.$store.getters.userRole != 'municipality'" :to="'/buy/ticket/'+parking.id">Buy</router-link>
             <button class="action save" v-if="this.$store.getters.userRole != 'municipality'">Pin it</button>
         </div>

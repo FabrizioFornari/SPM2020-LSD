@@ -96,10 +96,14 @@ public class SeleniumDriverTests {
         markerList.get(0).click();
 	    WebDriverWait wait2 = new WebDriverWait(driver, 3);
 	    wait2.until((ExpectedCondition<Boolean>) wd -> ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
-        Thread.sleep(2000);
-	    driver.findElement(By.id("routeButton")).click();
+	    Thread.sleep(2000);
+	    driver.findElement(By.className("leaflet-control-locate")).click();
         WebDriverWait wait3 = new WebDriverWait(driver, 3);
 	    wait3.until((ExpectedCondition<Boolean>) wd -> ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
+	    Thread.sleep(2000);
+	    driver.findElement(By.id("routeButton")).click();
+        WebDriverWait wait4 = new WebDriverWait(driver, 3);
+	    wait4.until((ExpectedCondition<Boolean>) wd -> ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
 	    Thread.sleep(2000);
 	  }
 

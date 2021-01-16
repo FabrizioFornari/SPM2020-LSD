@@ -164,7 +164,7 @@ export default {
             }  
             
             this.searchBounds = L.rectangle(newBounds, {color: 'red', fillOpacity: 0})
-            this.searchBounds.addTo(map)
+            //this.searchBounds.addTo(map)
 
             if (result) {
                 this.searchSpots.push(bounds)
@@ -174,7 +174,8 @@ export default {
                     const area = new L.polygon(this.reverseCoords(pol), {
                         fillOpacity: 0,
                         color: 'blue'
-                    }).addTo(map)
+                    })
+                    //area.addTo(map)
                     if (result.geometry.type == 'Polygon' && result.geometry.coordinates.length > 1) return
                     else if (this.isRectangle(pol)) this.findParkings(area.getBounds())
                 }

@@ -16,6 +16,7 @@ const router: VueRouter = new VueRouter({
       },
       beforeEnter: (to, from, next) => {
         store.commit("setActive", null)
+        store.commit("setWaypoints", null)
         next()
       }
     },
@@ -85,11 +86,35 @@ const router: VueRouter = new VueRouter({
           }
         },
         {
+          path: 'profile',
+          name: 'Profile',
+          component: () => {
+            switch (store.getters.userRole) {
+              case 'driver': return import('../views/driver/Profile.vue')
+              case 'policeman': return import('../views/driver/Profile.vue')
+              case 'municipality': return import('../views/driver/Profile.vue')
+            }
+          },
+          meta: { 
+            title: 'My Profile - Sparking',
+            requiresAuth: true 
+          }
+        },
+        {
           path: 'garage',
           name: 'Garage',
           component: () => import('../views/driver/Garage.vue'),
           meta: { 
               title: 'My Garage - Sparking',
+              requiresRole: ['driver', 'policeman'] 
+          }
+        },
+        {
+          path: 'pocket',
+          name: 'Pocket',
+          component: () => import('../views/driver/Garage.vue'),
+          meta: { 
+              title: 'My Pocket - Sparking',
               requiresRole: ['driver', 'policeman'] 
           }
         },

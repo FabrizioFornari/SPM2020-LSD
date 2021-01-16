@@ -13,6 +13,9 @@ const map = {
             state.active = active
             state.center = active
         },
+        setWaypoints(state, points) {
+            state.waypoints = points
+        },
         setDestination(state, end) {
             state.waypoints = null
             state.waypoints = [state.userPosition, end]

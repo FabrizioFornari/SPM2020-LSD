@@ -50,7 +50,7 @@ export default {
             searchBounds: null,
             searchSpots: [],
 
-            zoom: 12,
+            zoom: 12.5,
             minZoom: 3,
             maxZoom: 18,
             url: 'https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png',

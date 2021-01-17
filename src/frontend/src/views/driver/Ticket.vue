@@ -17,11 +17,11 @@
             <p class="sub">Time</p>
             <label class="label">
                 <label class="label">
-                    <input type="time" class="input" v-model="ticket.start" @change="priceCalculator" required>
+                    <input type="time" class="input" v-model="ticket.start" @input="priceCalculator" required>
                     <span>From</span>
                 </label>
                 <label class="label">
-                    <input type="time" class="input" :min="ticket.start" v-model="ticket.end" @change="priceCalculator" required>
+                    <input type="time" class="input" :min="ticket.start" v-model="ticket.end" @input="priceCalculator" required>
                     <span>To</span>
                 </label>
             </label>

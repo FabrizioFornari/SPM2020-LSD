@@ -42,19 +42,19 @@ export default {
 
   .leaflet-geosearch-bar {
     width: 500px;
-    max-width: calc(100% - 100px);
     min-width: 400px;
     left: 50%;
     bottom: 20px;
-    border-radius: 5px;
+    border-radius: 8px;
     background-color: #fff;
-    box-shadow: 0 10px 20px rgba(0,0,0,.09803921568627451);
+    box-shadow: 0 10px 20px #00000033;
     transform: translateX(-50%);
     overflow: hidden;
     position: fixed;
     cursor: auto;
 
     form {
+      width: 100%;
       border: none !important;
       flex-flow: column-reverse;
       display: flex;

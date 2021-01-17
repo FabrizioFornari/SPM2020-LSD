@@ -1,9 +1,9 @@
 <template>
     <l-map id="map" ref="map"
         :zoom="zoom"
+        :center="center"
         :minZoom="minZoom"
         :maxZoom="maxZoom"
-        :center="center"
         :options="mapOptions"
         @ready="handleEvents"
         @update:zoom="hideMarkers"
@@ -44,6 +44,7 @@ export default {
     name: 'spark-map',  
     data() {
         return {
+            map: null,
             autoSearch: false,
             locSearch: false,
             searchBounds: null,
@@ -60,7 +61,6 @@ export default {
                 zoomSnap: 0.25
             },
 
-            userPosition: null,
             markerVisible: true,
             markerIcon: L.icon({
                 popupAnchor: [0, -40],
@@ -94,6 +94,7 @@ export default {
     },
     methods: {
         handleEvents(map) {
+            this.map = map
             this.parseAreas(map.getBounds(), map)
             map.on('geosearch/showlocation', (ev) => {
                 this.locSearch = true
@@ -104,11 +105,11 @@ export default {
                 else if (this.autoSearch && map.getZoom() > 10) this.parseAreas(map.getBounds(), map)
             })
             map.on('locationfound', (ev) => {
-                this.$store.commit('setUserPosition', ev.latlng)
+                store.commit('setUserPosition', ev.latlng)
             })
             map.on('locationerror', (ev) => {
                 alert(ev)
-                this.$store.commit('setUserPosition', null)
+                store.commit('setUserPosition', null)
             })
         },
 
@@ -128,10 +129,7 @@ export default {
                 .get()
                 .then((querySnapshot) => {
                     console.log(querySnapshot.size, "new parkings were found")
-                    querySnapshot.forEach((doc) => {
-                        //this.markers.push(doc.data())
-                        this.$store.commit("addParking", doc.data())
-                    })
+                    querySnapshot.forEach((doc) => store.commit("addParking", doc.data()))
                 })
                 .catch((error) => {
                     console.log("Error getting documents: ", error);
@@ -207,14 +205,14 @@ export default {
         }
     },
     computed: {
-        center() { return this.$store.getters.center },
-        active() { return this.$store.getters.active },
-        parkings() { return this.$store.getters.parkings },
-        waypoints() { return this.$store.getters.waypoints }
+        center() { return store.getters.center },
+        active() { return store.getters.active },
+        parkings() { return store.getters.parkings },
+        waypoints() { return store.getters.waypoints }
     },
     watch: {
         center() { return },
-        active() { return },
+        active(newAct, oldAct) { if (newAct) this.map.setView(newAct, 15) },
         parkings() { return },
         waypoints() { return }
     }

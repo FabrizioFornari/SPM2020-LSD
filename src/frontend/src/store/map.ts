@@ -11,7 +11,6 @@ const map = {
         },
         setActive(state, active) {
             state.active = active
-            state.center = active
         },
         setWaypoints(state, points) {
             state.waypoints = points

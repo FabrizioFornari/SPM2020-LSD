@@ -50,7 +50,7 @@ export default {
             searchBounds: null,
             searchSpots: [],
 
-            zoom: 11,
+            zoom: 12,
             minZoom: 3,
             maxZoom: 18,
             url: 'https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png',
@@ -201,7 +201,7 @@ export default {
         },
         
         hideMarkers(zoom) {
-            zoom > 9.5 ? (this.markerVisible = true) : (this.markerVisible = false)
+            zoom > 11.5 ? (this.markerVisible = true) : (this.markerVisible = false)
         }
     },
     computed: {

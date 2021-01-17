@@ -212,17 +212,18 @@ button {
 
 .container {
   height: 100%;
-  max-width: 100% !important;
-  min-width: 400px;
+  min-width: 350px;
   padding: 0 5% !important;
   flex-flow: column;
   display: flex;
 
   &.width-40 {
     width: 40vw;
+    max-width: 500px;
   }
   &.width-70 {
     width: 70vw;
+    max-width: 700px;
   }
 }
 

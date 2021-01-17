@@ -50,7 +50,7 @@ export default {
     display: flex;
 
     .choice {
-      flex: 1 1 300px;
+      flex: 1 1 250px;
     }
   }
 

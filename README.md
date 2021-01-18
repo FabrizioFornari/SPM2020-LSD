@@ -67,7 +67,8 @@ It is possible to view the project status after each sprint, in the relative bra
 * [Sprint 1](https://github.com/FabrizioFornari/SPM2020-LSD/tree/sprint1/)
 * [Sprint 2](https://github.com/FabrizioFornari/SPM2020-LSD/tree/sprint2/)
 * [Sprint 3](https://github.com/FabrizioFornari/SPM2020-LSD/tree/sprint3/)
-* Sprint 4 (in progress)
+* [Sprint 4](https://github.com/FabrizioFornari/SPM2020-LSD/tree/sprint4/)
+* Sprint 5 (in progress)
 
 
 ## Contact

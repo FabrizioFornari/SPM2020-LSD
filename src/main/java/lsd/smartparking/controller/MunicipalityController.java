@@ -71,6 +71,7 @@ public class MunicipalityController extends TokenChecker {
     public @ResponseBody String addParking(@PathVariable("municipalityId") String municipalityId, @PathVariable("token") String token,
     		@RequestBody Parking parking) throws InterruptedException, ExecutionException, FirebaseAuthException {
     	if (checkToken(municipalityId, token, role) && parking.getMunicipalityId().equals(municipalityId)) {
+    		parking.setId(UUID.randomUUID().toString());
     		ApiFuture<DocumentReference> addedDocRef = parkingRef.add(parking);
 	        return (new Gson().toJson(addedDocRef));
     	}

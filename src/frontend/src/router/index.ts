@@ -56,7 +56,7 @@ const router: VueRouter = new VueRouter({
       path: '/map/parking/:id',
       name: 'Parking',
       component: () => import('../views/Parking.vue'),
-      props: true,
+      props: route => ({ id: route.params.id, edit: (route.query.edit === 'true') }),
       meta: { 
         float: true 
       }

@@ -142,11 +142,11 @@ export default {
     async created() {
         if (this.id) {
             this.parking = { ...await this.$store.dispatch("fetchParking", this.id) }
-            if (this.parking) {
+            if (!this.parking || (this.edit && this.$store.getters.userUid != this.parking.municipalityId)) this.$router.push('/map')
+            else {
                 this.slots = { ...this.parking.slots }
                 this.$store.commit("setActive", latLng(this.parking.lat, this.parking.lon))
             }
-            else this.$router.push('/map')
         }
         else if (this.c.indexOf(',') > -1) {
             const coords = this.c.split(',')

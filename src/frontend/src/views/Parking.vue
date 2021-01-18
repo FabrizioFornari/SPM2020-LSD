@@ -45,19 +45,11 @@
             <p class="sub">Opening time</p>
             <label class="label">
                 <label class="label">
-<<<<<<< HEAD
-                    <input type="time" class="input" v-model="days.start" required>
+                    <input type="time" class="input" id="parkingStartTime" v-model="days.start" required>
                     <span>From</span>
                 </label>
                 <label class="label">
-                    <input type="time" class="input" v-model="days.end" required>
-=======
-                    <input type="time" class="input" id="parkingStartTime" v-model="days.time" required>
-                    <span>From</span>
-                </label>
-                <label class="label">
-                    <input type="time" class="input" id="parkingEndTime" v-model="days.time" required>
->>>>>>> a374451e3009092d3c94bf0340908a2ba5a652ea
+                    <input type="time" class="input" id="parkingEndTime" v-model="days.end" required>
                     <span>To</span>
                 </label>
             </label>

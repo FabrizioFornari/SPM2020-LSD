@@ -3,7 +3,6 @@ import { fireStore } from '@/firebase'
 const driver = {
     state: {
         driver: {
-            status: false,
             profile: {},
             vehicles: {},
             tickets: {}
@@ -12,7 +11,6 @@ const driver = {
     mutations: {
         setDriver(state, driver) {
             state.driver.profile = driver
-            state.driver.status = true
         },
         addVehicle(state, vehicle) {
             state.driver.vehicles[vehicle.id] = vehicle
@@ -28,7 +26,6 @@ const driver = {
     },
     actions: {
         async fetchDriver({ commit, rootGetters }) {
-            if (rootGetters.driver.status) return rootGetters.driver
             const driver = await fireStore.collection('Users').doc(rootGetters.userUid).get()
             if (!driver.exists) return null
             commit('setDriver', driver.data())

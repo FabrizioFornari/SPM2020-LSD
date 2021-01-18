@@ -24,7 +24,10 @@ const onAuthStateChangedPromise = new Promise((resolve, reject) => {
     fireAuth.onAuthStateChanged(async user => {
         store.dispatch("fetchUser", user)
         await getRole(user)
-        if (user) await store.dispatch('fetchDriver')
+        if (user) {
+            if (store.getters.userRole == 'driver') await store.dispatch('fetchDriver')
+            else if (store.getters.userRole == 'municipality') await store.dispatch('fetchMunicipality')
+        }
         resolve(user)
     }, err => {
         reject(err)

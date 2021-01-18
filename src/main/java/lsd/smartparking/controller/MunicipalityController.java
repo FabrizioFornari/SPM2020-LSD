@@ -70,7 +70,7 @@ public class MunicipalityController extends TokenChecker {
     @PostMapping("/add/parking/{municipalityId}/{token}")
     public @ResponseBody String addParking(@PathVariable("municipalityId") String municipalityId, @PathVariable("token") String token,
     		@RequestBody Parking parking) throws InterruptedException, ExecutionException, FirebaseAuthException {
-    	if (checkToken(municipalityId, token, role)) {
+    	if (checkToken(municipalityId, token, role) && parking.getMunicipalityId().equals(municipalityId)) {
     		ApiFuture<DocumentReference> addedDocRef = parkingRef.add(parking);
 	        return (new Gson().toJson(addedDocRef));
     	}
@@ -80,7 +80,7 @@ public class MunicipalityController extends TokenChecker {
     @PostMapping("/edit/parking/{municipalityId}/{token}")
     public @ResponseBody String editParking(@PathVariable("municipalityId") String municipalityId, @PathVariable("token") String token,
     		@RequestBody Parking parking) throws InterruptedException, ExecutionException, FirebaseAuthException {
-    	if (checkToken(municipalityId, token, role)) {
+    	if (checkToken(municipalityId, token, role) && parking.getMunicipalityId().equals(municipalityId)) {
     		ApiFuture<WriteResult> editedParking = parkingRef.document(parking.getId()).set(parking);
 	        return (new Gson().toJson(editedParking));
     	}
@@ -103,7 +103,7 @@ public class MunicipalityController extends TokenChecker {
     public @ResponseBody String editParkingRounds(@PathVariable("municipalityId") String municipalityId, @PathVariable("token") String token,
     		@PathVariable("uid") String uid, @PathVariable("dayNumber") String dayNumber, @PathVariable("roundNumber") String roundNumber,
     		@PathVariable("start") int start, @PathVariable("end") int end) throws InterruptedException, ExecutionException, FirebaseAuthException {
-    	if (checkToken(municipalityId, token, role)) {
+    	if (checkToken(municipalityId, token, role) && parking.getMunicipalityId().equals(municipalityId)) {
     		Round round = new Round(start, end);
     		ApiFuture<WriteResult> editedParkingRounds = parkingRef.document(uid).collection("days").document(dayNumber).collection("rounds").document(roundNumber).set(round);
 	        return (new Gson().toJson(editedParkingRounds));
@@ -113,9 +113,10 @@ public class MunicipalityController extends TokenChecker {
     
     @PostMapping("/remove/parking/{municipalityId}/{token}/{parkingId}")
     public @ResponseBody String removeParking(@PathVariable("municipalityId") String municipalityId, @PathVariable("token") String token,
-    		@PathVariable("parkingId") String parkingId) throws InterruptedException, ExecutionException, FirebaseAuthException {
-    	if (checkToken(municipalityId, token, role)) {
-    		ApiFuture<WriteResult> writeResult = parkingRef.document(parkingId).delete();
+    		@RequestBody Parking parking) throws InterruptedException, ExecutionException, FirebaseAuthException {
+    	if (checkToken(municipalityId, token, role) && parking.getMunicipalityId().equals(municipalityId)) {
+    		//
+    		ApiFuture<WriteResult> writeResult = parkingRef.document(parking.getId()).delete();
 	        return (new Gson().toJson(writeResult));
     	}
     	return "Error";

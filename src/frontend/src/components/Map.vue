@@ -212,7 +212,7 @@ export default {
     },
     watch: {
         center() { return },
-        active(newAct, oldAct) { if (newAct) this.map.setView(newAct, 15) },
+        active(newAct, oldAct) { if (newAct) this.map.flyTo(newAct, this.map.getZoom() > 15 ? this.map.getZoom() : 15) },
         parkings() { return },
         waypoints() { return }
     }

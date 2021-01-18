@@ -45,11 +45,11 @@
             <p class="sub">Opening time</p>
             <label class="label">
                 <label class="label">
-                    <input type="time" class="input" v-model="days.time" required>
+                    <input type="time" class="input" v-model="days.start" required>
                     <span>From</span>
                 </label>
                 <label class="label">
-                    <input type="time" class="input" v-model="days.time" required>
+                    <input type="time" class="input" v-model="days.end" required>
                     <span>To</span>
                 </label>
             </label>
@@ -157,7 +157,8 @@ export default {
                     this.parking.lon = response.data.lon
                     this.parking.address = response.data.address.road || response.data.address.farm
                     this.parking.city = response.data.address.city || response.data.address.town || response.data.address.village
-                    this.$store.commit("setActive", latLng(response.data.lat, response.data.lon))
+                    if (this.$store.getters.municipality.profile.city != this.parking.city) this.$router.push('/map')
+                    else this.$store.commit("setActive", latLng(response.data.lat, response.data.lon))
                 }) 
                 .catch(error => {
                     this.$router.push('/map')

@@ -58,7 +58,8 @@ const router: VueRouter = new VueRouter({
       component: () => import('../views/Parking.vue'),
       props: route => ({ id: route.params.id, edit: (route.query.edit === 'true') }),
       meta: { 
-        float: true 
+        float: true,
+        requiresRole: route => route.query.edit == 'true' ? ['municipality'] : undefined
       }
     },
     {
@@ -169,6 +170,8 @@ const router: VueRouter = new VueRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
+  const role = typeof to.meta.requiresRole === 'function' ? to.meta.requiresRole(to) : to.meta.requiresRole
+
   if (to.meta.requiresAuth !== undefined) {
     await onAuthStateInit()
     if (to.meta.requiresAuth == true && !store.getters.isLogged) next({ path: '/login', query: { redirect: to.fullPath } })
@@ -176,15 +179,14 @@ router.beforeEach(async (to, from, next) => {
     else if (to.meta.requiresAdmin == true && !store.getters.isLoggedAdmin) next('/map')
     else if (to.meta.requiresAdmin == false && store.getters.isLoggedAdmin) next('/admin/dashboard')
     else next(); // make sure to always call next()!
-  } else if (to.meta.requiresRole !== undefined) {
+  } else if (role !== undefined) {
     await onAuthStateInit()
     if (!store.getters.isLogged) next({ path: '/login', query: { redirect: to.fullPath } })
-    else if (!to.meta.requiresRole.includes(store.getters.userRole)) next('/map')
+    else if (!role.includes(store.getters.userRole)) next('/map')
     else next()
   } else next()
 
-  if (to.meta.title !== undefined) document.title = to.meta.title
-  else document.title = 'Sparking'
+  document.title = to.meta.title || 'Sparking'
 })
 
 export default router

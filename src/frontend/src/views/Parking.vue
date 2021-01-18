@@ -1,5 +1,5 @@
 <template>
-    <form v-if="parking.id && !edit">
+    <form v-if="id && !edit">
         <div class="details">
             <h3><b>{{ parking.name }}</b></h3>
             <div class="address">{{ parking.address }}, {{ parking.city }}</div>

@@ -1,6 +1,7 @@
 package lsd.smartparking.model;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 public class Parking {
 
@@ -19,8 +20,8 @@ public class Parking {
 	
 	public Parking() { }
 
-	public Parking(String id, String name, String city, String address, double lat, double lon, double price, boolean guarded, String municipalityId, HashMap<String, Integer> slots) {
-		this.setId(id);
+	public Parking(String name, String city, String address, double lat, double lon, double price, boolean guarded, String municipalityId, HashMap<String, Integer> slots) {
+		this.setId(UUID.randomUUID().toString());
 		this.setName(name);
 		this.setLat(lat);
 		this.setLon(lon);

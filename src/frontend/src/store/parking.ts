@@ -13,6 +13,9 @@ const parking = {
         addParkings(state, parkings) {
             for (const id in parkings)
                 Vue.set(state.parkings, id, parkings[id])
+        },
+        removeParking(state, parkingId) {
+            Vue.delete(state.parkings, parkingId)
         }
     },
     getters: {

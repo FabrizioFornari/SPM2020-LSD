@@ -151,7 +151,7 @@ export default {
         else if (this.c.indexOf(',') > -1) {
             const coords = this.c.split(',')
             await axios
-                .get('https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat='+coords[0]+'&lon='+coords[1]+'&zoom=16')
+                .get('https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat='+coords[0]+'&lon='+coords[1]+'&zoom=16&accept-language=it')
                 .then(response => {
                     this.parking.lat = response.data.lat
                     this.parking.lon = response.data.lon

@@ -11,7 +11,7 @@
             <div>{{ parking.price }}/hour</div>
         </div>
         <div class="actions" v-if="this.$store.getters.userUid == parking.municipalityId">
-            <router-link class="action save" :to="{path: '/map/parking/'+parking.id, query: {edit: true}}">Edit</router-link>
+            <router-link class="action save" :to="{path: '/map/parking/'+parking.id, query: {edit: true}}" id="parkingEditButton">Edit</router-link>
             <button class="action cancel" @click.prevent="removeParking">Remove</button>
         </div>
         <div class="actions" v-else>
@@ -67,7 +67,7 @@
         </div>
 
         <div class="actions" v-if="edit">
-            <button class="action save" type="submit">Save</button>
+            <button class="action save" id="parkingSaveButton" type="submit">Save</button>
             <router-link class="action cancel" :to="'/map/parking/'+parking.id">Cancel</router-link>
         </div>
         <div class="actions" v-else>

@@ -26,7 +26,7 @@
             <h3 v-else><b>New Parking</b></h3>
             <div class="address">{{ parking.address }}, {{ parking.city }}</div>
             <label class="label">
-                <input type="text" class="input" v-model.trim="parking.name" required autofocus>
+                <input type="text" class="input" id="parkingName" v-model.trim="parking.name" required autofocus>
                 <span>Name</span>
             </label>
 
@@ -45,16 +45,24 @@
             <p class="sub">Opening time</p>
             <label class="label">
                 <label class="label">
+<<<<<<< HEAD
                     <input type="time" class="input" v-model="days.start" required>
                     <span>From</span>
                 </label>
                 <label class="label">
                     <input type="time" class="input" v-model="days.end" required>
+=======
+                    <input type="time" class="input" id="parkingStartTime" v-model="days.time" required>
+                    <span>From</span>
+                </label>
+                <label class="label">
+                    <input type="time" class="input" id="parkingEndTime" v-model="days.time" required>
+>>>>>>> a374451e3009092d3c94bf0340908a2ba5a652ea
                     <span>To</span>
                 </label>
             </label>
             <label class="label">
-                <input type="number" min="0" step=".01" class="input" v-model.number="parking.price" required>
+                <input type="number" min="0" step=".01" class="input" id="parkingPrice" v-model.number="parking.price" required>
                 <span>Price/h</span>
             </label>
 
@@ -71,7 +79,7 @@
             <router-link class="action cancel" :to="'/map/parking/'+parking.id">Cancel</router-link>
         </div>
         <div class="actions" v-else>
-            <button class="action save" type="submit">Add</button>
+            <button class="action save" id="parkingAddButton" type="submit">Add</button>
             <router-link class="action cancel" to="/map">Cancel</router-link>
         </div>
     </form>

@@ -97,7 +97,7 @@ public class SeleniumAuthTests {
 	    driver.get("http://localhost:8098/login");
 	    driver.findElement(By.xpath("//form")).click();
 	    driver.findElement(By.id("emailLogin")).clear();
-	    driver.findElement(By.id("emailLogin")).sendKeys("a@castelfidardo.it");
+	    driver.findElement(By.id("emailLogin")).sendKeys("castelfidardo@gmail.com");
 	    driver.findElement(By.id("passwordLogin")).clear();
 	    driver.findElement(By.id("passwordLogin")).sendKeys("password");
 	    driver.findElement(By.id("buttonLogin")).click();

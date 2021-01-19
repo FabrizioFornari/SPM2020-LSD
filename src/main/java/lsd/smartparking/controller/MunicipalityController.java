@@ -14,9 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.atlis.location.model.impl.Address;
+import com.atlis.location.model.impl.MapPoint;
+import com.atlis.location.nominatim.NominatimAPI;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.DocumentSnapshot;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
@@ -27,6 +31,7 @@ import com.google.gson.Gson;
 
 import lsd.smartparking.model.Day;
 import lsd.smartparking.model.Driver;
+import lsd.smartparking.model.Municipality;
 import lsd.smartparking.model.Parking;
 import lsd.smartparking.model.Round;
 
@@ -71,9 +76,26 @@ public class MunicipalityController extends TokenChecker {
     public @ResponseBody String addParking(@PathVariable("municipalityId") String municipalityId, @PathVariable("token") String token,
     		@RequestBody Parking parking) throws InterruptedException, ExecutionException, FirebaseAuthException {
     	if (checkToken(municipalityId, token, role) && parking.getMunicipalityId().equals(municipalityId)) {
-    		parking.setId(UUID.randomUUID().toString());
-    		ApiFuture<DocumentReference> addedDocRef = parkingRef.add(parking);
-	        return (new Gson().toJson(addedDocRef));
+    		MapPoint mapPoint = new MapPoint();
+			Address address = new Address();
+			mapPoint = new MapPoint().buildMapPoint(parking.getLat(), parking.getLon());
+			address = NominatimAPI.with("https://nominatim.openstreetmap.org/").getAddressFromMapPoint(mapPoint);			
+    		ApiFuture<DocumentSnapshot> future = municipalityRef.document(municipalityId).get();
+    		DocumentSnapshot document = future.get();
+    		Municipality m = null;
+    		if (document.exists()) {
+    			m = document.toObject(Municipality.class);
+    			if (m.getCity().equals(address.getCity())) {
+	    			ApiFuture<WriteResult> municipality = municipalityRef.document(parking.getId()).set(parking);
+			      	parking.setId(UUID.randomUUID().toString());
+			      	ApiFuture<DocumentReference> addedDocRef = parkingRef.add(parking);
+			      	return (new Gson().toJson(addedDocRef));
+    			} else {
+        			return "Error";
+    			}
+    		} else {
+    			return "Error";
+    		}
     	}
     	return "Error";
     }

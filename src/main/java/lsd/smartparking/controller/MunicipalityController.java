@@ -87,10 +87,11 @@ public class MunicipalityController extends TokenChecker {
     			m = document.toObject(Municipality.class);
     			if (m.getCity().equals(address.getTown())) {
                     Map<String, Object> parkingUpdates = new HashMap<>();
-                    parkingUpdates.put("parking."+parking.getId(), parking.getName());
-            		ApiFuture<WriteResult> writeResult = municipalityRef.document(municipalityId).update(parkingUpdates);
-			      	ApiFuture<DocumentReference> addedDocRef = parkingRef.add(parking);
-			      	return (new Gson().toJson(addedDocRef));
+                    parkingUpdates.put("parking."+parking.getId()+".lat", parking.getLat());
+                    parkingUpdates.put("parking."+parking.getId()+".lon", parking.getLon());
+            		municipalityRef.document(municipalityId).update(parkingUpdates);
+            		ApiFuture<WriteResult> writeResult = parkingRef.document(parking.getId()).set(parking);
+			      	return (new Gson().toJson(writeResult));
     			} else {
         			return "Error";
     			}

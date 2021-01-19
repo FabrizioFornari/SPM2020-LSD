@@ -83,11 +83,11 @@ public class Municipality extends Utils {
 	}
 
 	public void setPolicemen(HashMap<String, Policeman> policemen) {
-		for (Policeman p : policemen.values()) {
+		/*for (Policeman p : policemen.values()) {
 			if (!p.getMunicipalityId().equals(this.getId())) {
 				throw new IllegalArgumentException("Invalid policeman");
 			}
-		}
+		}*/
 		this.policemen = policemen;
 	}
 
@@ -104,11 +104,11 @@ public class Municipality extends Utils {
 	}
 
 	public void setParking(HashMap<String, Parking> parking) {
-		for (Parking p : parking.values()) {
+		/*for (Parking p : parking.values()) {
 			if (!p.getMunicipalityId().equals(this.getId())) {
 				throw new IllegalArgumentException("Invalid parking");
 			}
-		}
+		}*/
 		this.parking = parking;
 	}
 

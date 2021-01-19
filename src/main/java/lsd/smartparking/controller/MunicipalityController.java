@@ -85,7 +85,7 @@ public class MunicipalityController extends TokenChecker {
     		Municipality m = null;
     		if (document.exists()) {
     			m = document.toObject(Municipality.class);
-    			if (m.getCity().equals(address.getTown())) {
+    			if (m.getCity().equals(address.getTown()) || m.getCity().equals(address.getCity())) {
                     Map<String, Object> parkingUpdates = new HashMap<>();
                     parkingUpdates.put("parking."+parking.getId()+".lat", parking.getLat());
                     parkingUpdates.put("parking."+parking.getId()+".lon", parking.getLon());

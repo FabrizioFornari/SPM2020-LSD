@@ -34,7 +34,7 @@ public class NominatimCustomAPI {
     private static final String URL_SUFFIX_FOR_GECODING = "search.php";
     private static final String URL_SUFFIX_FOR_REVERSE_GECODING = "reverse.php";
     private static final String RESPONSE_FORMAT_VALUE = "json";
-    private static final String URL_ACCEPT_LANGUAGE_PARAMETER_VALUE = "en";
+    private static final String URL_ACCEPT_LANGUAGE_PARAMETER_VALUE = "it";
     private static final String URL_ZOOM_PARAMETER_VALUE = "18";
     private static final String URL_OSM_TYPE_VALUE = "N";
 

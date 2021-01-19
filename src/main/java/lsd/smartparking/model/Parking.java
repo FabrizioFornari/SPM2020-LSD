@@ -18,9 +18,7 @@ public class Parking {
 	private HashMap<String, Integer> slots;
 	
 	
-	public Parking() { 
-		this.setId(UUID.randomUUID().toString());
-	}
+	public Parking() { }
 
 	public Parking(String name, String city, String address, double lat, double lon, double price, boolean guarded, String municipalityId, HashMap<String, Integer> slots) {
 		this.setId(UUID.randomUUID().toString());

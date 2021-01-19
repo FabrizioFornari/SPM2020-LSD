@@ -98,16 +98,16 @@ public class MunicipalityTests {
 	@Test
 	public void addValidParkingToMunicipality() {
 		Parking parking = new Parking("Parcheggio Comunale", "ancona", "via maggio", 0.0, 0.0, 10.0, false, municipality.getId(), new HashMap<>());
-		HashMap<String, Parking> newParking = municipality.getParking();
-		newParking.put(parking.getId(), parking);
+		HashMap<String, String> newParking = municipality.getParking();
+		newParking.put(parking.getId(), parking.getName());
 		assertEquals(newParking, municipality.getParking());
 	}
 	
 	@Test
 	public void addInvalidParkingToMunicipality() {
-		HashMap<String, Parking> newParking = municipality.getParking();
+		HashMap<String, String> newParking = municipality.getParking();
 		Parking parking = new Parking("Parcheggio Comunale", "ancona", "via maggio", 0.0, 0.0, 10.0, false, "invalid id", new HashMap<>());
-		newParking.put(parking.getId(), parking);
+		newParking.put(parking.getId(), parking.getName());
 		assertThrows(IllegalArgumentException.class, () -> municipality.setParking(newParking));
 	}
 	

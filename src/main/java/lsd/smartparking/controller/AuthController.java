@@ -43,7 +43,8 @@ public class AuthController extends TokenChecker {
 	
 	@PostMapping("/municipality")
 	public String newMunicipality(@RequestBody Municipality municipality) throws IOException, FirebaseAuthException {
-		municipalityRef.document(municipality.getId()).set(municipality);
+		Municipality newMunicipality = new Municipality(municipality);
+		municipalityRef.document(municipality.getId()).set(newMunicipality);
 		claimToken(municipality.getId(), "municipality");
         return "Successfully registered";
 	}

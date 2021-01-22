@@ -20,6 +20,7 @@ import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.FieldValue;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
@@ -136,11 +137,34 @@ public class MunicipalityController extends TokenChecker {
     	return "Error";
     } */
     
-    @PostMapping("/remove/parking/{municipalityId}/{token}/{parkingId}")
+    @PostMapping("/remove/parking/{municipalityId}/{token}")
     public @ResponseBody String removeParking(@PathVariable("municipalityId") String municipalityId, @PathVariable("token") String token,
     		@RequestBody Parking parking) throws InterruptedException, ExecutionException, FirebaseAuthException {
     	if (checkToken(municipalityId, token, role) && parking.getMunicipalityId().equals(municipalityId)) {
-    		//
+    		//Download all parkings of municipality
+    		DocumentReference docRef = municipalityRef.document(municipalityId);
+    		ApiFuture<DocumentSnapshot> future = docRef.get();
+    		DocumentSnapshot document = future.get();
+    		Municipality m = document.toObject(Municipality.class);
+    		Map<String, HashMap<String, Double>> downloadParking = m.getParking();
+    		//Empty existing parking
+    		Map<String, Object> emptyParking = new HashMap<>();
+    		emptyParking.put("parking", FieldValue.delete());
+    		municipalityRef.document(municipalityId).update(emptyParking);
+    		//Create map of old parking, but remove the parking that has to been deleted
+    		Map<String, Object> parkingUpdates = new HashMap<>();
+            for (String keys : downloadParking.keySet()) {
+	            for (HashMap<String, Double> values : downloadParking.values()) {
+	                parkingUpdates.put("parking."+keys+".lat", values.get("lat"));
+	                parkingUpdates.put("parking."+keys+".lon", values.get("lon"));
+	            }
+            }
+            parkingUpdates.remove("parking."+parking.getId()+".lat");
+            parkingUpdates.remove("parking."+parking.getId()+".lon");
+            //Fill in the parking fields, the municipality parking, except old one
+            if (parkingUpdates.isEmpty()) parkingUpdates.put("parking", FieldValue.delete());
+    		municipalityRef.document(municipalityId).update(parkingUpdates);
+    		//Delete parking from main collection
     		ApiFuture<WriteResult> writeResult = parkingRef.document(parking.getId()).delete();
 	        return (new Gson().toJson(writeResult));
     	}

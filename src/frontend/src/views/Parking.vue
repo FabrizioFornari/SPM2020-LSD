@@ -117,7 +117,7 @@ export default {
     methods: {
         async addParking() {
 			this.parking.slots = this.slots
-		this.parking.municipalityId = this.$store.getters.userUid
+			this.parking.municipalityId = this.$store.getters.userUid
             api.addParking(this.parking).then(response => {
                 if (response >= 200 && response < 300) {
                     this.$store.commit("addParking", this.parking)
@@ -136,9 +136,10 @@ export default {
             })
         },
         async removeParking() {
+			console.log(this.parking)
 			this.parking.slots = this.slots
             this.parking.municipalityId = this.$store.getters.userUid
-            api.removeParking(this.parking.id).then(response => {
+            api.removeParking(this.parking).then(response => {
                 if (response >= 200 && response < 300) {
                     this.$store.commit("removeParking", this.parking.id)
                     this.$router.push('/map')

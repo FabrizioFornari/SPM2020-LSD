@@ -10,8 +10,8 @@ export default {
         const access = await store.dispatch("fetchAccess")
         return AXIOS.post(`/edit/parking/`+access.uid+'/'+access.token, parking)
     },
-    async removeParking(parkingId) {
+    async removeParking(parking) {
         const access = await store.dispatch("fetchAccess")
-        return AXIOS.post(`/remove/parking/`+access.uid+'/'+access.token+'/'+parkingId)
+        return AXIOS.post(`/remove/parking/`+access.uid+'/'+access.token, parking)
     }
 }

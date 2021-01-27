@@ -97,16 +97,7 @@ public class SeleniumMunicipalityTests {
 	@Test
 	@Order(2)
 	  public void testEditNewParking() throws Exception {
-		driver.get("http://localhost:8098/login");
-	    driver.findElement(By.xpath("//form")).click();
-	    driver.findElement(By.id("emailLogin")).clear();
-	    driver.findElement(By.id("emailLogin")).sendKeys("castelfidardo@gmail.com");
-	    driver.findElement(By.id("passwordLogin")).clear();
-	    driver.findElement(By.id("passwordLogin")).sendKeys("password");
-	    driver.findElement(By.id("buttonLogin")).click();
-        WebDriverWait wait1 = new WebDriverWait(driver, 3);
-	    wait1.until((ExpectedCondition<Boolean>) wd -> ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
-	    Thread.sleep(3000);
+		driver.get("http://localhost:8098/");
 	    driver.findElement(By.className("glass")).clear();
 	    driver.findElement(By.className("glass")).sendKeys("Castelfidardo");
 	    driver.findElement(By.className("glass")).sendKeys(Keys.ENTER);
@@ -124,10 +115,17 @@ public class SeleniumMunicipalityTests {
 	    wait4.until((ExpectedCondition<Boolean>) wd -> ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
 	    Thread.sleep(2000);
 	    driver.findElement(By.id("parkingName")).clear();
-	    driver.findElement(By.id("parkingName")).sendKeys("Edited");
+	    driver.findElement(By.id("parkingName")).sendKeys(" Edited");
         WebDriverWait wait5 = new WebDriverWait(driver, 3);
 	    wait5.until((ExpectedCondition<Boolean>) wd -> ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
 	    Thread.sleep(2000);
+	    driver.findElement(By.id("parkingStartTime")).sendKeys("17:00");
+        WebDriverWait wait6 = new WebDriverWait(driver, 3);
+	    wait6.until((ExpectedCondition<Boolean>) wd -> ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
+	    Thread.sleep(2000);
+	    driver.findElement(By.id("parkingEndTime")).sendKeys("18:00");
+        WebDriverWait wait7 = new WebDriverWait(driver, 3);
+	    wait7.until((ExpectedCondition<Boolean>) wd -> ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
 	    driver.findElement(By.id("parkingSaveButton")).click();
 	    Thread.sleep(2000);
 	  }

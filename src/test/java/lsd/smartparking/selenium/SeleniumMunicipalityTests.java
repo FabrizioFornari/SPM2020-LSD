@@ -129,5 +129,25 @@ public class SeleniumMunicipalityTests {
 	    driver.findElement(By.id("parkingSaveButton")).click();
 	    Thread.sleep(2000);
 	  }
+	
+	@Test
+	@Order(3)
+	  public void testRemoveNewParking() throws Exception {
+		driver.get("http://localhost:8098/");
+	    driver.findElement(By.className("glass")).clear();
+	    driver.findElement(By.className("glass")).sendKeys("Castelfidardo");
+	    driver.findElement(By.className("glass")).sendKeys(Keys.ENTER);
+	    WebDriverWait wait2 = new WebDriverWait(driver, 3);
+	    wait2.until((ExpectedCondition<Boolean>) wd -> ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
+        Thread.sleep(2000);
+        WebElement parentDiv = driver.findElement(By.className("leaflet-marker-pane"));
+        List<WebElement> markerList = parentDiv.findElements(By.tagName("img"));
+        markerList.get(0).click();
+        WebDriverWait wait3 = new WebDriverWait(driver, 3);
+	    wait3.until((ExpectedCondition<Boolean>) wd -> ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
+	    Thread.sleep(2000);
+	    driver.findElement(By.id("parkingRemoveButton")).click();
+	    Thread.sleep(2000);
+	  }
 
 }

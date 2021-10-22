@@ -39,7 +39,6 @@
 			</exclusions>
 		</dependency>
 		
-		
 		<!-- Secure backend API -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -66,12 +65,26 @@
 		    <artifactId>guava</artifactId>
 		    <version>22.0</version>
 		</dependency>
+		
+		<!-- MongoDB -->
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-mongodb</artifactId>
+			<version>3.2.6</version>
+		</dependency>
+		<dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongodb-driver-sync</artifactId>
+			<version>4.2.3</version>
+        </dependency>
+
 		<!-- Nominatim -->
 		<dependency>
 		  <groupId>me.atlis</groupId>
 		  <artifactId>nominatim-api</artifactId>
 		  <version>1.0.0</version>
 		</dependency>
+
 		<!-- Selenium -->
 		<dependency>
 		    <groupId>org.seleniumhq.selenium</groupId>

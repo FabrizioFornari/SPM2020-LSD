@@ -12,7 +12,7 @@
         </div>
         <div class="actions" v-if="this.$store.getters.userUid == parking.municipalityId">
             <router-link class="action save" :to="{path: '/map/parking/'+parking.id, query: {edit: true}}" id="parkingEditButton">Edit</router-link>
-            <button class="action cancel" @click.prevent="removeParking">Remove</button>
+            <button class="action cancel" @click.prevent="removeParking" id="parkingRemoveButton">Remove</button>
         </div>
         <div class="actions" v-else>
             <button id="routeButton" class="action save" @click.prevent="findRoute">Route</button>
@@ -67,7 +67,7 @@
         </div>
 
         <div class="actions" v-if="edit">
-            <button class="action save" id="parkingSaveButton" type="submit">Save</button>
+            <button class="action save" id="parkingSaveButton"  @click.prevent="editParking" type="submit">Save</button>
             <router-link class="action cancel" :to="'/map/parking/'+parking.id">Cancel</router-link>
         </div>
         <div class="actions" v-else>
@@ -116,10 +116,8 @@ export default {
     },
     methods: {
         async addParking() {
-            this.parking.slots = this.slots
-            //this.parking.days = this.days
-            console.log(this.parking)
-            this.parking.municipalityId = this.$store.getters.userUid
+			this.parking.slots = this.slots
+			this.parking.municipalityId = this.$store.getters.userUid
             api.addParking(this.parking).then(response => {
                 if (response >= 200 && response < 300) {
                     this.$store.commit("addParking", this.parking)
@@ -127,8 +125,21 @@ export default {
                 }
             })
         },
+        async editParking() {
+			this.parking.slots = this.slots
+			this.parking.municipalityId = this.$store.getters.userUid
+            api.editParking(this.parking).then(response => {
+                if (response >= 200 && response < 300) {
+                    this.$store.commit("editParking", this.parking.id)
+                    this.$router.push('/map/parking/'+this.parking.id)
+                }
+            })
+        },
         async removeParking() {
-            api.removeParking(this.parking.id).then(response => {
+			console.log(this.parking)
+			this.parking.slots = this.slots
+            this.parking.municipalityId = this.$store.getters.userUid
+            api.removeParking(this.parking).then(response => {
                 if (response >= 200 && response < 300) {
                     this.$store.commit("removeParking", this.parking.id)
                     this.$router.push('/map')

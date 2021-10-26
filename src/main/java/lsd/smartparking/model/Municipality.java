@@ -5,40 +5,26 @@ import java.util.HashMap;
 public class Municipality extends Utils {
 
 	private String id;
+	private String email;
 	private String city;
 	private String province;
 	private String region;
-	private String email;
 	private HashMap<String, Policeman> policemen;
-	private HashMap<String, HashMap<String, Double>> parking;
-	private boolean approved;
-	private boolean disabled;
+	private HashMap<String, HashMap<String, Double>> parkings;
+	private boolean approved = false;
+	private boolean disabled = false;
 
 	
     public Municipality() { }
 
-	public Municipality(String city, String province, String region, String email, String id) {
-		this.setId(id);
-		this.setEmail(email);
-		this.setCity(city);
-		this.setProvince(province);
-		this.setRegion(region);
-		this.setApproved(false);
-		this.setDisabled(false);
-		this.setPolicemen(new HashMap<String, Policeman>());
-		this.setParking(new HashMap<String, HashMap<String, Double>>());
-	}
-
-	public Municipality(Municipality municipality) {
-		this.setId(municipality.getId());
-		this.setEmail(municipality.getEmail());
-		this.setCity(municipality.getCity());
-		this.setProvince(municipality.getProvince());
-		this.setRegion(municipality.getRegion());
-		this.setApproved(false);
-		this.setDisabled(false);
-		this.setPolicemen(new HashMap<String, Policeman>());
-		this.setParking(new HashMap<String, HashMap<String, Double>>());
+	public Municipality(String id, String email, String city, String province, String region) {
+		this.id = id;
+		this.email = email;
+		this.city = city;
+		this.province = province;
+		this.region = region;
+		this.policemen = new HashMap<String, Policeman>();
+		this.parkings = new HashMap<String, HashMap<String, Double>>();
 	}
 
 	public String getId() {
@@ -56,7 +42,6 @@ public class Municipality extends Utils {
 
 	public void setEmail(String email) {
 		checkFields(email);
-		checkFieldsLength(email);
 		this.email = email.trim();
 	}
 
@@ -66,7 +51,7 @@ public class Municipality extends Utils {
 
 	public void setCity(String city) {
 		checkFields(city);
-		checkFieldsLength(city);
+		checkFieldsLength(city, 30);
 		this.city = city.trim();
 	}
 
@@ -76,7 +61,7 @@ public class Municipality extends Utils {
 
 	public void setProvince(String province) {
 		checkFields(province);
-		checkFieldsLength(province);
+		checkFieldsLength(province, 30);
 		this.province = province.trim();
 	}
 
@@ -86,7 +71,7 @@ public class Municipality extends Utils {
 
 	public void setRegion(String region) {
 		checkFields(region);
-		checkFieldsLength(region);
+		checkFieldsLength(region, 30);
 		this.region = region.trim();
 	}
 
@@ -98,20 +83,20 @@ public class Municipality extends Utils {
 		this.policemen = policemen;
 	}
 
+	public HashMap<String, HashMap<String, Double>> getParkings() {
+		return parkings;
+	}
+
+	public void setParkings(HashMap<String, HashMap<String, Double>> parkings) {
+		this.parkings = parkings;
+	}
+
 	public boolean isApproved() {
 		return approved;
 	}
 
 	public void setApproved(boolean approved) {
 		this.approved = approved;
-	}
-
-	public HashMap<String, HashMap<String, Double>> getParking() {
-		return parking;
-	}
-
-	public void setParking(HashMap<String, HashMap<String, Double>> parking) {
-		this.parking = parking;
 	}
 
 	public boolean isDisabled() {

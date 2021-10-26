@@ -9,11 +9,9 @@ public class Driver extends User {
 	private HashMap<String, Ticket> tickets;
 	
 	
-	public Driver() { }
-	
-	public Driver(String name, String surname, String email, String id, HashMap<String, String> vehicles) {
-		super(name, surname, email, id);
-		if (vehicles != null) this.setVehicles(vehicles);
+	public Driver(String id, String email, String name, String surname, HashMap<String, String> vehicles) {
+		super(id, email, name, surname);
+		if (vehicles != null) this.vehicles = vehicles;
 	}
 	
 	public HashMap<String, String> getVehicles() {

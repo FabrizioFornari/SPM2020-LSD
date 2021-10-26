@@ -1,61 +1,52 @@
 package lsd.smartparking.model;
 
 import java.util.HashMap;
-import java.util.UUID;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
+import org.springframework.data.geo.Point;
+
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.util.Assert;
+
+@Document(collection = "parkings")
 public class Parking {
 
+	private final ObjectId _id;
 	private String name;
-	private String id;
-	private double lat;
-	private double lon;
-	private double price;
-	private String municipalityId;
-	private String city;
+	private Point coords;
 	private String address;
+	private String city;
+	private String municipalityId;
+	private double price;
 	private boolean guarded;
 	private HashMap<Integer, Day> days;
 	private HashMap<String, Integer> slots;
 	
-	
-	public Parking() { }
 
-	public Parking(String name, String city, String address, double lat, double lon, double price, boolean guarded, String municipalityId, HashMap<String, Integer> slots) {
-		this.setId(UUID.randomUUID().toString());
-		this.setName(name);
-		this.setLat(lat);
-		this.setLon(lon);
-		this.setCity(city);
-		this.setAddress(address);
-		this.setPrice(price);
-		this.setMunicipalityId(municipalityId);
-		this.setDays(new HashMap<Integer, Day>());
-		this.setSlots(slots);
-		this.setGuarded(guarded);
-	}
-
-	public String getMunicipalityId() {
-		return municipalityId;
-	}
-
-	public void setMunicipalityId(String municipalityId) {
+	public Parking(String name, double lat, double lon, String address, String city, String municipalityId, double price) {
+		this._id = new ObjectId();
+		this.name = name;
+		this.coords = new Point(lon, lat);
+		this.address = address;
+		this.city = city;
 		this.municipalityId = municipalityId;
+		this.price = price;
+		this.days = new HashMap<Integer, Day>();
 	}
 
-	public double getLon() {
-		return lon;
+	public Parking(String name, double lat, double lon, String address, String city, String municipalityId, double price, HashMap<String, Integer> slots, boolean guarded) {
+		this(name, lat, lon, address, city, municipalityId, price);
+		this.slots = slots;
+		this.guarded = guarded;
 	}
 
-	public void setLon(double lon) {
-		this.lon = lon;
-	}
-
-	public double getLat() {
-		return lat;
-	}
-
-	public void setLat(double lat) {
-		this.lat = lat;
+	public String getId() {
+		return _id.toHexString();
 	}
 
 	public String getName() {
@@ -66,12 +57,16 @@ public class Parking {
 		this.name = name;
 	}
 
-	public String getId() {
-		return id;
+	public String getMunicipalityId() {
+		return municipalityId;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public double getLon() {
+		return coords.getX();
+	}
+
+	public double getLat() {
+		return coords.getY();
 	}
 
 	public HashMap<Integer, Day> getDays() {
@@ -95,7 +90,6 @@ public class Parking {
 	}
 
 	public void setSlots(HashMap<String, Integer> slots) {
-		if (slots.isEmpty()) throw new IllegalArgumentException("Invalid parking slots");
 		for (String vehicleType : slots.keySet()) {
 			if (!vehicleType.equals("car") &&
 				!vehicleType.equals("motorcycle") &&

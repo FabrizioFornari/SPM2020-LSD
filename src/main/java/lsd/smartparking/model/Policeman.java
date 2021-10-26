@@ -7,9 +7,9 @@ public class Policeman extends User {
 	
     public Policeman() { }
 
-	public Policeman(String name, String surname, String email, String id, String municipalityId) {
-		super(name, surname, email, id);
-		this.setMunicipalityId(municipalityId);
+	public Policeman(String id, String email, String name, String surname, String municipalityId) {
+		super(id, email, name, surname);
+		this.municipalityId = municipalityId;
 	}
 
 	public String getMunicipalityId() {

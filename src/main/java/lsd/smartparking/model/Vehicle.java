@@ -12,18 +12,18 @@ public class Vehicle {
 	private String plate;
 	private HashMap<String, String> sharedOwners;
 	
+
 	public Vehicle() { }
 
 	public Vehicle(String id, String name, String cod, String type, String owner, String plate) {
-		this.setId(id);
-		this.setCod(cod);
-		this.setPlate(plate);
-		this.setType(type);
-		this.setName(name);
-		this.setOwner(owner);
+		this.id =  id;
+		this.cod = cod;
+		this.plate = plate;
+		this.type = type;
+		this.name = name;
+		this.owner = owner;
 	}
     
-
 	public String getId() {
 		return this.id;
 	}

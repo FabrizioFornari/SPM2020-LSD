@@ -7,14 +7,12 @@ public class User extends Utils {
 	private String surname;
 	private String email;
 
-	
-    public User() { }
 
-	public User(String name, String surname, String email, String id) {
-		this.setName(name);
-		this.setSurname(surname);
-		this.setEmail(email);
-		this.setId(id);
+	public User(String id, String email, String name, String surname) {
+		this.id = id;
+		this.name = name;
+		this.surname = surname;
+		this.email = email;
 	}
 
 	public String getId() {
@@ -32,7 +30,7 @@ public class User extends Utils {
 
 	public void setName(String name) {
 		checkFields(name);
-		checkFieldsLength(name);
+		checkFieldsLength(name, 30);
 		this.name = name.trim();
 	}
 
@@ -42,7 +40,7 @@ public class User extends Utils {
 
 	public void setSurname(String surname) {
 		checkFields(surname);
-		checkFieldsLength(surname);
+		checkFieldsLength(surname, 30);
 		this.surname = surname.trim();
 	}
 
@@ -52,7 +50,6 @@ public class User extends Utils {
 
 	public void setEmail(String email) {
 		checkFields(email);
-		checkFieldsLength(email);
 		this.email = email.trim();
 	}
 	

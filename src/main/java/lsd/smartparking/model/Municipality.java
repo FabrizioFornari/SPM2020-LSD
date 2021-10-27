@@ -2,12 +2,21 @@ package lsd.smartparking.model;
 
 import java.util.HashMap;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+
 public class Municipality extends Utils {
 
+	@NotBlank(message = "Id cannot be empty")
 	private String id;
+	@NotBlank(message = "Email cannot be null")
+	@Email(message = "Email must be valid")
 	private String email;
+	@NotBlank(message = "City cannot be empty")
 	private String city;
+	@NotBlank(message = "Province cannot be empty")
 	private String province;
+	@NotBlank(message = "Region cannot be empty")
 	private String region;
 	private HashMap<String, Policeman> policemen;
 	private HashMap<String, HashMap<String, Double>> parkings;
@@ -17,7 +26,7 @@ public class Municipality extends Utils {
 	
     public Municipality() { }
 
-	public Municipality(String id, String email, String city, String province, String region) {
+	public Municipality(String city, String province, String region, String email, String id) {
 		this.id = id;
 		this.email = email;
 		this.city = city;

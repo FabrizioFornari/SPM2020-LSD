@@ -2,51 +2,78 @@ package lsd.smartparking.model;
 
 import java.util.HashMap;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import org.springframework.data.geo.Point;
-
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.PersistenceConstructor;
+import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.util.Assert;
 
 @Document(collection = "parkings")
 public class Parking {
 
-	private final ObjectId _id;
+	@Id
+	@NotNull(message = "Id cannot be null")
+	private final ObjectId id;
+	@NotBlank(message = "Name cannot be empty")
 	private String name;
-	private Point coords;
+	@Valid
+	@NotNull(message = "Coords cannot be empty")
+	@GeoSpatialIndexed(name="coords")
+	private Coords coords;
+	@NotBlank(message = "Address cannot be empty")
 	private String address;
+	@NotBlank(message = "City cannot be empty")
 	private String city;
-	private String municipalityId;
+	@NotBlank(message = "Owner cannot be empty")
+	private String owner;
+	@Min(0)
 	private double price;
 	private boolean guarded;
 	private HashMap<Integer, Day> days;
 	private HashMap<String, Integer> slots;
 	
 
-	public Parking(String name, double lat, double lon, String address, String city, String municipalityId, double price) {
-		this._id = new ObjectId();
+	public Parking() {
+		this.id = new ObjectId();
+	}
+
+	@PersistenceConstructor
+	public Parking(ObjectId id, String name, Coords coords, String address, String city, String owner, double price) {
+		Assert.isTrue(id.getClass() == ObjectId.class, "Id must be valid");
+		Assert.hasText(name, "Name cannot be empty");
+		Assert.notNull(coords, "Coords cannot be null");
+		Assert.notNull(address, "Address cannot be empty");
+		Assert.hasText(city, "City cannot be empty");
+		Assert.hasText(owner, "Owner cannot be empty");
+		Assert.isTrue(price >= 0, "Price cannot be negative");
+		this.id = id;
 		this.name = name;
-		this.coords = new Point(lon, lat);
+		this.coords = coords;
 		this.address = address;
 		this.city = city;
-		this.municipalityId = municipalityId;
+		this.owner = owner;
 		this.price = price;
 		this.days = new HashMap<Integer, Day>();
 	}
 
-	public Parking(String name, double lat, double lon, String address, String city, String municipalityId, double price, HashMap<String, Integer> slots, boolean guarded) {
-		this(name, lat, lon, address, city, municipalityId, price);
+	public Parking(String name, Coords coords, String address, String city, String owner, double price) {
+		this(new ObjectId(), name, coords, address, city, owner, price);
+	}
+
+	public Parking(String name, Coords coords, String address, String city, String owner, double price, HashMap<String, Integer> slots, boolean guarded) {
+		this(new ObjectId(), name, coords, address, city, owner, price);
 		this.slots = slots;
 		this.guarded = guarded;
 	}
 
 	public String getId() {
-		return _id.toHexString();
+		return id.toHexString();
 	}
 
 	public String getName() {
@@ -54,19 +81,21 @@ public class Parking {
 	}
 
 	public void setName(String name) {
+		Assert.hasText(name, "Name cannot be empty");
 		this.name = name;
 	}
 
-	public String getMunicipalityId() {
-		return municipalityId;
+	public String getOwner() {
+		return owner;
 	}
 
-	public double getLon() {
-		return coords.getX();
+	public Coords getCoords() {
+		return coords;
 	}
 
-	public double getLat() {
-		return coords.getY();
+	public void setCoords(Coords coords) {
+		Assert.notNull(coords, "Coords cannot be empty");
+		this.coords = coords;
 	}
 
 	public HashMap<Integer, Day> getDays() {
@@ -90,6 +119,7 @@ public class Parking {
 	}
 
 	public void setSlots(HashMap<String, Integer> slots) {
+		Assert.notEmpty(slots, "Slots cannot be empty");
 		for (String vehicleType : slots.keySet()) {
 			if (!vehicleType.equals("car") &&
 				!vehicleType.equals("motorcycle") &&
@@ -107,7 +137,7 @@ public class Parking {
 	}
 
 	public void setPrice(double price) {
-		if (price < 0) price = 0;
+		Assert.isTrue(price >= 0, "Price cannot be negative");
 		this.price = price;
 	}
 

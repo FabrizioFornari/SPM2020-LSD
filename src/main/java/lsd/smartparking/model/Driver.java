@@ -8,6 +8,8 @@ public class Driver extends User {
 	private HashMap<String, Payment> payments;
 	private HashMap<String, Ticket> tickets;
 	
+
+	public Driver() { }
 	
 	public Driver(String id, String email, String name, String surname, HashMap<String, String> vehicles) {
 		super(id, email, name, surname);

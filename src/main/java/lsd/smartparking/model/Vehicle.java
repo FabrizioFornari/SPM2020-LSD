@@ -1,36 +1,48 @@
 package lsd.smartparking.model;
 
 import java.util.HashMap;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.PersistenceConstructor;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.util.Assert;
+
+@Document(collection = "vehicles")
 public class Vehicle {
     
-    private String id;
+	@Id
+	@NotNull(message = "Id cannot be null")
+    private final ObjectId id;
+	@NotBlank(message = "Name cannot be empty")
 	private String name;
     private String type;
-    private String cod;
+	@NotBlank(message = "Owner cannot be empty")
 	private String owner;
-	private String plate;
 	private HashMap<String, String> sharedOwners;
 	
 
-	public Vehicle() { }
+	public Vehicle() { 
+		this.id = new ObjectId();
+	}
 
-	public Vehicle(String id, String name, String cod, String type, String owner, String plate) {
+	@PersistenceConstructor
+	public Vehicle(ObjectId id, String name, String cod, String type, String owner, String plate) {
+		Assert.isTrue(id.getClass() == ObjectId.class, "Id must be valid");
+		Assert.hasText(type, "Type cannot be empty");
+		Assert.hasText(type, "Name cannot be empty");
+		Assert.hasText(type, "Owner cannot be empty");
 		this.id =  id;
-		this.cod = cod;
-		this.plate = plate;
 		this.type = type;
 		this.name = name;
 		this.owner = owner;
 	}
     
 	public String getId() {
-		return this.id;
+		return this.id.toHexString();
 	}
-	
-	public void setId(String id) {
-		this.id = id;
-    }
 	
 	public String getName() {
 		return this.name;
@@ -76,22 +88,6 @@ public class Vehicle {
 	
 	public void removeOwner(String id) {
 		this.sharedOwners.remove(id);
-	}
-
-	public String getPlate() {
-		return plate;
-	}
-
-	public void setPlate(String plate) {
-		this.plate = plate;
-	}
-
-	public String getCod() {
-		return cod;
-	}
-
-	public void setCod(String cod) {
-		this.cod = cod;
 	}
 
 }

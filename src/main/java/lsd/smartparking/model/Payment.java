@@ -1,63 +1,62 @@
 package lsd.smartparking.model;
 
+import java.util.Date;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.util.Assert;
+
+@Document(collection = "payments")
 public class Payment {
 
-	private String id;
-	private double price;
-	private long emission;
-	private long life;
-	private String parking;
+	@Id
+	@NotNull(message = "Id cannot be null")
+	private final ObjectId id;
+	@NotBlank(message = "Payer cannot be empty")
+	private final String payer;
+	@NotNull(message = "Amount cannot be null")
+	private final double amount;
+	@NotNull(message = "Emission cannot be null")
+	private final Date emission;
+	@NotBlank(message = "Ticket cannot be empty")
+	private final String ticket;
 	
-	
-	public Payment() { }
 
-	public Payment(String id, double price, long emission, long life, String parking) {
-		super();
+	public Payment(ObjectId id, String payer, double amount, @Valid Date emission, String ticket) {
+		Assert.isTrue(id.getClass() == ObjectId.class, "Id must be valid");
+		Assert.hasText(payer, "Payer cannot be empty");
+		Assert.notNull(amount, "Amount cannot be null");
+		Assert.hasText(ticket, "Ticket cannot be empty");
 		this.id = id;
-		this.price = price;
+		this.payer = payer;
+		this.amount = amount;
 		this.emission = emission;
-		this.life = life;
-		this.parking = parking;
+		this.ticket = ticket;
 	}
 	
 	public String getId() {
-		return id;
+		return id.toHexString();
 	}
 	
-	public void setId(String id) {
-		this.id = id;
+	public String getPayer() {
+		return payer;
 	}
 	
-	public double getPrice() {
-		return price;
+	public double getAmount() {
+		return amount;
 	}
 	
-	public void setPrice(double price) {
-		this.price = price;
-	}
-	
-	public long getEmission() {
+	public Date getEmission() {
 		return emission;
 	}
 	
-	public void setEmission(long emission) {
-		this.emission = emission;
-	}
-	
-	public long getLife() {
-		return life;
-	}
-	
-	public void setLife(long life) {
-		this.life = life;
-	}
-	
-	public String getParking() {
-		return parking;
-	}
-	
-	public void setParking(String parking) {
-		this.parking = parking;
+	public String getTicket() {
+		return ticket;
 	}
 	
 }

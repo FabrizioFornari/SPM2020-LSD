@@ -1,14 +1,14 @@
 package lsd.smartparking;
 
-import org.apache.log4j.BasicConfigurator;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
+@EnableAutoConfiguration
 public class SmartParkingApplication {
 
 	public static void main(String[] args) {
-		BasicConfigurator.configure();
 		SpringApplication.run(SmartParkingApplication.class, args);
 	}
 

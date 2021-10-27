@@ -32,6 +32,7 @@ public class AdminController {
 	CollectionReference municipalityRef = db.collection("Municipality");
     private static final Logger LOG = LoggerFactory.getLogger(AuthController.class);
 
+    
 	@GetMapping("/login")
     public @ResponseBody String loginAdmin() {
         LOG.info("GET successfully called on /secured resource");

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,11 +28,9 @@ import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.cloud.FirestoreClient;
 import com.google.gson.Gson;
 
-import lsd.smartparking.model.Day;
-import lsd.smartparking.model.Driver;
+import lsd.smartparking.model.Coords;
 import lsd.smartparking.model.Municipality;
 import lsd.smartparking.model.Parking;
-import lsd.smartparking.model.Round;
 
 
 @RestController()
@@ -65,7 +62,7 @@ public class MunicipalityController extends TokenChecker {
 	        List<Parking> allParking = new ArrayList<Parking>();
 	    	for (QueryDocumentSnapshot document : documents) {
 	    		Parking p = document.toObject(Parking.class);
-	    		if (p.getMunicipalityId().equals(uid)) allParking.add(p);
+	    		if (p.getOwner().equals(uid)) allParking.add(p);
 	    	}
 	        return (new Gson().toJson(allParking));
     	}
@@ -75,11 +72,11 @@ public class MunicipalityController extends TokenChecker {
     @PostMapping("/add/parking/{municipalityId}/{token}")
     public @ResponseBody String addParking(@PathVariable("municipalityId") String municipalityId, @PathVariable("token") String token,
     		@RequestBody Parking parking) throws InterruptedException, ExecutionException, FirebaseAuthException {
-        parking.setId(UUID.randomUUID().toString());
-    	if (checkToken(municipalityId, token, role) && parking.getMunicipalityId().equals(municipalityId)) {
+        if (checkToken(municipalityId, token, role) && parking.getOwner().equals(municipalityId)) {
     		MapPoint mapPoint = new MapPoint();
 			Address address = new Address();
-			mapPoint = new MapPoint().buildMapPoint(parking.getLat(), parking.getLon());
+			Coords coords = parking.getCoords();
+			mapPoint = new MapPoint().buildMapPoint(coords.getX(), coords.getY());
 			address = NominatimCustomAPI.with("https://nominatim.openstreetmap.org/").getAddressFromMapPoint(mapPoint);			
     		ApiFuture<DocumentSnapshot> future = municipalityRef.document(municipalityId).get();
     		DocumentSnapshot document = future.get();
@@ -88,8 +85,8 @@ public class MunicipalityController extends TokenChecker {
     			m = document.toObject(Municipality.class);
     			if (m.getCity().equals(address.getTown()) || m.getCity().equals(address.getCity())) {
                     Map<String, Object> parkingUpdates = new HashMap<>();
-                    parkingUpdates.put("parking."+parking.getId()+".lat", parking.getLat());
-                    parkingUpdates.put("parking."+parking.getId()+".lon", parking.getLon());
+                    parkingUpdates.put("parking."+parking.getId()+".lat", coords.getX());
+                    parkingUpdates.put("parking."+parking.getId()+".lon", coords.getY());
             		municipalityRef.document(municipalityId).update(parkingUpdates);
             		ApiFuture<WriteResult> writeResult = parkingRef.document(parking.getId()).set(parking);
 			      	return (new Gson().toJson(writeResult));
@@ -106,7 +103,7 @@ public class MunicipalityController extends TokenChecker {
     @PostMapping("/edit/parking/{municipalityId}/{token}")
     public @ResponseBody String editParking(@PathVariable("municipalityId") String municipalityId, @PathVariable("token") String token,
     		@RequestBody Parking parking) throws InterruptedException, ExecutionException, FirebaseAuthException {
-    	if (checkToken(municipalityId, token, role) && parking.getMunicipalityId().equals(municipalityId)) {
+    	if (checkToken(municipalityId, token, role) && parking.getOwner().equals(municipalityId)) {
     		ApiFuture<WriteResult> editedParking = parkingRef.document(parking.getId()).set(parking);
 	        return (new Gson().toJson(editedParking));
     	}
@@ -140,13 +137,13 @@ public class MunicipalityController extends TokenChecker {
     @PostMapping("/remove/parking/{municipalityId}/{token}")
     public @ResponseBody String removeParking(@PathVariable("municipalityId") String municipalityId, @PathVariable("token") String token,
     		@RequestBody Parking parking) throws InterruptedException, ExecutionException, FirebaseAuthException {
-    	if (checkToken(municipalityId, token, role) && parking.getMunicipalityId().equals(municipalityId)) {
+    	if (checkToken(municipalityId, token, role) && parking.getOwner().equals(municipalityId)) {
     		//Download all parkings of municipality
     		DocumentReference docRef = municipalityRef.document(municipalityId);
     		ApiFuture<DocumentSnapshot> future = docRef.get();
     		DocumentSnapshot document = future.get();
     		Municipality m = document.toObject(Municipality.class);
-    		Map<String, HashMap<String, Double>> downloadParking = m.getParking();
+    		Map<String, HashMap<String, Double>> downloadParking = m.getParkings();
     		//Empty existing parking
     		Map<String, Object> emptyParking = new HashMap<>();
     		emptyParking.put("parking", FieldValue.delete());

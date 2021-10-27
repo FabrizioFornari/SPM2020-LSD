@@ -2,6 +2,8 @@ package lsd.smartparking.controller;
 
 import java.io.IOException;
 
+import javax.validation.Valid;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,23 +30,22 @@ public class AuthController extends TokenChecker {
 
 	
 	@PostMapping("/driver")
-	public String newDriver(@RequestBody Driver driver) throws IOException, FirebaseAuthException {
+	public String newDriver(@Valid @RequestBody Driver driver) throws IOException, FirebaseAuthException {
 		driverRef.document(driver.getId()).set(driver);
 		claimToken(driver.getId(), "driver");
 		return "Successfully registered";
 	}
 
 	@PostMapping("/policeman")
-	public String newPoliceman(@RequestBody Policeman policeman) throws IOException, FirebaseAuthException {
+	public String newPoliceman(@Valid @RequestBody Policeman policeman) throws IOException, FirebaseAuthException {
 		policemanRef.document(policeman.getId()).set(policeman);
 		claimToken(policeman.getId(), "policeman");
 		return "Successfully registered";
 	}
 	
 	@PostMapping("/municipality")
-	public String newMunicipality(@RequestBody Municipality municipality) throws IOException, FirebaseAuthException {
-		Municipality newMunicipality = new Municipality(municipality);
-		municipalityRef.document(municipality.getId()).set(newMunicipality);
+	public String newMunicipality(@Valid @RequestBody Municipality municipality) throws IOException, FirebaseAuthException {
+		municipalityRef.document(municipality.getId()).set(municipality);
 		claimToken(municipality.getId(), "municipality");
         return "Successfully registered";
 	}

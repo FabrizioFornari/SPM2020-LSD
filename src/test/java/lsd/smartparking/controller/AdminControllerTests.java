@@ -1,7 +1,6 @@
 package lsd.smartparking.controller;
 
 import java.lang.reflect.Type;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -12,6 +11,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import lsd.smartparking.configuration.FirebaseConfig;
 import lsd.smartparking.configuration.SecurityConfig;
 import lsd.smartparking.model.Municipality;
 
@@ -25,9 +25,8 @@ import com.google.gson.reflect.TypeToken;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 
-@Disabled
 @WebMvcTest
-@ContextConfiguration(classes = { AuthController.class, AdminController.class, SecurityConfig.class })
+@ContextConfiguration(classes = { FirebaseConfig.class, AdminController.class, SecurityConfig.class })
 public class AdminControllerTests {
  
     @Autowired

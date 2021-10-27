@@ -7,8 +7,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.io.ClassPathResource;
 
@@ -20,11 +19,10 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
 
-@Disabled
 public class FirebaseConfigTest {
 
-	@BeforeEach
-	void testInitialize() throws IOException {
+	@BeforeAll
+	static void testInitialize() throws IOException {
 		HashMap<String, Object> admin = new HashMap<String, Object>();
         admin.put("uid", "crime-admin-server");
         

@@ -5,33 +5,21 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.UUID;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest(classes = {Policeman.class})
 public class PolicemanTests {
 
-    private Policeman policeman;
-	private User user;
-	private Municipality municipality;
-	private String testMunicipalityId;
-	private String testName;
-	private String testSurname;
-	private String testEmail;
-	private String testId;
+	private static String testName = "Luca";
+	private static String testSurname = "Verdi";
+	private static String testEmail = "a@a.it";
+	private static String testId = UUID.randomUUID().toString();
+	private static String testMunicipalityId = UUID.randomUUID().toString();
+	private static User user = new User(testId, testEmail, testName, testSurname);
+    private static Policeman policeman = new Policeman(user.getId(), user.getEmail(), user.getName(), user.getSurname(), testMunicipalityId);
+	private static Municipality municipality = new Municipality(testMunicipalityId, "b@b.it", "Roma", "Roma", "Lazio");
 	
-	@BeforeEach
-	public void createPoliceman() {
-		testName = "Luca";
-		testSurname = "Verdi";
-		testEmail = "a@a.it";
-		testId = UUID.randomUUID().toString();
-		testMunicipalityId = UUID.randomUUID().toString();
-		municipality = new Municipality("Roma", "Roma", "Lazio", "b@b.it", testMunicipalityId);
-		user = new User(testName, testSurname, testEmail, testId);
-		policeman = new Policeman(user.getName(), user.getSurname(), user.getEmail(), user.getId(), testMunicipalityId);
-	}
 	
 	@Test
 	public void checkPolicemanFields() {

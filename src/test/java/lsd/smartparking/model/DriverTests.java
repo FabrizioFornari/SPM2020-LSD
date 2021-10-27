@@ -5,30 +5,20 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.HashMap;
 import java.util.UUID;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest(classes = {Driver.class})
 public class DriverTests {
 
-    private Driver driver;
-	private User user;
-	private String testName;
-	private String testSurname;
-	private String testEmail;
-	private String testId;
-	private HashMap<String, String> testCars;
+	private static String testName = "Luca";
+	private static String testSurname = "Verdi";
+	private static String testEmail = "a@a.it";
+	private static String testId = UUID.randomUUID().toString();
+	private static HashMap<String, String> testCars;
+	private static User user = new User(testId, testEmail, testName, testSurname);
+    private static Driver driver = new Driver(user.getId(), user.getEmail(), user.getName(), user.getSurname(), testCars);
 	
-	@BeforeEach
-	public void createDriver() {
-		testName = "Luca";
-		testSurname = "Verdi";
-		testEmail = "a@a.it";
-		testId = UUID.randomUUID().toString();
-		user = new User(testName, testSurname, testEmail, testId);
-		driver = new Driver(user.getName(), user.getSurname(), user.getEmail(), user.getId(), testCars);
-	}
 	
 	@Test
 	public void checkDriverFields() {

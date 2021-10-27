@@ -6,29 +6,19 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.HashMap;
 import java.util.UUID;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest(classes = {Municipality.class})
 public class MunicipalityTests {
 
-    private Municipality municipality;
-	private String testCity;
-	private String testProvince;
-	private String testRegion;
-	private String testEmail;
-	private String testId;
-	
-	@BeforeEach
-	public void createMunicipality() {
-		testCity = "Castelfidardo";
-		testProvince = "Ancona";
-		testRegion = "Marche";
-		testEmail = "a@a.it";
-		testId = UUID.randomUUID().toString();
-		municipality = new Municipality(testCity, testProvince, testRegion, testEmail, testId);
-	}
+	private static String testCity = "Castelfidardo";
+	private static String testProvince = "Ancona";
+	private static String testRegion = "Marche";
+	private static String testEmail = "a@a.it";
+	private static String testId = UUID.randomUUID().toString();
+    private static Municipality municipality = new Municipality(testId, testEmail, testCity, testProvince, testRegion);
+
 	
 	@Test
 	public void checkMunicipalityFields() {
@@ -70,7 +60,6 @@ public class MunicipalityTests {
 	public void createMunicipalityInvalidEmail() {
 		assertThrows(IllegalArgumentException.class, () -> municipality.setEmail(null));
 		assertThrows(IllegalArgumentException.class, () -> municipality.setEmail(""));
-		assertThrows(IllegalArgumentException.class, () -> municipality.setEmail("1234567890123456789012345678901"));
 	}
 	
 	@Test
@@ -87,38 +76,39 @@ public class MunicipalityTests {
 		assertEquals(newPolicemen, municipality.getPolicemen());
 	}
 	
-	/*@Test
+	@Test
 	public void addInvalidPolicemenToMunicipality() {
 		HashMap<String, Policeman> newPolicemen = municipality.getPolicemen();
 		Policeman policeman = new Policeman("Caio", "Lori", "caio@lori.it", UUID.randomUUID().toString(), "InvalidID");
 		newPolicemen.put(policeman.getId(), policeman);
 		assertThrows(IllegalArgumentException.class, () -> municipality.setPolicemen(newPolicemen));
-	}*/
+	}
 	
 	@Test
 	public void addValidParkingToMunicipality() {
 		HashMap<String, Integer> slots = new HashMap<String, Integer>();
-		slots.put("car", 1);
-		Parking parking = new Parking("Parcheggio Comunale", "ancona", "via maggio", 0.0, 0.0, 10.0, false, municipality.getId(), slots);
-		HashMap<String, HashMap<String, Double>> newParking = municipality.getParking();
-		HashMap<String, Double> coordinates = new HashMap<String,Double>();
-		coordinates.put("lat", parking.getLat());
-		coordinates.put("lat", parking.getLon());
+		slots.put("car", 10);
+		Parking parking = new Parking("Parcheggio", new Coords(10, 20), "Piazza del Duomo", "Milano", municipality.getId(), 0);
+		HashMap<String, HashMap<String, Double>> newParking = new HashMap<String, HashMap<String, Double>>();
+		HashMap<String, Double> coordinates = new HashMap<String, Double>();
+		coordinates.put("lat", parking.getCoords().getLat());
+		coordinates.put("lon", parking.getCoords().getLon());
 		newParking.put(parking.getId(), coordinates);
-		assertEquals(newParking, municipality.getParking());
+		municipality.setParkings(newParking);
+		assertEquals(newParking, municipality.getParkings());
 	}
 	
-	/*@Test
+	@Test
 	public void addInvalidParkingToMunicipality() {
-		HashMap<String, HashMap<String, Double>> newParking = municipality.getParking();
 		HashMap<String, Integer> slots = new HashMap<String, Integer>();
-		slots.put("car", 1);
-		Parking parking = new Parking("Parcheggio Comunale", "ancona", "via maggio", 0.0, 0.0, 10.0, false, "invalid id", slots);
+		slots.put("car", 10);
+		Parking parking = new Parking("Parcheggio", new Coords(10, 20), "Piazza del Duomo", "Milano", "invalid id", 0);
+		HashMap<String, HashMap<String, Double>> newParking = new HashMap<String, HashMap<String, Double>>();
 		HashMap<String, Double> coordinates = new HashMap<String, Double>();
-		coordinates.put("lat", parking.getLat());
-		coordinates.put("lat", parking.getLon());
+		coordinates.put("lat", parking.getCoords().getLat());
+		coordinates.put("lon", parking.getCoords().getLon());
 		newParking.put(parking.getId(), coordinates);
-		assertThrows(IllegalArgumentException.class, () -> municipality.setParking(newParking));
-	}*/
+		assertThrows(IllegalArgumentException.class, () -> municipality.setParkings(newParking));
+	}
 	
 }

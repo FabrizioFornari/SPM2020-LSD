@@ -5,27 +5,18 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.UUID;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest(classes = {User.class})
 public class UserTests {
 
-    private User user;
-	private String testName;
-	private String testSurname;
-	private String testEmail;
-	private String testId;
+	private static String testName = "Mario";
+	private static String testSurname = "Rossi";
+	private static String testEmail = "a@a.it";
+	private static String testId = UUID.randomUUID().toString();
+    private static User user = new User(testId, testEmail, testName, testSurname);
 	
-	@BeforeEach
-	public void createUser() {
-		testName = "Mario";
-		testSurname = "Rossi";
-		testEmail = "a@a.it";
-		testId = UUID.randomUUID().toString();
-		user = new User(testName, testSurname, testEmail, testId);
-	}
 	
 	@Test
 	public void checkUserFields() {
@@ -54,13 +45,12 @@ public class UserTests {
 	public void createUserInvalidEmail() {
 		assertThrows(IllegalArgumentException.class, () -> user.setEmail(null));
 		assertThrows(IllegalArgumentException.class, () -> user.setEmail(""));
-		assertThrows(IllegalArgumentException.class, () -> user.setEmail("1234567890123456789012345678901"));
 	}
 	
 	@Test
 	public void createUserInvalidId() {
-		assertThrows(IllegalArgumentException.class, () -> user.setId(null));
-		assertThrows(IllegalArgumentException.class, () -> user.setId(""));
+		assertThrows(IllegalArgumentException.class, () -> new User(null, "email@email.com", "name", "surname"));
+		assertThrows(IllegalArgumentException.class, () -> new User("", "email@email.com", "name", "surname"));
 	}
 	
 }

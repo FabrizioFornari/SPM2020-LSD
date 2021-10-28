@@ -1,10 +1,10 @@
 package lsd.smartparking.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.firebase.database.annotations.NotNull;
 
 import org.hibernate.validator.constraints.Range;
 import org.springframework.data.annotation.PersistenceConstructor;
-import org.springframework.data.annotation.Transient;
 import org.springframework.data.geo.Point;
 import org.springframework.util.Assert;
 
@@ -49,12 +49,12 @@ public class Coords {
         this.y = y;
     }
     
-    @Transient
+    @JsonIgnore
     public double getLon() {
         return getX();
     }
 
-    @Transient
+    @JsonIgnore
     public double getLat() {
         return getY();
     }

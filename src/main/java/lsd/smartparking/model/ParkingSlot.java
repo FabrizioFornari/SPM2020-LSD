@@ -11,7 +11,9 @@ import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.util.Assert;
 
-@Document(collection = "parkings")
+import lsd.smartparking.enums.VehicleType;
+
+@Document(collection = "slots")
 public class ParkingSlot {
 
 	@Id
@@ -23,6 +25,8 @@ public class ParkingSlot {
 	@NotNull(message = "Coords cannot be empty")
 	@GeoSpatialIndexed(name="coords")
 	private Coords coords;
+	@Valid
+	private VehicleType type;
 	
 
 	public ParkingSlot() {
@@ -30,17 +34,18 @@ public class ParkingSlot {
 	}
 
 	@PersistenceConstructor
-	public ParkingSlot(ObjectId id, String parking, Coords coords) {
+	public ParkingSlot(ObjectId id, String parking, Coords coords, VehicleType type) {
 		Assert.isTrue(id.getClass() == ObjectId.class, "Id must be valid");
 		Assert.hasText(parking, "Parking cannot be empty");
 		Assert.notNull(coords, "Coords cannot be null");
 		this.id = id;
 		this.parking = parking;
 		this.coords = coords;
+		this.type = type;
 	}
 
-	public ParkingSlot(String parking, Coords coords) {
-		this(new ObjectId(), parking, coords);
+	public ParkingSlot(String parking, Coords coords, VehicleType type) {
+		this(new ObjectId(), parking, coords, type);
 	}
 
 	public String getId() {
@@ -60,9 +65,18 @@ public class ParkingSlot {
 		return coords;
 	}
 
-	public void setCoords(Coords coords) {
+	public void setCoords(@Valid Coords coords) {
 		Assert.notNull(coords, "Coords cannot be empty");
 		this.coords = coords;
+	}
+
+	public VehicleType getType() {
+		return this.type;
+	}
+
+	public void setType(@Valid VehicleType type) {
+		Assert.notNull(type, "Type cannot be empty");
+		this.type = type;
 	}
 
 }

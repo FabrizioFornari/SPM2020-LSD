@@ -22,6 +22,8 @@ public class Ticket {
 	private String vehicle;
 	@NotNull(message = "Emission cannot be null")
 	private Date emission;
+	@NotNull(message = "Inception cannot be null")
+	private Date inception;
 	@NotNull(message = "Expiration cannot be null")
 	private Date expiration;
 	@NotBlank(message = "Parking cannot be empty")
@@ -71,6 +73,15 @@ public class Ticket {
 	public void setEmission(Date emission) {
 		Assert.notNull(emission, "Emission cannot be empty");
 		this.emission = emission;
+	}
+	
+	public Date getInception() {
+		return inception;
+	}
+	
+	public void setInception(Date inception) {
+		Assert.notNull(inception, "Emission cannot be empty");
+		this.inception = inception;
 	}
 	
 	public Date getExpiration() {

@@ -4,21 +4,27 @@ import java.util.HashMap;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.util.Assert;
 
+import lsd.smartparking.enums.VehicleType;
+
 @Document(collection = "vehicles")
-public class Vehicle {
+public abstract class Vehicle {
     
 	@Id
 	@NotNull(message = "Id cannot be null")
     private final ObjectId id;
 	@NotBlank(message = "Name cannot be empty")
 	private String name;
-    private String type;
+	@NotNull(message = "Type cannot be null")
+    private VehicleType type;
 	@NotBlank(message = "Owner cannot be empty")
 	private String owner;
 	private HashMap<String, String> sharedOwners;
@@ -28,15 +34,13 @@ public class Vehicle {
 		this.id = new ObjectId();
 	}
 
-	@PersistenceConstructor
-	public Vehicle(ObjectId id, String name, String cod, String type, String owner, String plate) {
+	public Vehicle(ObjectId id, String name, VehicleType type, String owner) {
 		Assert.isTrue(id.getClass() == ObjectId.class, "Id must be valid");
-		Assert.hasText(type, "Type cannot be empty");
-		Assert.hasText(type, "Name cannot be empty");
-		Assert.hasText(type, "Owner cannot be empty");
+		Assert.hasText(name, "Name cannot be empty");
+		Assert.hasText(owner, "Owner cannot be empty");
 		this.id =  id;
-		this.type = type;
 		this.name = name;
+		this.type = type;
 		this.owner = owner;
 	}
     
@@ -52,17 +56,12 @@ public class Vehicle {
 		this.name = name;
 	}
 	
-	public String getType() {
-		return this.type;
+	public VehicleType getType() {
+		return type;
 	}
 	
-	public void setType(String type) {
-		if (!type.equals("car") &&
-			!type.equals("motorcycle") &&
-			!type.equals("bicycle") &&
-			!type.equals("caravan") &&
-			!type.equals("handicap"))
-			throw new IllegalArgumentException("Invalid vehicle type");
+	public void setType(VehicleType type) {
+		Assert.notNull(type, "Type cannot be empty");
 		this.type = type;
 	}
 	
@@ -89,5 +88,7 @@ public class Vehicle {
 	public void removeOwner(String id) {
 		this.sharedOwners.remove(id);
 	}
+
+    public abstract String getPlate();
 
 }

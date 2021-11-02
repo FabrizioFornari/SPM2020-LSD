@@ -20,7 +20,8 @@ public class VehicleService {
 
 
     public <T extends Vehicle> T addVehicle(T vehicle) {
-        if (!vehicleRepo.findByPlate(vehicle.getPlate()).isEmpty()) return null;
+        String plate = vehicle.getPlate();
+        if (plate != null && !vehicleRepo.existsByPlateAndOwner(plate, vehicle.getOwner()).isEmpty()) return null;
         return vehicleRepo.save(vehicle);
     }
 

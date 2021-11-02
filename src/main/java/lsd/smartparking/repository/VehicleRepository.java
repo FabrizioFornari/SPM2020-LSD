@@ -20,5 +20,8 @@ public interface VehicleRepository extends MongoRepository<Vehicle, String> {
     
     @Query("{'plate' : ?0}")
     List<Vehicle> findByPlate(String plate);
+
+    @Query("{'plate' : ?0, 'owner' : ?1}")
+    List<Vehicle> existsByPlateAndOwner(String plate, String owner);
     
 }

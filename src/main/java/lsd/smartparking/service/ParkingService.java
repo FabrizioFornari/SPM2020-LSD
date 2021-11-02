@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.geo.Box;
 import org.springframework.stereotype.Service;
 
+import lsd.smartparking.enums.VehicleType;
 import lsd.smartparking.model.Coords;
 import lsd.smartparking.model.Parking;
 import lsd.smartparking.repository.ParkingRepository;
@@ -37,6 +38,11 @@ public class ParkingService {
     public List<Parking> getParkings(Coords topright, Coords botleft) {
         Box box = new Box(botleft.toPoint(), topright.toPoint());
         return parkingRepo.findByCoordsWithin(box);
+    }
+
+    public List<Parking> getParkings(Coords topright, Coords botleft, VehicleType type) {
+        Box box = new Box(botleft.toPoint(), topright.toPoint());
+        return parkingRepo.findByCoordsWithinAndType(box, type);
     }
 
 }

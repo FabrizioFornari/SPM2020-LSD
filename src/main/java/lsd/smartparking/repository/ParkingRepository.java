@@ -6,8 +6,10 @@ import java.util.Optional;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.geo.Box;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import lsd.smartparking.enums.VehicleType;
 import lsd.smartparking.model.Parking;
 
 @ComponentScan
@@ -19,5 +21,8 @@ public interface ParkingRepository extends MongoRepository<Parking, String> {
     List<Parking> findByOwner(String owner);
 
     List<Parking> findByCoordsWithin(Box box);
+
+    @Query("{'coords' : {'$within' : {'$box' : ?0}}, 'slots.?1' : {'$exists' : true}}")
+    List<Parking> findByCoordsWithinAndType(Box box, VehicleType type);
     
 }

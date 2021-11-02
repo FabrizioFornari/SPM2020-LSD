@@ -5,6 +5,7 @@ import java.util.HashMap;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.bson.types.ObjectId;
@@ -13,6 +14,8 @@ import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.util.Assert;
+
+import lsd.smartparking.enums.VehicleType;
 
 @Document(collection = "parkings")
 public class Parking {
@@ -34,9 +37,9 @@ public class Parking {
 	private String owner;
 	@Min(0)
 	private double price;
-	private boolean guarded;
-	private HashMap<Integer, Day> days;
-	private HashMap<String, Integer> slots;
+	private boolean guarded = false;
+	@NotEmpty
+	private HashMap<VehicleType, Integer> slots;
 	
 
 	public Parking() {
@@ -44,7 +47,7 @@ public class Parking {
 	}
 
 	@PersistenceConstructor
-	public Parking(ObjectId id, String name, Coords coords, String address, String city, String owner, double price) {
+	public Parking(ObjectId id, String name, Coords coords, String address, String city, String owner, double price, HashMap<VehicleType, Integer> slots) {
 		Assert.isTrue(id.getClass() == ObjectId.class, "Id must be valid");
 		Assert.hasText(name, "Name cannot be empty");
 		Assert.notNull(coords, "Coords cannot be null");
@@ -59,16 +62,15 @@ public class Parking {
 		this.city = city;
 		this.owner = owner;
 		this.price = price;
-		this.days = new HashMap<Integer, Day>();
-	}
-
-	public Parking(String name, Coords coords, String address, String city, String owner, double price) {
-		this(new ObjectId(), name, coords, address, city, owner, price);
-	}
-
-	public Parking(String name, Coords coords, String address, String city, String owner, double price, HashMap<String, Integer> slots, boolean guarded) {
-		this(new ObjectId(), name, coords, address, city, owner, price);
 		this.slots = slots;
+	}
+
+	public Parking(String name, Coords coords, String address, String city, String owner, double price, HashMap<VehicleType, Integer> slots) {
+		this(new ObjectId(), name, coords, address, city, owner, price, slots);
+	}
+
+	public Parking(String name, Coords coords, String address, String city, String owner, double price, HashMap<VehicleType, Integer> slots, boolean guarded) {
+		this(new ObjectId(), name, coords, address, city, owner, price, slots);
 		this.guarded = guarded;
 	}
 
@@ -98,14 +100,6 @@ public class Parking {
 		this.coords = coords;
 	}
 
-	public HashMap<Integer, Day> getDays() {
-		return days;
-	}
-
-	public void setDays(HashMap<Integer, Day> days) {
-		this.days = days;
-	}
-
 	public boolean isGuarded() {
 		return guarded;
 	}
@@ -114,20 +108,14 @@ public class Parking {
 		this.guarded = guarded;
 	}
 
-	public HashMap<String, Integer> getSlots() {
+	public HashMap<VehicleType, Integer> getSlots() {
 		return slots;
 	}
 
-	public void setSlots(HashMap<String, Integer> slots) {
+	public void setSlots(HashMap<VehicleType, Integer> slots) {
 		Assert.notEmpty(slots, "Slots cannot be empty");
-		for (String vehicleType : slots.keySet()) {
-			if (!vehicleType.equals("car") &&
-				!vehicleType.equals("motorcycle") &&
-				!vehicleType.equals("bicycle") &&
-				!vehicleType.equals("caravan") &&
-				!vehicleType.equals("handicap")) {
-					throw new IllegalArgumentException("Invalid vehicle type");
-			}
+		for (Integer size : slots.values()) {
+			if (size <= 0) throw new IllegalArgumentException("Invalid slot size");
 		}
 		this.slots = slots;
 	}

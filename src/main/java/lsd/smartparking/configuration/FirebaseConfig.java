@@ -3,21 +3,23 @@ package lsd.smartparking.configuration;
 import java.io.IOException;
 import java.util.HashMap;
 
-import javax.annotation.PostConstruct;
-
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import com.google.firebase.auth.FirebaseAuth;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.stereotype.Service;
 
-@Service
+@Configuration
 public class FirebaseConfig {
 
-    @PostConstruct
-    public void initialize() throws IOException {
-        HashMap<String, Object> admin = new HashMap<String, Object>();
+    @Primary
+	@Bean
+	public FirebaseApp getfirebaseApp() throws IOException {
+		HashMap<String, Object> admin = new HashMap<String, Object>();
         admin.put("uid", "crime-admin-server");
         
         FirebaseOptions options = new FirebaseOptions.Builder()
@@ -27,6 +29,13 @@ public class FirebaseConfig {
             .build();
             
         if (FirebaseApp.getApps().isEmpty()) FirebaseApp.initializeApp(options);
-    }
+        
+		return FirebaseApp.getInstance();
+	}
+
+	@Bean
+	public FirebaseAuth getAuth() throws IOException {
+		return FirebaseAuth.getInstance(getfirebaseApp());
+	}
 
 }

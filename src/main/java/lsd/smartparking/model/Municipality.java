@@ -1,16 +1,24 @@
 package lsd.smartparking.model;
 
-import java.util.HashMap;
-
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
-public class Municipality extends Utils {
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.util.Assert;
 
-	@NotBlank(message = "Id cannot be empty")
-	private String id;
-	@NotBlank(message = "Email cannot be null")
+import lsd.smartparking.enums.UserType;
+
+@Document(collection = "municipalities")
+public class Municipality extends Utils implements UserInfo {
+
+	@Id
+	@NotNull(message = "Id must be valid")
+	private final ObjectId id;
 	@Email(message = "Email must be valid")
+	@NotBlank(message = "Email cannot be null")
 	private String email;
 	@NotBlank(message = "City cannot be empty")
 	private String city;
@@ -18,33 +26,36 @@ public class Municipality extends Utils {
 	private String province;
 	@NotBlank(message = "Region cannot be empty")
 	private String region;
-	private HashMap<String, Policeman> policemen;
-	private HashMap<String, HashMap<String, Double>> parkings;
+	@NotNull(message = "Type cannot be empty")
+	private UserType type;
 	private boolean approved = false;
 	private boolean disabled = false;
 
 	
-    public Municipality() { }
+    public Municipality() { 
+		this.id = new ObjectId();
+	}
 
-	public Municipality(String city, String province, String region, String email, String id) {
+	public Municipality(ObjectId id, String email, String city, String province, String region) {
+		Assert.notNull(id, "Id must be valid");
+		Assert.hasText(email, "Email cannot be empty");
+		Assert.hasText(city, "City cannot be empty");
+		Assert.hasText(province, "Province cannot be empty");
+		Assert.hasText(region, "Region cannot be empty");
 		this.id = id;
 		this.email = email;
 		this.city = city;
 		this.province = province;
 		this.region = region;
-		this.policemen = new HashMap<String, Policeman>();
-		this.parkings = new HashMap<String, HashMap<String, Double>>();
+		this.type = UserType.MUNICIPALITY;
 	}
 
+	@Override
 	public String getId() {
-		return id;
+		return id.toHexString();
 	}
 
-	public void setId(String id) {
-		checkFields(id);
-		this.id = id.trim();
-	}
-
+	@Override
 	public String getEmail() {
 		return email;
 	}
@@ -84,20 +95,13 @@ public class Municipality extends Utils {
 		this.region = region.trim();
 	}
 
-	public HashMap<String, Policeman> getPolicemen() {
-		return policemen;
+	@Override
+	public UserType getType() {
+		return type;
 	}
 
-	public void setPolicemen(HashMap<String, Policeman> policemen) {
-		this.policemen = policemen;
-	}
-
-	public HashMap<String, HashMap<String, Double>> getParkings() {
-		return parkings;
-	}
-
-	public void setParkings(HashMap<String, HashMap<String, Double>> parkings) {
-		this.parkings = parkings;
+	public void setType(UserType type) {
+		this.type = type;
 	}
 
 	public boolean isApproved() {

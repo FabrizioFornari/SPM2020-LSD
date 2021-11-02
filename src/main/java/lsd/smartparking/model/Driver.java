@@ -2,6 +2,13 @@ package lsd.smartparking.model;
 
 import java.util.HashMap;
 
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.PersistenceConstructor;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import lsd.smartparking.enums.UserType;
+
+@Document(collection = "users")
 public class Driver extends User {
 	
 	private HashMap<String, String> vehicles;
@@ -9,11 +16,17 @@ public class Driver extends User {
 	private HashMap<String, Ticket> tickets;
 	
 
-	public Driver() { }
+	public Driver() { 
+		this.setType(UserType.DRIVER);
+	}
 	
-	public Driver(String id, String email, String name, String surname, HashMap<String, String> vehicles) {
-		super(id, email, name, surname);
-		if (vehicles != null) this.vehicles = vehicles;
+	@PersistenceConstructor
+	public Driver(ObjectId id, String email, String name, String surname) {
+		super(id, email, name, surname, UserType.DRIVER);
+	}
+
+	public Driver(String email, String name, String surname) {
+		this(new ObjectId(), email, name, surname);
 	}
 	
 	public HashMap<String, String> getVehicles() {

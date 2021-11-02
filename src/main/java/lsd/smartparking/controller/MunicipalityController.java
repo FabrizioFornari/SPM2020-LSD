@@ -132,7 +132,7 @@ public class MunicipalityController extends TokenChecker {
 	        return (new Gson().toJson(editedParkingRounds));
     	}
     	return "Error";
-    } */
+    } 
     
     @PostMapping("/remove/parking/{municipalityId}/{token}")
     public @ResponseBody String removeParking(@PathVariable("municipalityId") String municipalityId, @PathVariable("token") String token,
@@ -166,6 +166,6 @@ public class MunicipalityController extends TokenChecker {
 	        return (new Gson().toJson(writeResult));
     	}
     	return "Error";
-    }
+    }*/
 
 }

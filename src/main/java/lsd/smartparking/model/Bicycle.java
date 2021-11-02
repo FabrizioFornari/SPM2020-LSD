@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.PersistenceConstructor;
-import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lsd.smartparking.enums.VehicleType;

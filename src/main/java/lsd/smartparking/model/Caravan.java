@@ -1,16 +1,20 @@
 package lsd.smartparking.model;
 
+import javax.validation.constraints.NotBlank;
+
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.PersistenceConstructor;
-import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.util.Assert;
 
 import lsd.smartparking.enums.VehicleType;
 
 @Document(collection = "vehicles")
 public class Caravan extends Vehicle {
     
+	@NotBlank(message = "Cod cannot be empty")
     private String cod;
+	@NotBlank(message = "plate cannot be empty")
 	private String plate;
 	
 
@@ -21,6 +25,8 @@ public class Caravan extends Vehicle {
 	@PersistenceConstructor
 	public Caravan(ObjectId id, String name, String cod, String owner, String plate) {
 		super(id, name, VehicleType.CARAVAN, owner);
+		Assert.hasText(cod, "Cod cannot be empty");
+		Assert.hasText(plate, "Plate cannot be empty");
 		this.cod = cod;
 		this.plate = plate;
 	}

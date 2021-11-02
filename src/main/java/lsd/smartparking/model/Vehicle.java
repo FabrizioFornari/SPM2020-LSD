@@ -4,12 +4,8 @@ import java.util.HashMap;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.PersistenceConstructor;
-import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.util.Assert;
 
@@ -37,6 +33,7 @@ public abstract class Vehicle {
 	public Vehicle(ObjectId id, String name, VehicleType type, String owner) {
 		Assert.isTrue(id.getClass() == ObjectId.class, "Id must be valid");
 		Assert.hasText(name, "Name cannot be empty");
+		Assert.notNull(type, "Type cannot be empty");
 		Assert.hasText(owner, "Owner cannot be empty");
 		this.id =  id;
 		this.name = name;

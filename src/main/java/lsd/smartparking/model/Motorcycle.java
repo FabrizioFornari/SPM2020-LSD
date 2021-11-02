@@ -4,6 +4,7 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.util.Assert;
 
 import lsd.smartparking.enums.VehicleType;
 
@@ -21,6 +22,8 @@ public class Motorcycle extends Vehicle {
 	@PersistenceConstructor
 	public Motorcycle(ObjectId id, String name, String cod, String owner, String plate) {
 		super(id, name, VehicleType.MOTORCYCLE, owner);
+		Assert.hasText(cod, "Cod cannot be empty");
+		Assert.hasText(plate, "Plate cannot be empty");
 		this.cod = cod;
 		this.plate = plate;
 	}

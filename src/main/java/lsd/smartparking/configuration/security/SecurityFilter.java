@@ -46,11 +46,9 @@ public class SecurityFilter extends OncePerRequestFilter {
 		if (token == null || token.isBlank()) return;
 		try {
 			DecodedToken decoded = new DecodedToken(firebaseAuth.verifyIdToken(token));
-			System.out.println(decoded.getRole());
-
 			String uid = decoded.getUid();
 			List<GrantedAuthority> authorities = new ArrayList<>();
-			authorities.add(new SimpleGrantedAuthority(decoded.getRole()));
+			authorities.add(new SimpleGrantedAuthority(decoded.getRole().toString()));
 
 			UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(uid, decoded, authorities);
 			authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

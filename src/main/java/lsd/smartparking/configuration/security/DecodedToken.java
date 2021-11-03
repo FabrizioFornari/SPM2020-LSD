@@ -4,6 +4,8 @@ import java.util.Map;
 
 import com.google.firebase.auth.FirebaseToken;
 
+import lsd.smartparking.enums.UserType;
+
 public class DecodedToken {
 
     private FirebaseToken token;
@@ -33,8 +35,8 @@ public class DecodedToken {
         return token.getClaims();
     }
 
-	public String getRole() {
-		return (String) token.getClaims().get("role");
+	public UserType getRole() {
+		return UserType.valueOf((String) getClaims().get("role"));
 	}
     
 }

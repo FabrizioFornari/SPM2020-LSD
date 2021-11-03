@@ -8,6 +8,8 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,7 +23,7 @@ import lsd.smartparking.model.ParkingSlot;
 import lsd.smartparking.service.ParkingSlotService;
 
 @RestController
-@RequestMapping("/api/parkingslot")
+@RequestMapping(path = "/api/parkingslot", consumes = "application/json")
 public class ParkingSlotController {
 
     @Autowired
@@ -46,8 +48,10 @@ public class ParkingSlotController {
     	return new ResponseEntity<>(slots, !slots.isEmpty() ? HttpStatus.FOUND : HttpStatus.NOT_FOUND);
     }
 
+    @PreAuthorize("hasAnyAuthority('MUNICIPALITY')")
     @PostMapping("/")
-    public ResponseEntity<ParkingSlot> addSlot(@Valid @RequestBody ParkingSlot slot) {
+    public ResponseEntity<ParkingSlot> addSlot(Authentication auth, @Valid @RequestBody ParkingSlot slot) {
+        if (!slotService.checkOwner(slot, auth.getName())) return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         slot = slotService.addSlot(slot);
     	return new ResponseEntity<>(slot, slot != null ? HttpStatus.CREATED : HttpStatus.BAD_REQUEST);
     }

@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,7 +22,7 @@ import lsd.smartparking.model.Parking;
 import lsd.smartparking.service.ParkingService;
 
 @RestController
-@RequestMapping("/api/parking")
+@RequestMapping(path = "/api/parking", consumes = "application/json")
 public class ParkingController {
 
     @Autowired
@@ -52,10 +53,18 @@ public class ParkingController {
     	return new ResponseEntity<>(parkings, parkings.isEmpty() ? HttpStatus.FOUND : HttpStatus.NOT_FOUND);
     }
 
+    @PreAuthorize("hasAnyAuthority('MUNICIPALITY')")
     @PostMapping("/")
     public ResponseEntity<Parking> addParking(@Valid @RequestBody Parking parking) {
-        Parking p = parkingService.addParking(parking);
-    	return new ResponseEntity<>(p, HttpStatus.CREATED);
+        Parking newParking = parkingService.addParking(parking);
+    	return new ResponseEntity<>(newParking, newParking != null ? HttpStatus.CREATED : HttpStatus.CONFLICT);
+    }
+
+    @PreAuthorize("hasAnyAuthority('MUNICIPALITY')")
+    @PostMapping("/edit")
+    public ResponseEntity<Parking> editParking(@Valid @RequestBody Parking parking) {
+        Parking editParking = parkingService.editParking(parking);
+    	return new ResponseEntity<>(editParking, editParking != null ? HttpStatus.OK : HttpStatus.CONFLICT);
     }
     
 }

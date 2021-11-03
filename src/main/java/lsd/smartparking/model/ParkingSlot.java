@@ -26,6 +26,7 @@ public class ParkingSlot {
 	@GeoSpatialIndexed(name="coords")
 	private Coords coords;
 	@Valid
+	@NotNull(message = "Type cannot be empty")
 	private VehicleType type;
 	
 
@@ -38,6 +39,7 @@ public class ParkingSlot {
 		Assert.isTrue(id.getClass() == ObjectId.class, "Id must be valid");
 		Assert.hasText(parking, "Parking cannot be empty");
 		Assert.notNull(coords, "Coords cannot be null");
+		Assert.notNull(type, "Type cannot be null");
 		this.id = id;
 		this.parking = parking;
 		this.coords = coords;

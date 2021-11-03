@@ -65,6 +65,10 @@ public class Parking {
 		this.slots = slots;
 	}
 
+	public Parking(String id, String name, Coords coords, String address, String city, String owner, double price, HashMap<VehicleType, Integer> slots) {
+		this(new ObjectId(id), name, coords, address, city, owner, price, slots);
+	}
+
 	public Parking(String name, Coords coords, String address, String city, String owner, double price, HashMap<VehicleType, Integer> slots) {
 		this(new ObjectId(), name, coords, address, city, owner, price, slots);
 	}

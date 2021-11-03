@@ -1,8 +1,19 @@
 package lsd.smartparking.controller;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -11,22 +22,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import lsd.smartparking.configuration.FirebaseConfig;
-import lsd.smartparking.configuration.SecurityConfig;
 import lsd.smartparking.model.Municipality;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-import java.util.ArrayList;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
-
-@WebMvcTest
-@ContextConfiguration(classes = { FirebaseConfig.class, AdminController.class, SecurityConfig.class })
+@WebMvcTest(AdminController.class)
+@AutoConfigureMockMvc
+@ContextConfiguration
 public class AdminControllerTests {
  
     @Autowired

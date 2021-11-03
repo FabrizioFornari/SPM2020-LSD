@@ -40,6 +40,7 @@ public class Car extends Vehicle {
 	}
 
 	public void setPlate(String plate) {
+		Assert.hasText(plate, "Plate cannot be empty");
 		this.plate = plate;
 	}
 
@@ -48,6 +49,7 @@ public class Car extends Vehicle {
 	}
 
 	public void setCod(String cod) {
+		Assert.hasText(cod, "Cod cannot be empty");
 		this.cod = cod;
 	}
 

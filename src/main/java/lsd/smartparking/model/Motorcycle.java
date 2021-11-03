@@ -1,8 +1,9 @@
 package lsd.smartparking.model;
 
+import javax.validation.constraints.NotBlank;
+
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.PersistenceConstructor;
-import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.util.Assert;
 
@@ -11,7 +12,9 @@ import lsd.smartparking.enums.VehicleType;
 @Document(collection = "vehicles")
 public class Motorcycle extends Vehicle {
     
+	@NotBlank(message = "Cod cannot be empty")
     private String cod;
+	@NotBlank(message = "plate cannot be empty")
 	private String plate;
 	
 
@@ -37,6 +40,7 @@ public class Motorcycle extends Vehicle {
 	}
 
 	public void setPlate(String plate) {
+		Assert.hasText(plate, "Plate cannot be empty");
 		this.plate = plate;
 	}
 
@@ -45,6 +49,7 @@ public class Motorcycle extends Vehicle {
 	}
 
 	public void setCod(String cod) {
+		Assert.hasText(cod, "Cod cannot be empty");
 		this.cod = cod;
 	}
 

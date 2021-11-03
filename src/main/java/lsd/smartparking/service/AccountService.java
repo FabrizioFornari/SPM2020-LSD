@@ -13,15 +13,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import lsd.smartparking.enums.UserType;
-import lsd.smartparking.model.Auth;
+import lsd.smartparking.model.Driver;
 import lsd.smartparking.model.Municipality;
+import lsd.smartparking.model.Policeman;
 import lsd.smartparking.model.User;
-import lsd.smartparking.model.UserInfo;
+import lsd.smartparking.model.Account;
 import lsd.smartparking.repository.MunicipalityRepository;
 import lsd.smartparking.repository.UserRepository;
 
 @Service
-public class AuthService {
+public class AccountService {
 
 	@Autowired
 	private FirebaseAuth firebaseAuth;
@@ -31,40 +32,51 @@ public class AuthService {
     private MunicipalityRepository municipalityRepo;
 
 
-    public Optional<User> findProva(String id) {
+    public Optional<User> getUser(String id) {
         return userRepo.findById(id);
     }
 
-    public <T extends UserInfo> T addUser(Auth<T> user) {
-        UserRecord userRecord = null;
-        try {
-            userRecord = firebaseAuth.getUserByEmail(user.getEmail());
-        } catch (FirebaseAuthException e) {
-            e.printStackTrace();
-        }
-        if (userRecord != null) return null;
-        createUser(user);
-        return user.getUser() instanceof Municipality ? 
-            (T) municipalityRepo.save((Municipality) user.getUser()) :
-            (T) userRepo.save((User) user.getUser());
+    public Optional<Municipality> getMunicipality(String id) {
+        return municipalityRepo.findById(id);
     }
 
-    private <T extends UserInfo> void createUser(Auth<T> prova) {
-        CreateRequest request = new CreateRequest()
-            .setUid(prova.getUser().getId())
-            .setEmail(prova.getEmail())
-            .setEmailVerified(false)
-            .setPassword(prova.getPassword())
-            .setDisabled(false);
+    public Driver addDriver(Driver user, String password) {        
+        if (!createAccount(user, password)) return null;
+        return userRepo.save(user);
+    }
 
-        UserRecord userRecord;
+    public Policeman addPoliceman(Policeman policeman, String password) {
+        if (municipalityRepo.findById(policeman.getMunicipalityId()).isEmpty()) return null;
+        if (!createAccount(policeman, password)) return null;
+        return userRepo.save(policeman);
+    }
+
+    public Municipality addMunicipality(Municipality municipality, String password) {
+        if (!createAccount(municipality, password)) return null;
+        return municipalityRepo.save(municipality);
+    }
+
+    public boolean createAccount(Account account, String password) {
         try {
-            userRecord = firebaseAuth.createUser(request);
-            addRole(userRecord.getUid(), prova.getUser().getType());
+            if (firebaseAuth.getUserByEmail(account.getEmail()) != null) return false;
         } catch (FirebaseAuthException e) {
             e.printStackTrace();
         }
-
+        UserRecord userRecord;
+        CreateRequest request = new CreateRequest()
+            .setUid(account.getId())
+            .setEmail(account.getEmail())
+            .setPassword(password)
+            .setEmailVerified(false)
+            .setDisabled(false);
+        try {
+            userRecord = firebaseAuth.createUser(request);
+            addRole(userRecord.getUid(), account.getType());
+        } catch (FirebaseAuthException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
 	private void addRole(String uid, UserType role) {

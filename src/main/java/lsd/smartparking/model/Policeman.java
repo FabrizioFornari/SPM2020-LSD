@@ -11,18 +11,18 @@ import lsd.smartparking.enums.UserType;
 
 @Document(collection = "users")
 public class Policeman extends User {
-	
+
 	@NotBlank(message = "MunicipalityId cannot be empty")
 	private String municipalityId;
 
 
-	public Policeman() { 
+	public Policeman() {
 		this.setType(UserType.POLICEMAN);
 	}
 
 	@PersistenceConstructor
 	public Policeman(ObjectId id, String email, String name, String surname, String municipalityId) {
-		super(id, email, name, surname, UserType.POLICEMAN);
+		super(email, name, surname, UserType.DRIVER);
 		Assert.hasText(municipalityId, "MunicipalityId cannot be empty");
 		this.municipalityId = municipalityId;
 	}

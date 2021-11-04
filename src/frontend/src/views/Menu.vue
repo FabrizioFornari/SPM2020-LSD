@@ -14,7 +14,7 @@ export default {
   name: 'choices',
   data() {
     return {
-      role: this.$store.getters.userRole + 'Menu'
+      role: this.$store.getters.userRole.toLowerCase() + 'Menu'
     }
   },
   methods: {

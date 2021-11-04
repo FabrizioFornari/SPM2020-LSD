@@ -3,7 +3,7 @@
     <div class="row justify-content-center">
       <div class="col-md-10">
         <div class="card-body">
-          <div v-if="error" class="alert alert-danger">{{error}}</div>
+          <div v-if="error" class="alert alert-danger">{{ error }}</div>
           <form @submit.prevent="signIn">
             <div class="form-group row">
               <div class="col-md-12">
@@ -38,17 +38,16 @@ export default {
     return {
       user: '',
       password: '',
-      error: false,
-      errors: []
+      error: false
     }
   },
   methods: {
     signIn() {
+      this.error = false
       auth.dispatch('fetchAdmin', { user: this.user, password: this.password })
         .then(() => this.$router.push('/admin/dashboard'))
         .catch(error => {
-          this.errors.push(error);
-          this.error = true
+          this.error = error
         })
     }
   }

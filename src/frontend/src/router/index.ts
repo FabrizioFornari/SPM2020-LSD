@@ -45,7 +45,7 @@ const router: VueRouter = new VueRouter({
       props: route => ( route.query ),
       meta: { 
         float: true,
-        requiresRole: ['municipality'] 
+        requiresRole: ['MUNICIPALITY'] 
       },
       beforeEnter: (to, from, next) => {
         if (!to.query.c) next('/map')
@@ -59,7 +59,7 @@ const router: VueRouter = new VueRouter({
       props: route => ({ id: route.params.id, edit: (route.query.edit === 'true') }),
       meta: { 
         float: true,
-        requiresRole: route => route.query.edit == 'true' ? ['municipality'] : undefined
+        requiresRole: route => route.query.edit == 'true' ? ['MUNICIPALITY'] : undefined
       }
     },
     {
@@ -69,7 +69,7 @@ const router: VueRouter = new VueRouter({
       props: true,
       meta: { 
         float: true,
-        requiresRole: ['driver', 'policeman'] 
+        requiresRole: ['DRIVER', 'POLICEMAN'] 
       }
     },
     {
@@ -91,9 +91,9 @@ const router: VueRouter = new VueRouter({
           name: 'Profile',
           component: () => {
             switch (store.getters.userRole) {
-              case 'driver': return import('../views/driver/Profile.vue')
-              case 'policeman': return import('../views/driver/Profile.vue')
-              case 'municipality': return import('../views/driver/Profile.vue')
+              case 'DRIVER': return import('../views/driver/Profile.vue')
+              case 'POLICEMAN': return import('../views/driver/Profile.vue')
+              case 'MUNICIPALITY': return import('../views/driver/Profile.vue')
             }
           },
           meta: { 
@@ -107,7 +107,7 @@ const router: VueRouter = new VueRouter({
           component: () => import('../views/driver/Garage.vue'),
           meta: { 
               title: 'My Garage - Sparking',
-              requiresRole: ['driver', 'policeman'] 
+              requiresRole: ['DRIVER', 'POLICEMAN'] 
           }
         },
         {
@@ -116,7 +116,7 @@ const router: VueRouter = new VueRouter({
           component: () => import('../views/driver/Garage.vue'),
           meta: { 
               title: 'My Pocket - Sparking',
-              requiresRole: ['driver', 'policeman'] 
+              requiresRole: ['DRIVER', 'POLICEMAN'] 
           }
         },
         {
@@ -126,7 +126,7 @@ const router: VueRouter = new VueRouter({
           props: true,
           meta: {
               title: 'My Vehicle - Sparking',
-              requiresRole: ['driver', 'policeman'] 
+              requiresRole: ['DRIVER', 'POLICEMAN'] 
           }
         },
         {
@@ -135,7 +135,7 @@ const router: VueRouter = new VueRouter({
           component: () => import('../views/driver/Vehicle.vue'),
           meta: {
               title: 'New Vehicle - Sparking',
-              requiresRole: ['driver', 'policeman'] 
+              requiresRole: ['DRIVER', 'POLICEMAN'] 
           }
         }
       ]

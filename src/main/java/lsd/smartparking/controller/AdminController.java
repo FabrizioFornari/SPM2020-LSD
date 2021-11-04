@@ -30,7 +30,7 @@ public class AdminController {
 	
 	Firestore db = FirestoreClient.getFirestore();
 	CollectionReference municipalityRef = db.collection("Municipality");
-    private static final Logger LOG = LoggerFactory.getLogger(AuthController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AccountController.class);
 
     
 	@GetMapping("/login")

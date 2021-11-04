@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import lsd.smartparking.enums.VehicleType;
 import lsd.smartparking.model.Coords;
 import lsd.smartparking.model.ParkingSlot;
-import lsd.smartparking.repository.MunicipalityRepository;
 import lsd.smartparking.repository.ParkingRepository;
 import lsd.smartparking.repository.ParkingSlotRepository;
 

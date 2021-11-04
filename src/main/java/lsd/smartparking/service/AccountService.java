@@ -40,23 +40,23 @@ public class AccountService {
         return municipalityRepo.findById(id);
     }
 
-    public Driver addDriver(Driver user, String password) {        
-        if (!createAccount(user, password)) return null;
-        return userRepo.save(user);
+    public Driver addDriver(Driver driver, String password) {        
+        if (!createAccount(driver, password, driver.getName())) return null;
+        return userRepo.save(driver);
     }
 
     public Policeman addPoliceman(Policeman policeman, String password) {
-        if (municipalityRepo.findById(policeman.getMunicipalityId()).isEmpty()) return null;
-        if (!createAccount(policeman, password)) return null;
+        if (!municipalityRepo.existsById(policeman.getMunicipalityId())) return null;
+        if (!createAccount(policeman, password, policeman.getName())) return null;
         return userRepo.save(policeman);
     }
 
     public Municipality addMunicipality(Municipality municipality, String password) {
-        if (!createAccount(municipality, password)) return null;
+        if (!createAccount(municipality, password, municipality.getCity())) return null;
         return municipalityRepo.save(municipality);
     }
 
-    public boolean createAccount(Account account, String password) {
+    public boolean createAccount(Account account, String password, String displayName) {
         try {
             if (firebaseAuth.getUserByEmail(account.getEmail()) != null) return false;
         } catch (FirebaseAuthException e) {
@@ -65,6 +65,7 @@ public class AccountService {
         UserRecord userRecord;
         CreateRequest request = new CreateRequest()
             .setUid(account.getId())
+            .setDisplayName(displayName)
             .setEmail(account.getEmail())
             .setPassword(password)
             .setEmailVerified(false)

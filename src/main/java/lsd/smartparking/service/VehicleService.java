@@ -19,18 +19,18 @@ public class VehicleService {
     private VehicleRepository vehicleRepo;
 
 
+    public Optional<Vehicle> getVehicleById(String id) {
+        return vehicleRepo.findById(id);
+    }
+
+    public List<Vehicle> getVehicleByOwner(String id) {
+        return vehicleRepo.findByOwner(id);
+    }
+
     public <T extends Vehicle> T addVehicle(T vehicle) {
         String plate = vehicle.getPlate();
         if (plate != null && !vehicleRepo.existsByPlateAndOwner(plate, vehicle.getOwner()).isEmpty()) return null;
         return vehicleRepo.save(vehicle);
-    }
-
-    public Optional<Vehicle> findVehicleById(String id) {
-        return vehicleRepo.findById(id);
-    }
-
-    public List<Vehicle> findVehicleByOwner(String id) {
-        return vehicleRepo.findByOwner(id);
     }
 
     @Transactional

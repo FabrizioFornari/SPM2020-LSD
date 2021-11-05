@@ -19,7 +19,7 @@ import lsd.smartparking.model.Ticket;
 import lsd.smartparking.service.TicketService;
 
 @RestController
-@RequestMapping(path = "/api/ticket", consumes = "application/json")
+@RequestMapping("/api/ticket")
 public class TicketController {
 
     @Autowired
@@ -34,7 +34,7 @@ public class TicketController {
     }
 
     @PreAuthorize("hasAnyAuthority('DRIVER', 'POLICEMAN')")
-    @PostMapping("/")
+    @PostMapping(path = "/", consumes = "application/json")
     public ResponseEntity<Ticket> buyTicket(@Valid @RequestBody Ticket ticket) {
         ticket = ticketService.buyTicket(ticket);
     	return new ResponseEntity<>(ticket, ticket != null ? HttpStatus.CREATED : HttpStatus.CONFLICT);

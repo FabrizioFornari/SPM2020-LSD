@@ -23,7 +23,7 @@ import lsd.smartparking.model.ParkingSlot;
 import lsd.smartparking.service.ParkingSlotService;
 
 @RestController
-@RequestMapping(path = "/api/parkingslot", consumes = "application/json")
+@RequestMapping("/api/parkingslot")
 public class ParkingSlotController {
 
     @Autowired
@@ -49,7 +49,7 @@ public class ParkingSlotController {
     }
 
     @PreAuthorize("hasAnyAuthority('MUNICIPALITY')")
-    @PostMapping("/")
+    @PostMapping(path = "/", consumes = "application/json")
     public ResponseEntity<ParkingSlot> addSlot(Authentication auth, @Valid @RequestBody ParkingSlot slot) {
         if (!slotService.checkOwner(slot, auth.getName())) return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         slot = slotService.addSlot(slot);

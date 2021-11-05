@@ -28,7 +28,7 @@ import lsd.smartparking.service.VehicleService;
 
 @RestController
 @PreAuthorize("hasAnyAuthority('DRIVER', 'POLICEMAN')")
-@RequestMapping(path = "/api/vehicle", consumes = "application/json")
+@RequestMapping("/api/vehicle")
 public class VehicleController {
 
     @Autowired
@@ -43,28 +43,28 @@ public class VehicleController {
     	return new ResponseEntity<>(vehicles, !vehicles.isEmpty() ? HttpStatus.FOUND : HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping("/car")
+    @PostMapping(path = "/car", consumes = "application/json")
     public ResponseEntity<Vehicle> addCar(@Valid @RequestBody Car car, Authentication auth) {
         if (!car.getOwner().equals(auth.getName())) new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         car = vehicleService.addVehicle(car);
     	return new ResponseEntity<>(car, car != null ? HttpStatus.CREATED : HttpStatus.CONFLICT);
     }
 
-    @PostMapping("/bicycle")
+    @PostMapping(path = "/bicycle", consumes = "application/json")
     public ResponseEntity<Vehicle> addBicycle(@Valid @RequestBody Bicycle bicycle, Authentication auth) {
         if (!bicycle.getOwner().equals(auth.getName())) new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         bicycle = vehicleService.addVehicle(bicycle);
     	return new ResponseEntity<>(bicycle, bicycle != null ? HttpStatus.CREATED : HttpStatus.CONFLICT);
     }
 
-    @PostMapping("/caravan")
+    @PostMapping(path = "/caravan", consumes = "application/json")
     public ResponseEntity<Vehicle> addCaravan(@Valid @RequestBody Caravan caravan, Authentication auth) {
         if (!caravan.getOwner().equals(auth.getName())) new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         caravan = vehicleService.addVehicle(caravan);
     	return new ResponseEntity<>(caravan, caravan != null ? HttpStatus.CREATED : HttpStatus.CONFLICT);
     }
 
-    @PostMapping("/motorcycle")
+    @PostMapping(path = "/motorcycle", consumes = "application/json")
     public ResponseEntity<Vehicle> addMotorcycle(@Valid @RequestBody Motorcycle motorcycle, Authentication auth) {
         if (!motorcycle.getOwner().equals(auth.getName())) new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         motorcycle = vehicleService.addVehicle(motorcycle);

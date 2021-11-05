@@ -24,7 +24,7 @@ import lsd.smartparking.model.Parking;
 import lsd.smartparking.service.ParkingService;
 
 @RestController
-@RequestMapping(path = "/api/parking", consumes = "application/json")
+@RequestMapping("/api/parking")
 public class ParkingController {
 
     @Autowired
@@ -40,13 +40,13 @@ public class ParkingController {
     @GetMapping(value = "/", params = {"topright", "botleft"})
     public ResponseEntity<List<Parking>> getParkings(@RequestParam(required = true) double[] topright, @RequestParam(required = true) double[] botleft) {
         List<Parking> parkings = parkingService.getParkings(new Coords(botleft), new Coords(topright));
-    	return new ResponseEntity<>(parkings, parkings.isEmpty() ? HttpStatus.FOUND : HttpStatus.NOT_FOUND);
+    	return new ResponseEntity<>(parkings, !parkings.isEmpty() ? HttpStatus.FOUND : HttpStatus.NOT_FOUND);
     }
     
     @GetMapping(value = "/", params = {"topright", "botleft", "type"})
     public ResponseEntity<List<Parking>> getParkings(@RequestParam(required = true) double[] topright, @RequestParam(required = true) double[] botleft, @RequestParam(required = true) VehicleType type) {
         List<Parking> parkings = parkingService.getParkings(new Coords(botleft), new Coords(topright), type);
-    	return new ResponseEntity<>(parkings, parkings.isEmpty() ? HttpStatus.FOUND : HttpStatus.NOT_FOUND);
+    	return new ResponseEntity<>(parkings, !parkings.isEmpty() ? HttpStatus.FOUND : HttpStatus.NOT_FOUND);
     }
     
     @PreAuthorize("hasAnyAuthority('MUNICIPALITY')")
@@ -57,7 +57,7 @@ public class ParkingController {
     }
 
     @PreAuthorize("hasAnyAuthority('MUNICIPALITY')")
-    @PostMapping("/")
+    @PostMapping(path = "/", consumes = "application/json")
     public ResponseEntity<Parking> addParking(@Valid @RequestBody Parking parking, Authentication auth) {
         if (!parking.getOwner().equals(auth.getName())) return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         Parking newParking = parkingService.addParking(parking);
@@ -65,7 +65,7 @@ public class ParkingController {
     }
 
     @PreAuthorize("hasAnyAuthority('MUNICIPALITY')")
-    @PostMapping("/edit")
+    @PostMapping(path = "/edit", consumes = "application/json")
     public ResponseEntity<Parking> editParking(@Valid @RequestBody Parking parking, Authentication auth) {
         Optional<Parking> p = parkingService.getParking(parking.getId());
         if (p.isEmpty() || !p.get().getOwner().equals(auth.getName()) || !p.get().getOwner().equals(parking.getOwner())) return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);

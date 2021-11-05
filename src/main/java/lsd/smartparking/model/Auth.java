@@ -9,15 +9,15 @@ import org.springframework.util.Assert;
 
 public class Auth<T extends Account> {
 
-	@Size(min = 8)
-	@NotBlank(message = "password cannot be empty")
+	@Size(min = 8, message = "Password must be longer than 7 chars")
+	@NotBlank(message = "Password cannot be empty")
     private String password;
 	@Valid
 	@NotNull(message = "Type cannot be null")
     private T user;
 
 
-	public Auth(String password, T user) {
+	public Auth(String password, @Valid T user) {
 		Assert.isTrue(password.length() >= 8, "Password must be longer than 7 chars");
 		Assert.hasText(password, "Password cannot be empty");
 		Assert.notNull(user, "Type cannot be empty");
@@ -39,7 +39,7 @@ public class Auth<T extends Account> {
 		return this.user;
 	}
 
-	public void setType(T user) {
+	public void setType(@Valid T user) {
 		Assert.notNull(user, "Type cannot be empty");
 		this.user = user;
 	}

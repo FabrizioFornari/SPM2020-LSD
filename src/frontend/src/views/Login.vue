@@ -3,8 +3,8 @@
     <div class="row justify-content-center">
       <div class="col-md-12">
         <div class="card-body">
-          <div v-if="error" class="alert alert-danger">{{ error }}</div>
           <h1><b>Login</b></h1>
+          <div v-if="error" class="alert alert-danger">{{ error }}</div>
           <form @submit.prevent="signIn">
             <label class="label">
               <input type="email" id="emailLogin" class="input" value required autofocus v-model="form.email">
@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { login } from '@/firebase';
+import { login } from '@/firebase'
 
 export default {
   data() {

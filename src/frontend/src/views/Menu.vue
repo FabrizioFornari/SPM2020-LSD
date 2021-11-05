@@ -1,6 +1,7 @@
 <template>
   <div class="menu">
-    <component :is="role"></component>
+    <municipalityMenu v-if="role == 'municipality'"></municipalityMenu>
+    <driverMenu v-else></driverMenu>
     <div class="choice action logout" id="logoutButton" @click="signOut()"> Logout </div>
   </div>
 </template>
@@ -14,7 +15,7 @@ export default {
   name: 'choices',
   data() {
     return {
-      role: this.$store.getters.userRole.toLowerCase() + 'Menu'
+      role: this.$store.getters.userRole.toLowerCase()
     }
   },
   methods: {

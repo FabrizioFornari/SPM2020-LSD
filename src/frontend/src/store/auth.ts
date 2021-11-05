@@ -75,6 +75,7 @@ const auth = {
         fetchUser({ commit }, user) {
             commit("SET_USER_STATE", user !== null)
             if (user) {
+                console.log(user.getIdToken())
                 commit("SET_USER", {
                     name: user.displayName,
                     email: user.email,

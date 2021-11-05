@@ -10,6 +10,7 @@
             <option value="municipality">Municipality</option>
           </select>
           <br><br>
+          <div v-if="error" class="alert alert-danger">{{ error }}</div>
 
           <form @submit="register">
             <div v-if="type != 'municipality'">
@@ -21,12 +22,10 @@
                 <input type="text" class="input" value required v-model="form.surname">
                 <span>Surname</span>
               </label>
-              <div v-if="type == 'policeman'">
-                <label class="label">
-                  <input type="text" class="input" value required v-model="form.municipalityId">
-                  <span>Municipality</span>
-                </label>
-              </div>
+              <label class="label" v-if="type == 'policeman'">
+                <input type="text" class="input" value required v-model="form.municipalityId">
+                <span>Municipality</span>
+              </label>
             </div>
 
             <div v-else>
@@ -44,18 +43,20 @@
               </label>
             </div>
 
-            <label class="label">
-              <input type="email" class="input" value required v-model="form.email">
-              <span>Email</span>
-            </label>
-            <label class="label">
-              <input type="password" class="input" required v-model="form.password">
-              <span>Password</span>
-            </label>
-            <label class="label">
-              <input type="password" class="input" required v-model="form.passwordConf">
-              <span>Confirm Password</span>
-            </label>
+            <div>
+              <label class="label">
+                <input type="email" class="input" value required v-model="form.email">
+                <span>Email</span>
+              </label>
+              <label class="label">
+                <input type="password" minlength="8" class="input" required v-model="form.password">
+                <span>Password</span>
+              </label>
+              <label class="label">
+                <input type="password" minlength="8" class="input" required v-model="form.passwordConf">
+                <span>Confirm Password</span>
+              </label>
+            </div>
 
             <div class="form-group row mb-0">
               <div class="col-md-12">
@@ -72,7 +73,7 @@
 </template>
 
 <script>
-import { signin } from '@/firebase';
+import { login } from '@/firebase'
 import auth from '@/api/auth'
 import store from '@/store'
 
@@ -83,40 +84,34 @@ export default {
       form: {
         name: "",
         surname: "",
-        district: "",
+        municipalityId: "",
         city: "",
         province: "",
         region: "",
         email: "",
         password: "",
         passwordConf: ""
-      }
+      },
+      error: null
     }
   },
   methods: {
     async register(e) {
       e.preventDefault()
-      if (this.form.password == this.form.passwordConf) {
-        const username = (this.form.name ? this.form.name : this.form.city)
-        await signin(this.form.email, this.form.password, username)
-        
-        const user = {}
-        if (this.type == "municipality") {
-          user.city = this.form.city
-          user.province = this.form.province
-          user.region = this.form.region
-        } else {
-          user.name = this.form.name
-          user.surname = this.form.surname
-          if (this.type == "policeman") user.municipalityId = this.form.municipalityId
-        }
-        user.email = this.form.email
-        user.id = store.getters.user.uid
-        
-        auth.registerUser(user, this.type)
-        store.dispatch("fetchRole", this.type)
-        this.$router.push(this.$route.query.redirect || '/')
+      this.error = null
+      if (this.form.password != this.form.passwordConf) {
+        this.error = "Password and confim password must be the same"
+        return
       }
+      
+      const user = {}
+      user.password = this.form.password
+      user.user = this.form
+      
+      await auth.registerUser(user, this.type)
+      await login(this.form.email, this.form.password)
+      store.dispatch("fetchRole", this.type)
+      this.$router.push(this.$route.query.redirect || '/map')
     }
   }
 }

@@ -4,7 +4,7 @@ import Vue from 'vue'
 const parking = {
     state: {
         parkings: {},
-        vehicleTypes: ['car', 'motorcycle', 'caravan', 'bicycle', 'handicap']
+        vehicleTypes: ['BICYCLE', 'CAR', 'CARAVAN', 'MOTORCYCLE']
     },
     mutations: {
         addParking(state, parking) {

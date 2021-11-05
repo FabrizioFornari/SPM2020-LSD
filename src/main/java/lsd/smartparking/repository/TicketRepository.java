@@ -23,7 +23,10 @@ public interface TicketRepository extends MongoRepository<Ticket, String> {
 
     List<Ticket> findByParking(String parking);
 
-    @Query("{'inception' : ?0, 'expiration' : ?1}")
-    List<Ticket> findByTimeRange(Date inception, Date expiration);
+    @Query(value = "{'parking': ?2, $or: [{'inception':{ $gte: ?0, $lte: ?1 }}, {expiration:{ $gte: ?0, $lte: ?1 }}, {inception:{ $lte: ?0 }, expiration:{ $gte: ?1 }}]}", exists = true)
+    Boolean existsByTimeRangeAndParking(Date inception, Date expiration, String parking);
+
+    @Query(value = "{'parking': ?2, $or: [{'inception':{ $gte: ?0, $lte: ?1 }}, {expiration:{ $gte: ?0, $lte: ?1 }}, {inception:{ $lte: ?0 }, expiration:{ $gte: ?1 }}]}", exists = true)
+    Boolean existsByTimeRangeAndVehicle(Date inception, Date expiration, String vehicle);
     
 }

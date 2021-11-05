@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import lsd.smartparking.enums.VehicleType;
 import lsd.smartparking.model.Parking;
+import lsd.smartparking.model.ParkingInfo;
 
 @ComponentScan
 @Repository
@@ -20,9 +21,10 @@ public interface ParkingRepository extends MongoRepository<Parking, String> {
 
     List<Parking> findByOwner(String owner);
 
-    List<Parking> findByCoordsWithin(Box box);
+    @Query(value = "{ 'coords': { '$within': { '$box': ?0 }}}", fields = "{ 'coords': 1, 'price': 1 }")
+    List<ParkingInfo> findByCoordsWithin(Box box);
 
-    @Query("{'coords' : {'$within' : {'$box' : ?0}}, 'slots.?1' : {'$exists' : true}}")
-    List<Parking> findByCoordsWithinAndType(Box box, VehicleType type);
+    @Query(value = "{ 'coords': { '$within': { '$box': ?0 }}, 'slots.?1': { '$exists': true }}", fields = "{ 'coords': 1, 'price': 1 }")
+    List<ParkingInfo> findByCoordsWithinAndType(Box box, VehicleType type);
     
 }

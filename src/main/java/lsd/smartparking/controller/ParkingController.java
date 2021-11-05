@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lsd.smartparking.enums.VehicleType;
 import lsd.smartparking.model.Coords;
 import lsd.smartparking.model.Parking;
+import lsd.smartparking.model.ParkingInfo;
 import lsd.smartparking.service.ParkingService;
 
 @RestController
@@ -38,14 +39,14 @@ public class ParkingController {
     }
     
     @GetMapping(value = "/", params = {"topright", "botleft"})
-    public ResponseEntity<List<Parking>> getParkings(@RequestParam(required = true) double[] topright, @RequestParam(required = true) double[] botleft) {
-        List<Parking> parkings = parkingService.getParkings(new Coords(botleft), new Coords(topright));
+    public ResponseEntity<List<ParkingInfo>> getParkings(@RequestParam(required = true) double[] topright, @RequestParam(required = true) double[] botleft) {
+        List<ParkingInfo> parkings = parkingService.getParkings(new Coords(botleft), new Coords(topright));
     	return new ResponseEntity<>(parkings, !parkings.isEmpty() ? HttpStatus.FOUND : HttpStatus.NOT_FOUND);
     }
     
     @GetMapping(value = "/", params = {"topright", "botleft", "type"})
-    public ResponseEntity<List<Parking>> getParkings(@RequestParam(required = true) double[] topright, @RequestParam(required = true) double[] botleft, @RequestParam(required = true) VehicleType type) {
-        List<Parking> parkings = parkingService.getParkings(new Coords(botleft), new Coords(topright), type);
+    public ResponseEntity<List<ParkingInfo>> getParkings(@RequestParam(required = true) double[] topright, @RequestParam(required = true) double[] botleft, @RequestParam(required = true) VehicleType type) {
+        List<ParkingInfo> parkings = parkingService.getParkings(new Coords(botleft), new Coords(topright), type);
     	return new ResponseEntity<>(parkings, !parkings.isEmpty() ? HttpStatus.FOUND : HttpStatus.NOT_FOUND);
     }
     

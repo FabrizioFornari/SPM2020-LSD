@@ -33,19 +33,19 @@ public class ParkingSlotController {
     @GetMapping(value = "/", params = "id")
     public ResponseEntity<Optional<ParkingSlot>> getSlot(@RequestParam(required = true) String id) {
         Optional<ParkingSlot> slot = slotService.getSlot(id);
-        return new ResponseEntity<>(slot, slot.isPresent() ? HttpStatus.FOUND : HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(slot, slot.isPresent() ? HttpStatus.OK : HttpStatus.NOT_FOUND);
     }
     
     @GetMapping(value = "/", params = "parking")
     public ResponseEntity<List<ParkingSlot>> getSlots(@RequestParam(required = true) String parking, @RequestParam(required = false) VehicleType type) {
         List<ParkingSlot> slots = (type == null) ? slotService.getSlots(parking) : slotService.getSlots(parking, type);
-    	return new ResponseEntity<>(slots, !slots.isEmpty() ? HttpStatus.FOUND : HttpStatus.NOT_FOUND);
+    	return new ResponseEntity<>(slots, !slots.isEmpty() ? HttpStatus.OK : HttpStatus.NOT_FOUND);
     }
     
     @GetMapping(value = "/", params = {"topright", "botleft"})
     public ResponseEntity<List<ParkingSlot>> getSlots(@RequestParam(required = true) double[] topright, @RequestParam(required = true) double[] botleft) {
         List<ParkingSlot> slots = slotService.getSlots(new Coords(botleft), new Coords(topright));
-    	return new ResponseEntity<>(slots, !slots.isEmpty() ? HttpStatus.FOUND : HttpStatus.NOT_FOUND);
+    	return new ResponseEntity<>(slots, !slots.isEmpty() ? HttpStatus.OK : HttpStatus.NOT_FOUND);
     }
 
     @PreAuthorize("hasAnyAuthority('MUNICIPALITY')")

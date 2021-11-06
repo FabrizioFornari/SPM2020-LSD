@@ -27,7 +27,7 @@ import lsd.smartparking.model.Policeman;
 import lsd.smartparking.service.AccountService;
 
 @RestController()
-@RequestMapping(path = "/api/account", consumes = "application/json")
+@RequestMapping("/api/account")
 public class AccountController {
 
 	@Autowired
@@ -44,25 +44,25 @@ public class AccountController {
 		Optional<? extends Account> account = null;
 		if (type == UserType.MUNICIPALITY) account = accountService.getMunicipality(id);
 		else account = accountService.getUser(id);
-		return new ResponseEntity<>(account, account.isPresent() ? HttpStatus.FOUND : HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(account, account.isPresent() ? HttpStatus.OK : HttpStatus.NOT_FOUND);
 	}
 	
 	@PreAuthorize("isAnonymous()")
-	@PostMapping("/driver")
+	@PostMapping(path = "driver", consumes = "application/json")
 	public ResponseEntity<Driver> newDriver(@Valid @RequestBody Auth<Driver> user) {
 		Driver driver = accountService.addDriver(user.getUser(), user.getPassword());
 		return new ResponseEntity<Driver>(driver, driver != null ? HttpStatus.CREATED : HttpStatus.CONFLICT);
 	}
 	
 	@PreAuthorize("isAnonymous()")
-	@PostMapping("/policeman")
+	@PostMapping(path = "/policeman", consumes = "application/json")
 	public ResponseEntity<Policeman> newPoliceman(@Valid @RequestBody Auth<Policeman> user) {
 		Policeman policeman = accountService.addPoliceman(user.getUser(), user.getPassword());
 		return new ResponseEntity<Policeman>(policeman, policeman != null ? HttpStatus.CREATED : HttpStatus.CONFLICT);
 	}
 	
 	@PreAuthorize("isAnonymous()")
-	@PostMapping("/municipality")
+	@PostMapping(path = "/municipality", consumes = "application/json")
 	public ResponseEntity<Municipality> newMunicipality(@Valid @RequestBody Auth<Municipality> user) {
 		Municipality municipality = user.getUser();
 		municipality.setApproved(false);

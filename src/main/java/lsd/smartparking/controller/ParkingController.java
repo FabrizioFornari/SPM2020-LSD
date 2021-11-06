@@ -35,26 +35,26 @@ public class ParkingController {
     @GetMapping(value = "/", params = "id")
     public ResponseEntity<Optional<Parking>> getParking(@RequestParam(required = true) String id) {
         Optional<Parking> parking = parkingService.getParking(id);
-        return new ResponseEntity<>(parking, parking.isPresent() ? HttpStatus.FOUND : HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(parking, parking.isPresent() ? HttpStatus.OK : HttpStatus.NOT_FOUND);
     }
     
     @GetMapping(value = "/", params = {"topright", "botleft"})
     public ResponseEntity<List<ParkingInfo>> getParkings(@RequestParam(required = true) double[] topright, @RequestParam(required = true) double[] botleft) {
         List<ParkingInfo> parkings = parkingService.getParkings(new Coords(botleft), new Coords(topright));
-    	return new ResponseEntity<>(parkings, !parkings.isEmpty() ? HttpStatus.FOUND : HttpStatus.NOT_FOUND);
+    	return new ResponseEntity<>(parkings, !parkings.isEmpty() ? HttpStatus.OK : HttpStatus.NOT_FOUND);
     }
     
     @GetMapping(value = "/", params = {"topright", "botleft", "type"})
     public ResponseEntity<List<ParkingInfo>> getParkings(@RequestParam(required = true) double[] topright, @RequestParam(required = true) double[] botleft, @RequestParam(required = true) VehicleType type) {
         List<ParkingInfo> parkings = parkingService.getParkings(new Coords(botleft), new Coords(topright), type);
-    	return new ResponseEntity<>(parkings, !parkings.isEmpty() ? HttpStatus.FOUND : HttpStatus.NOT_FOUND);
+    	return new ResponseEntity<>(parkings, !parkings.isEmpty() ? HttpStatus.OK : HttpStatus.NOT_FOUND);
     }
     
     @PreAuthorize("hasAnyAuthority('MUNICIPALITY')")
     @GetMapping("/")
     public ResponseEntity<List<Parking>> getParkings(Authentication auth) {
         List<Parking> parkings = parkingService.getParkings(auth.getName());
-    	return new ResponseEntity<>(parkings, parkings.isEmpty() ? HttpStatus.FOUND : HttpStatus.NOT_FOUND);
+    	return new ResponseEntity<>(parkings, parkings.isEmpty() ? HttpStatus.OK : HttpStatus.NOT_FOUND);
     }
 
     @PreAuthorize("hasAnyAuthority('MUNICIPALITY')")

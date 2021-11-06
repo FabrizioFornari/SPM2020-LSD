@@ -2,6 +2,7 @@ import store from '@/store'
 import router from '@/router'
 import config from '@/config/firebase'
 import Firebase from 'firebase/app'
+import auth from '@/api/auth'
 import 'firebase/auth'
 import 'firebase/firestore'
 
@@ -10,24 +11,21 @@ export const fireAuth = Firebase.auth()
 export const fireStore = Firebase.firestore()
 export const geoPoint = Firebase.firestore.GeoPoint
 
-async function getRole(user) {
-    if (user) {
-        await user.getIdTokenResult(true).then(idTokenResult => {
-            store.dispatch("fetchRole", idTokenResult.claims.role)
-        }, err => {
-            console.log(err)
-        })
-    }
+export async function getToken() {
+    if (!fireAuth.currentUser) return null
+    return await fireAuth.currentUser.getIdToken().then(idToken => {
+        return idToken
+    })
 }
 
 const onAuthStateChangedPromise = new Promise((resolve, reject) => {
     fireAuth.onAuthStateChanged(async user => {
-        store.dispatch("fetchUser", user)
-        await getRole(user)
+        let account = null
         if (user) {
-            if (store.getters.userRole == 'driver') await store.dispatch('fetchDriver')
-            else if (store.getters.userRole == 'municipality') await store.dispatch('fetchMunicipality')
+            account = (await auth.getUser()).data
+            account.displayName = user.displayName
         }
+        store.dispatch("fetchUser", account)
         resolve(user)
     }, err => {
         reject(err)
@@ -36,29 +34,9 @@ const onAuthStateChangedPromise = new Promise((resolve, reject) => {
   
 export const onAuthStateInit = () => onAuthStateChangedPromise
 
-export async function signin(email: string, password: string, username: string) {
-    try {
-        await fireAuth.createUserWithEmailAndPassword(email, password)
-        const current = fireAuth.currentUser
-        if (current) {
-            current.updateProfile({
-                displayName: username
-            }).then(function() {
-                store.dispatch("fetchUser", current)
-            }).catch(function(error) {
-                console.log(error)
-            })
-        }
-        console.log("Registred")
-    } catch (error) {
-        console.log(error)
-    }
-}
-
 export async function login(email: string, password: string) {
     try {
         await fireAuth.signInWithEmailAndPassword(email, password)
-        await getRole(fireAuth.currentUser)
         console.log("Logged in")
         return
     } catch (error) {

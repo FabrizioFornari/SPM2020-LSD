@@ -32,7 +32,7 @@ const map = {
     actions: {
         async fetchWaypoints({ commit, rootGetters }, destination) {
             if (rootGetters.userPosition) commit('setDestination', destination)
-            else alert("You have to set a starting point or you position to start routing")
+            else alert("You have to set a starting point or your position to start routing")
         }
     }
 }

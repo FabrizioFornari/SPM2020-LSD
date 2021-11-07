@@ -4,7 +4,6 @@ const driver = {
     state: {
         driver: {
             profile: {},
-            vehicles: {},
             tickets: {}
         }
     },
@@ -12,17 +11,12 @@ const driver = {
         setDriver(state, driver) {
             state.driver.profile = driver
         },
-        addVehicle(state, vehicle) {
-            state.driver.vehicles[vehicle.id] = vehicle
-            state.driver.profile.vehicles[vehicle.id] = {id: vehicle.id, name: vehicle.name, type: vehicle.type}
-        },
         addTicket(state, ticket) {
             state.driver.tickets[ticket.id] = ticket
         }
     },
     getters: {
-        driver: state => state.driver,
-        vehicles: state => state.driver.vehicles
+        driver: state => state.driver
     },
     actions: {
         async fetchDriver({ commit, rootGetters }) {
@@ -30,13 +24,6 @@ const driver = {
             if (!driver.exists) return null
             commit('setDriver', driver.data())
             return driver.data()
-        },
-        async fetchVehicle({ commit, rootGetters}, id) {
-            if (rootGetters.vehicles[id]) return rootGetters.vehicles[id]
-            const vehicle = await fireStore.collection('Vehicles').doc(id).get()
-            if (!vehicle.exists) return null
-            commit('addVehicle', vehicle.data())
-            return vehicle.data()
         }
     }
 }

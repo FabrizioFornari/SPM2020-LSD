@@ -3,8 +3,7 @@ import Vue from 'vue'
 
 const parking = {
     state: {
-        parkings: {},
-        vehicleTypes: ['BICYCLE', 'CAR', 'CARAVAN', 'MOTORCYCLE']
+        parkings: {}
     },
     mutations: {
         addParking(state, parking) {
@@ -14,15 +13,21 @@ const parking = {
             for (const id in parkings)
                 Vue.set(state.parkings, id, parkings[id])
         },
+        setParkings(state, tickets) {
+            state.tickets = tickets
+        },
         removeParking(state, parkingId) {
             Vue.delete(state.parkings, parkingId)
         }
     },
     getters: {
-        parkings: state => state.parkings,
-        vehicleTypes: state => state.vehicleTypes
+        parkings: state => state.parkings
     },
-    actions: {
+    actions: {        
+        fetchParkings({ commit }, parkings) {
+            if (!parkings) commit("setParkings", {})
+            else commit("addParkings", parkings)
+        },
         async fetchParking({ commit, rootGetters }, id) {
             if (rootGetters.parkings[id]) return rootGetters.parkings[id]
             const parking = await fireStore.collection('Parkings').doc(id).get()

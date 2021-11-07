@@ -1,10 +1,12 @@
 import AXIOS from '@/config/axios'
 
+const endpoint = '/account/'
+
 export default {
     getUser() {
-        return AXIOS.get(`/account/`);
+        return AXIOS.get(endpoint);
     },
     newUser(user, type: string) {
-        return AXIOS.post(`/account/` + type, user);
+        return AXIOS.post(endpoint + type, user);
     }
 }

@@ -30,7 +30,7 @@ public class TicketController {
     @GetMapping("/")
     public ResponseEntity<List<Ticket>> getTickets(Authentication auth) {
         List<Ticket> tickets = ticketService.getTickets(auth.getName());
-    	return new ResponseEntity<>(tickets, !tickets.isEmpty() ? HttpStatus.OK : HttpStatus.NOT_FOUND);
+    	return new ResponseEntity<>(tickets, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyAuthority('DRIVER', 'POLICEMAN')")

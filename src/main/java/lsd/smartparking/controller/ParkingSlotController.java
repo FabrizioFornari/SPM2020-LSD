@@ -4,12 +4,14 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
+import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,8 +39,14 @@ public class ParkingSlotController {
     }
     
     @GetMapping(value = "/", params = "parking")
-    public ResponseEntity<List<ParkingSlot>> getSlots(@RequestParam(required = true) String parking, @RequestParam(required = false) VehicleType type) {
-        List<ParkingSlot> slots = (type == null) ? slotService.getSlots(parking) : slotService.getSlots(parking, type);
+    public ResponseEntity<List<ParkingSlot>> getSlots(@RequestParam(required = true) String parking) {
+        List<ParkingSlot> slots = slotService.getSlots(parking);
+    	return new ResponseEntity<>(slots, !slots.isEmpty() ? HttpStatus.OK : HttpStatus.NOT_FOUND);
+    }
+    
+    @GetMapping(value = "/", params = {"parking", "type"})
+    public ResponseEntity<List<ParkingSlot>> getSlots(@RequestParam(required = true) String parking, @RequestParam(required = true) VehicleType type) {
+        List<ParkingSlot> slots = slotService.getSlots(parking, type);
     	return new ResponseEntity<>(slots, !slots.isEmpty() ? HttpStatus.OK : HttpStatus.NOT_FOUND);
     }
     
@@ -54,6 +62,15 @@ public class ParkingSlotController {
         if (!slotService.checkOwner(slot, auth.getName())) return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         slot = slotService.addSlot(slot);
     	return new ResponseEntity<>(slot, slot != null ? HttpStatus.CREATED : HttpStatus.BAD_REQUEST);
+    }
+
+    @PreAuthorize("hasAnyAuthority('MUNICIPALITY')")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteParking(@PathParam("id") String id, Authentication auth) {
+        Optional<ParkingSlot> p = slotService.getSlot(id);
+        if (p.isEmpty() || !slotService.checkOwner(p.get(), auth.getName())) return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        slotService.deleteParking(id);
+    	return new ResponseEntity<>(id, HttpStatus.OK);
     }
     
 }

@@ -40,7 +40,7 @@ public class VehicleController {
     @GetMapping("/")
     public ResponseEntity<List<Vehicle>> getVehicles(Authentication auth) {
         List<Vehicle> vehicles = vehicleService.getVehicleByOwner(auth.getName());
-    	return new ResponseEntity<>(vehicles, !vehicles.isEmpty() ? HttpStatus.OK : HttpStatus.NOT_FOUND);
+    	return new ResponseEntity<>(vehicles, HttpStatus.OK);
     }
 
     @PostMapping(path = "/car", consumes = "application/json")

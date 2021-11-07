@@ -15,7 +15,7 @@ public class Driver extends User {
 	
 	@PersistenceConstructor
 	public Driver(ObjectId id, String email, String name, String surname) {
-		super(email, name, surname, UserType.DRIVER);
+		super(id, email, name, surname, UserType.DRIVER);
 	}
 
 	public Driver(String email, String name, String surname) {

@@ -46,6 +46,7 @@ public class Municipality extends Account {
 	}
 
 	public void setCity(String city) {
+		Assert.hasText(city, "City cannot be empty");
 		this.city = city.trim();
 	}
 
@@ -54,6 +55,7 @@ public class Municipality extends Account {
 	}
 
 	public void setProvince(String province) {
+		Assert.hasText(province, "Province cannot be empty");
 		this.province = province.trim();
 	}
 
@@ -62,6 +64,7 @@ public class Municipality extends Account {
 	}
 
 	public void setRegion(String region) {
+		Assert.hasText(region, "Region cannot be empty");
 		this.region = region.trim();
 	}
 

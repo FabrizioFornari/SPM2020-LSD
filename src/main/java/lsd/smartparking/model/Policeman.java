@@ -22,7 +22,7 @@ public class Policeman extends User {
 
 	@PersistenceConstructor
 	public Policeman(ObjectId id, String email, String name, String surname, String municipalityId) {
-		super(email, name, surname, UserType.DRIVER);
+		super(id, email, name, surname, UserType.POLICEMAN);
 		Assert.hasText(municipalityId, "MunicipalityId cannot be empty");
 		this.municipalityId = municipalityId;
 	}
@@ -37,7 +37,7 @@ public class Policeman extends User {
 
 	public void setMunicipalityId(String municipalityId) {
 		Assert.hasText(municipalityId, "MunicipalityId cannot be empty");
-		this.municipalityId = municipalityId;
+		this.municipalityId = municipalityId.trim();
 	}
 	
 }

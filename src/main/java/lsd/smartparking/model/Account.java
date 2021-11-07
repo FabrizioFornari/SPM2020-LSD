@@ -16,7 +16,7 @@ public class Account {
 	@NotNull(message = "Id must be valid")
 	private final ObjectId id;
 	@Email(message = "Email must be valid")
-	@NotBlank(message = "Email cannot be null")
+	@NotBlank(message = "Email cannot be empty")
 	private String email;
 	@NotNull(message = "Type cannot be empty")
 	private UserType type;
@@ -44,6 +44,7 @@ public class Account {
 	}
 
 	public void setEmail(String email) {
+		Assert.hasText(email, "Email cannot be empty");
 		this.email = email.trim();
 	}
 
@@ -52,6 +53,7 @@ public class Account {
 	}
 
 	public void setType(UserType type) {
+		Assert.notNull(type, "Type cannot be empty");
 		this.type = type;
 	}
 	

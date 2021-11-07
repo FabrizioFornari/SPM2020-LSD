@@ -46,7 +46,7 @@ export default {
     Map
   },
   async created() {
-    const center = [45.449534, 9.179764] 
+    const center = [45.46, 9.19] 
     this.$store.commit("setCenter", center)
     this.ready = true
   }

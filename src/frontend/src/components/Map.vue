@@ -50,7 +50,7 @@ export default {
             searchBounds: null,
             searchSpots: [],
 
-            zoom: 12.5,
+            zoom: 14,
             minZoom: 3,
             maxZoom: 18,
             url: 'https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png',
@@ -114,7 +114,7 @@ export default {
         },
 
         async addParking(ev) {
-            if (store.getters.userRole == 'municipality')
+            if (store.getters.userRole == 'MUNICIPALITY')
                 this.$router.push({ path: '/map/parking', query: { c: ev.latlng.lat + ',' + ev.latlng.lng }})
         },
 
@@ -212,7 +212,7 @@ export default {
     },
     watch: {
         center() { return },
-        active(newAct, oldAct) { if (newAct) this.map.flyTo(newAct, this.map.getZoom() > 15 ? this.map.getZoom() : 15) },
+        active(newAct, oldAct) { if (newAct) this.map.flyTo(newAct, this.map.getZoom() > 16 ? this.map.getZoom() : 16) },
         parkings() { return },
         waypoints() { return }
     }

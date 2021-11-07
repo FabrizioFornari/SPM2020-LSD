@@ -1,6 +1,6 @@
 <template>
     <div class="menu">
-        <div class="choices vehicles" v-if="status">
+        <div class="choices vehicles">
             <router-link class="choice vehicle" v-for="(car, index) in vehicles" :key="index" :to="{ path: '/dashboard/vehicle/'+car.id }">
                 <h4>{{ car.name }}</h4>
                 <p>My {{ car.type }}</p>
@@ -18,11 +18,9 @@
 export default {
     name: 'garage',
     computed: {
-        status() { return this.$store.getters.driver.status },
-        vehicles() { return this.$store.getters.driver.profile.vehicles }
+        vehicles() { return this.$store.getters.vehicles }
     },
     watch: {
-        status(newStatus, oldStatus) { return },
         vehicles(newDriver, oldDriver) { return }
     }
 }
@@ -31,7 +29,7 @@ export default {
 <style lang="scss" scoped>
 .menu {
     .vehicle {
-        flex: 1 1 150px;
+        flex: 1 1 200px;
     }
 
     .add-vehicle {

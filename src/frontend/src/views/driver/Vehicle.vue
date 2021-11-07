@@ -1,24 +1,26 @@
 <template>
     <form class="vehicle" @submit.prevent="!id ? addVehicle() : updateVehicle()">
         <div class="details">
+            <label class="label"> 
+                <select class="input" v-model="vehicle.type" required>
+                    <option value="BICYCLE">Bycicle</option>
+                    <option value="CAR">Car</option>
+                    <option value="CARAVAN">Caravan</option>
+                    <option value="MOTORCYCLE">Motorcycle</option>
+                </select>
+                <span>Type</span>
+            </label>
             <label class="label">
                 <input type="text" id="nameVehicle" class="input" v-model="vehicle.name" required>
                 <span>Name</span>
             </label>
-            <label class="label">
+            <label class="label" v-if="vehicle.type != 'BICYCLE'">
                 <input type="text" class="input" v-model="vehicle.plate" required>
                 <span>Plate</span>
             </label>
-            <label class="label">
+            <label class="label" v-if="vehicle.type != 'BICYCLE'">
                 <input type="text" class="input" v-model="vehicle.cod" required>
                 <span>Code</span>
-            </label>
-            <label class="label"> 
-                <select class="input" v-model="vehicle.type" required>
-                    <option value="other">Other</option>
-                    <option value="car">Car</option>
-                </select>
-                <span>Type</span>
             </label>
         </div>
         
@@ -32,12 +34,15 @@
 
 <script>
 import { fireStore } from '@/firebase'
-import api from '@/api/driver'
+import api from '@/api/vehicle'
 
 export default {
     data() {
         return {
-            vehicle: {}
+            vehicle: {
+                type: "CAR",
+                owner: this.$store.getters.user.id
+            }
         }
     },
     props: {
@@ -46,13 +51,15 @@ export default {
             default: null
         }
     },
-    async created() {
-        if (this.id) this.vehicle = await this.$store.dispatch("fetchVehicle", this.id)
+    created() {
+        if (this.id) this.vehicle = this.$store.getters.vehicles[this.id]
     },
     methods: {
         async addVehicle() {
-            await api.addVehicle(this.vehicle)
-            this.$router.push('/dashboard/garage')
+            await api.addVehicle(this.vehicle, this.vehicle.type.toLowerCase()).then(response => {
+                this.$store.dispatch("fetchVehicle", response.data)
+                this.$router.push('/dashboard/garage')
+            })
         },
         async updateVehicle() {
             const vehicles = {[this.vehicle.id]: {id: this.vehicle.id, name: this.vehicle.name, type: this.vehicle.type}}

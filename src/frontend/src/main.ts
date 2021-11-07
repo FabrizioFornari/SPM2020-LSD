@@ -12,7 +12,7 @@ Vue.config.productionTip = false
 Vue.use(VueCookies)
 Vue.use(BootstrapVue)
 
-store.commit("SET_ADMIN_STATE", Vue.$cookies.isKey('admin'))
+store.commit("setAdminState", Vue.$cookies.isKey('admin'))
 
 new Vue({
   router,

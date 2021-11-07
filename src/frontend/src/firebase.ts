@@ -14,6 +14,7 @@ export const geoPoint = Firebase.firestore.GeoPoint
 export async function getToken() {
     if (!fireAuth.currentUser) return null
     return await fireAuth.currentUser.getIdToken().then(idToken => {
+        console.log(idToken)
         return idToken
     })
 }
@@ -25,7 +26,7 @@ const onAuthStateChangedPromise = new Promise((resolve, reject) => {
             account = (await auth.getUser()).data
             account.displayName = user.displayName
         }
-        store.dispatch("fetchUser", account)
+        store.dispatch("initialize", account)
         resolve(user)
     }, err => {
         reject(err)

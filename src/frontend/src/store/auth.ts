@@ -13,16 +13,16 @@ const auth = {
         }
     },
     mutations: {
-        SET_ADMIN_STATE(state, value) {
+        setAdminState(state, value) {
             state.admin.loggedIn = value
         },
-        SET_USER_STATE(state, value) {
+        setUserState(state, value) {
             state.user.loggedIn = value
         },
-        SET_USER_ROLE(state, role) {
+        setUserRole(state, role) {
             state.user.role = role
         },
-        SET_USER(state, account) {
+        setUser(state, account) {
             state.user.account = account
         }
     },
@@ -40,7 +40,7 @@ const auth = {
                     api.logoutAdmin().then(response => {
                         if (response.status == 200) {
                             console.log("Logout successful")
-                            commit("SET_ADMIN_STATE", false)
+                            commit("setAdminState", false)
                             Vue.$cookies.remove('admin')
                         }
                         resolve(response)
@@ -56,7 +56,7 @@ const auth = {
                 api.loginAdmin(user, password).then(response => {
                     if (response.status == 200) {
                         console.log("Login successful")
-                        commit("SET_ADMIN_STATE", true)
+                        commit("setAdminState", true)
                         Vue.$cookies.set('admin', true)
                     }
                     resolve(response)
@@ -67,11 +67,12 @@ const auth = {
                 })
             })
         },
-        async fetchUser({ commit }, user) {
-            commit("SET_USER_STATE", user !== null)
+        fetchUser({ commit }, user) {
+            commit("setUserState", user !== null)
             if (!user) user = {}
-            commit("SET_USER", user)
-            commit("SET_USER_ROLE", user.type)
+            console.log(user)
+            commit("setUser", user)
+            commit("setUserRole", user.type)
         }
     }
 }

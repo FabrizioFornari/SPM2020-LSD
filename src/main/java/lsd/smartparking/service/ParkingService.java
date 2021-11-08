@@ -73,7 +73,7 @@ public class ParkingService {
 
     private boolean checkAddress(Parking parking) {
         Coords coords = parking.getCoords();
-        MapPoint mapPoint = new MapPoint().buildMapPoint(coords.getX(), coords.getY());
+        MapPoint mapPoint = new MapPoint().buildMapPoint(coords.getY(), coords.getX());
         Address address = NominatimCustomAPI.with("https://nominatim.openstreetmap.org/").getAddressFromMapPoint(mapPoint);
         Municipality municipality = municipalityRepo.findById(parking.getOwner()).get();
         if (municipality != null && (municipality.getCity().equals(address.getTown()) || parking.getCity().equals(address.getCity()))) return true;

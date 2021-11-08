@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,23 +39,23 @@ public class ParkingController {
         return new ResponseEntity<>(parking, parking.isPresent() ? HttpStatus.OK : HttpStatus.NOT_FOUND);
     }
     
-    @GetMapping(value = "/", params = {"topright", "botleft"})
-    public ResponseEntity<List<ParkingInfo>> getParkings(@RequestParam(required = true) double[] topright, @RequestParam(required = true) double[] botleft) {
-        List<ParkingInfo> parkings = parkingService.getParkings(new Coords(botleft), new Coords(topright));
-    	return new ResponseEntity<>(parkings, !parkings.isEmpty() ? HttpStatus.OK : HttpStatus.NOT_FOUND);
+    @GetMapping(value = "/", params = {"ne", "sw"})
+    public ResponseEntity<List<ParkingInfo>> getParkings(@RequestParam(required = true) double[] ne, @RequestParam(required = true) double[] sw) {
+        List<ParkingInfo> parkings = parkingService.getParkings(new Coords(sw), new Coords(ne));
+    	return new ResponseEntity<>(parkings, HttpStatus.OK);
     }
     
-    @GetMapping(value = "/", params = {"topright", "botleft", "type"})
-    public ResponseEntity<List<ParkingInfo>> getParkings(@RequestParam(required = true) double[] topright, @RequestParam(required = true) double[] botleft, @RequestParam(required = true) VehicleType type) {
-        List<ParkingInfo> parkings = parkingService.getParkings(new Coords(botleft), new Coords(topright), type);
-    	return new ResponseEntity<>(parkings, !parkings.isEmpty() ? HttpStatus.OK : HttpStatus.NOT_FOUND);
+    @GetMapping(value = "/", params = {"ne", "sw", "type"})
+    public ResponseEntity<List<ParkingInfo>> getParkings(@RequestParam(required = true) double[] ne, @RequestParam(required = true) double[] sw, @RequestParam(required = true) VehicleType type) {
+        List<ParkingInfo> parkings = parkingService.getParkings(new Coords(sw), new Coords(ne), type);
+    	return new ResponseEntity<>(parkings, HttpStatus.OK);
     }
     
     @PreAuthorize("hasAnyAuthority('MUNICIPALITY')")
     @GetMapping("/")
     public ResponseEntity<List<Parking>> getParkings(Authentication auth) {
         List<Parking> parkings = parkingService.getParkings(auth.getName());
-    	return new ResponseEntity<>(parkings, parkings.isEmpty() ? HttpStatus.OK : HttpStatus.NOT_FOUND);
+    	return new ResponseEntity<>(parkings, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyAuthority('MUNICIPALITY')")
@@ -75,7 +76,7 @@ public class ParkingController {
     }
 
     @PreAuthorize("hasAnyAuthority('MUNICIPALITY')")
-    @PostMapping("/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteParking(@PathParam("id") String id, Authentication auth) {
         Optional<Parking> p = parkingService.getParking(id);
         if (p.isEmpty() || !p.get().getOwner().equals(auth.getName())) return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);

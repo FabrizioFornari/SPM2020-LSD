@@ -18,27 +18,39 @@
         <l-marker v-if="active" :lat-lng="active" :icon="activeIcon" :zIndexOffset="10" />
         <l-group v-if="markerVisible">
             <l-marker v-for="marker in parkings"
-                :lat-lng="[marker.lat, marker.lon]"
-                :icon="markerIcon"
+                :lat-lng="[marker.coords.y, marker.coords.x]"
                 :key="marker.id"
                 @click="showParking(marker.id)">
+                <l-icon>
+                    <p-icon :price="marker.price"></p-icon>
+                </l-icon>
+            </l-marker>
+            <l-marker v-for="slot in slots"
+                :lat-lng="[slot.coords.y, slot.coords.x]"
+                :icon="markerIcon"
+                :key="slot.id"
+                data-class="CIAOOOOOOOO">
+                <l-icon :icon-anchor="[16, 36]">
+                    <s-icon :type="slot.type"></s-icon>
+                </l-icon>
             </l-marker>
         </l-group>
     </l-map>
 </template>
 
 <script>
-import { LMap, LTileLayer, LMarker, LLayerGroup, LControl } from 'vue2-leaflet'
+import { LMap, LTileLayer, LMarker, LLayerGroup, LControl, LIcon } from 'vue2-leaflet'
 import Vue2LeafletLocatecontrol from 'vue2-leaflet-locatecontrol/Vue2LeafletLocatecontrol'
 import { OpenStreetMapProvider } from 'leaflet-geosearch'
 import Geosearch from '@/components/Geosearch'
 import Routing from '@/components/Routing'
+import ParkingIcon from './ParkingIcon.vue'
+import SlotIcon from './SlotIcon.vue'
 import L, { latLng } from 'leaflet'
 import 'leaflet/dist/leaflet.css'
-import { fireStore, geoPoint } from '@/firebase'
 import * as turf from '@turf/turf'
-import municipalityApi from '@/api/municipality'
 import store from '@/store'
+import apiParking from '../api/parking'
 
 export default {
     name: 'spark-map',  
@@ -58,7 +70,7 @@ export default {
             attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
             mapOptions: {
                 zoomDelta: 0.5,
-                zoomSnap: 0.25
+                zoomSnap: 0.5
             },
 
             markerVisible: true,
@@ -86,23 +98,33 @@ export default {
         'l-map': LMap,
         'l-tile-layer': LTileLayer,
         'l-marker': LMarker,
+        'l-icon': LIcon,
         'l-group': LLayerGroup,
         'l-control': LControl,
         'l-locate-control': Vue2LeafletLocatecontrol,
         'l-search': Geosearch,
-        'l-routing': Routing
+        'l-routing': Routing,
+        'p-icon': ParkingIcon,
+        's-icon': SlotIcon
     },
     methods: {
         handleEvents(map) {
             this.map = map
-            this.parseAreas(map.getBounds(), map)
+            //this.parseAreas(map.getBounds(), map)
+            this.findParkings(map.getBounds())
             map.on('geosearch/showlocation', (ev) => {
                 this.locSearch = true
-                this.parseAreas(L.latLngBounds(ev.location.bounds), map)
+                console.log(ev)
+                //this.parseAreas(L.latLngBounds(ev.location.bounds), map)
+                //this.findParkings(ev.location.bounds)
             })
-            map.on('moveend', () => {
-                if (this.locSearch) this.locSearch = false
-                else if (this.autoSearch && map.getZoom() > 10) this.parseAreas(map.getBounds(), map)
+            map.on('moveend', (ev) => {
+                if (this.locSearch) {
+                    if (ev.target.getZoom() <= 13) map.setZoom(13.5)
+                    this.findParkings(map.getBounds())
+                    this.locSearch = false
+                }
+                else if (this.autoSearch && map.getZoom() > 13) this.findParkings(map.getBounds()) //this.parseAreas(map.getBounds(), map)
             })
             map.on('locationfound', (ev) => {
                 store.commit('setUserPosition', ev.latlng)
@@ -123,17 +145,11 @@ export default {
         },
 
         findParkings(bounds) {
-            fireStore.collection('Parkings')
-                .where('lat', '<=', bounds.getNorthEast().lat)
-                .where('lat', '>=', bounds.getSouthWest().lat)
-                .get()
-                .then((querySnapshot) => {
-                    console.log(querySnapshot.size, "new parkings were found")
-                    querySnapshot.forEach((doc) => store.commit("addParking", doc.data()))
-                })
-                .catch((error) => {
-                    console.log("Error getting documents: ", error);
-                })
+            const ne = [bounds.getEast(), bounds.getNorth()]
+            const sw = [bounds.getWest(), bounds.getSouth()]
+            apiParking.getParkingsByArea(ne.join(','), sw.join(',')).then(response => {
+                store.dispatch("fetchParkings", response.data)
+            })
         },
 
         parseAreas(bounds, map) {
@@ -201,25 +217,27 @@ export default {
         },
         
         hideMarkers(zoom) {
-            zoom > 11.5 ? (this.markerVisible = true) : (this.markerVisible = false)
+            zoom > 13 ? (this.markerVisible = true) : (this.markerVisible = false)
         }
     },
     computed: {
         center() { return store.getters.center },
         active() { return store.getters.active },
         parkings() { return store.getters.parkings },
+        slots() { return store.getters.slots },
         waypoints() { return store.getters.waypoints }
     },
     watch: {
         center() { return },
-        active(newAct, oldAct) { if (newAct) this.map.flyTo(newAct, this.map.getZoom() > 16 ? this.map.getZoom() : 16) },
+        active(newAct, oldAct) { if (newAct) this.map.flyTo(newAct, this.map.getZoom() > 17 ? this.map.getZoom() : 17) },
         parkings() { return },
+        slots() { return },
         waypoints() { return }
     }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 #map {
     width: 100%;
     height: 100vh;
@@ -234,6 +252,14 @@ export default {
     &.active {
         color: white;
         background-color: rgb(41, 134, 255);
+    }
+}
+
+.leaflet-marker-icon {
+    z-index: 1 !important;
+
+    &:hover {
+        z-index: 1000 !important;
     }
 }
 

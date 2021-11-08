@@ -2,7 +2,7 @@ package lsd.smartparking.enums;
 
 public enum VehicleType {
     
-    BYCICLE("Bicycle"),
+    BICYCLE("Bicycle"),
     CAR("Car"),
     CARAVAN("Caravan"),
     MOTORCYCLE("Motorcycle");

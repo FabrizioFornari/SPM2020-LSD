@@ -12,12 +12,12 @@ import lsd.smartparking.enums.VehicleType;
 public class Bicycle extends Vehicle {
 
 	public Bicycle() { 
-		this.setType(VehicleType.BYCICLE);
+		this.setType(VehicleType.BICYCLE);
 	}
 
 	@PersistenceConstructor
 	public Bicycle(ObjectId id, String name, String owner) {
-		super(id, name, VehicleType.BYCICLE, owner);
+		super(id, name, VehicleType.BICYCLE, owner);
 	}
 	
 	public Bicycle(String name, String owner) {

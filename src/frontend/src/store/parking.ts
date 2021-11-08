@@ -1,45 +1,45 @@
-import { fireStore } from '@/firebase'
 import Vue from 'vue'
 
 const parking = {
     state: {
-        parkings: {}
+        parkings: {},
+        slots: {}
     },
     mutations: {
         addParking(state, parking) {
             Vue.set(state.parkings, parking.id, parking)
         },
         addParkings(state, parkings) {
-            for (const id in parkings)
-                Vue.set(state.parkings, id, parkings[id])
+            for (const parking of parkings)
+                Vue.set(state.parkings, parking.id, parking)
         },
-        setParkings(state, tickets) {
-            state.tickets = tickets
+        setParkings(state, parkings) {
+            state.parkings = parkings
         },
-        removeParking(state, parkingId) {
+        deleteParking(state, parkingId) {
             Vue.delete(state.parkings, parkingId)
+        },
+        setSlots(state, slots) {
+            state.slots = slots
         }
     },
     getters: {
-        parkings: state => state.parkings
+        parkings: state => state.parkings,
+        slots: state => state.slots
     },
-    actions: {        
+    actions: {
+        fetchParking({ commit }, parking) {
+            commit("addParking", parking)
+        },        
         fetchParkings({ commit }, parkings) {
             if (!parkings) commit("setParkings", {})
             else commit("addParkings", parkings)
         },
-        async fetchParking({ commit, rootGetters }, id) {
-            if (rootGetters.parkings[id]) return rootGetters.parkings[id]
-            const parking = await fireStore.collection('Parkings').doc(id).get()
-            if (!parking.exists) return null
-            commit('addParking', parking.data())
-            return parking.data()
+        deleteParking({ commit }, id) {
+            commit("deleteParking", id)
         },
-        async coordParking({ rootGetters }, id) {
-            if (rootGetters.parkings[id]) return [rootGetters.parkings[id].lat, rootGetters.parkings[id].lon]
-            const parking = await fireStore.collection('Parkings').doc(id).get()
-            if (!parking.exists) return null
-            return [parking.data().lat, parking.data().lon]
+        fetchSlots({ commit }, slots) {
+            commit("setSlots", slots)
         }
     }
 }

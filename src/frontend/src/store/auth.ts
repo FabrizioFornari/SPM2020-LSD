@@ -70,7 +70,6 @@ const auth = {
         fetchUser({ commit }, user) {
             commit("setUserState", user !== null)
             if (!user) user = {}
-            console.log(user)
             commit("setUser", user)
             commit("setUserRole", user.type)
         }

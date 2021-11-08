@@ -38,7 +38,7 @@ export default new Vuex.Store({
                     parkings = (await apiParking.getParkings()).data
                 }
             }
-            dispatch("fetchParkings", parkings)
+            if (parkings) dispatch("fetchParkings", parkings)
             dispatch("fetchTickets", tickets)
             dispatch("fetchVehicles", vehicles)
         }

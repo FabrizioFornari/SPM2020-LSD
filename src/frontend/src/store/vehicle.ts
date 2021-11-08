@@ -16,7 +16,7 @@ const vehicle = {
         setVehicles(state, vehicles) {
             state.vehicles = vehicles
         },
-        removeVehicle(state, vehicleId) {
+        deleteVehicle(state, vehicleId) {
             Vue.delete(state.vehicles, vehicleId)
         }
     },
@@ -31,6 +31,9 @@ const vehicle = {
         fetchVehicles({ commit }, vehicles) {
             if (!vehicles) commit("setVehicles", {})
             else commit("addVehicles", vehicles)
+        },
+        deleteVehicle({ commit }, id) {
+            commit("deleteVehicle", id)
         }
     }
 }

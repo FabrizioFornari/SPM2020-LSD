@@ -3,24 +3,23 @@
         <div class="details">
             <h3><b>{{ parking.name }}</b></h3>
             <div class="address">{{ parking.address }}, {{ parking.city }}</div>
-            <p class="sub">Parking slots</p>
+            <p class="sub"><b>Parking slots</b></p>
             <div v-for="(amount, type) in parking.slots" :key="type">{{type}}: {{amount}}</div>
-            <p class="sub">Opening time</p>
-            <div v-for="(day, d) of parking.days" :key="d">{{weekday[d]}}: {{day.start}} - {{day.end}}</div>
-            <p class="sub">Price</p>
-            <div>{{ parking.price }}/hour</div>
+            <!--<p class="sub"><b>Opening time</b></p>
+            <div v-for="(day, d) of parking.days" :key="d">{{weekday[d]}}: {{day.start}} - {{day.end}}</div>-->
+            <p class="sub"><b>Price</b></p>
+            <div>{{ parking.price }}€/hour</div>
         </div>
-        <div class="actions" v-if="this.$store.getters.userUid == parking.municipalityId">
+        <div class="actions" v-if="this.$store.getters.userUid == parking.owner">
             <router-link class="action save" :to="{path: '/map/parking/'+parking.id, query: {edit: true}}" id="parkingEditButton">Edit</router-link>
-            <button class="action cancel" @click.prevent="removeParking" id="parkingRemoveButton">Remove</button>
+            <button class="action cancel" @click.prevent="deleteParking" id="parkingRemoveButton">Remove</button>
         </div>
         <div class="actions" v-else>
             <button id="routeButton" class="action save" @click.prevent="findRoute">Route</button>
             <router-link class="action save" v-if="this.$store.getters.userRole != 'municipality'" :to="'/buy/ticket/'+parking.id">Buy</router-link>
-            <button class="action save" v-if="this.$store.getters.userRole != 'municipality'">Pin it</button>
         </div>
     </form>
-    <form v-else @submit.prevent="addParking()">
+    <form v-else @submit.prevent="edit ? editParking() : addParking()">
         <div class="details">
             <h3 v-if="edit"><b>Edit Parking</b></h3>
             <h3 v-else><b>New Parking</b></h3>
@@ -33,23 +32,23 @@
             <p class="sub">Parking slots</p>
             <div class="slider">
                 <a v-for="type in $store.getters.vehicleTypes" :key="type" v-show="!(type in slots)" @click="$set(slots, type)">
-                    {{ type }}
+                    {{ type.toLowerCase() }}
                 </a>
             </div>
             <label class="label" :class="{ 'removable' : Object.keys(slots).length > 1 }" v-for="(slot, type) in slots" :key="type">
                 <input type="number" min="1" class="input" v-model.number="slots[type]" required>
-                <span>{{ type }} slots</span>
+                <span>{{ type.toLowerCase() }} slots</span>
                 <a v-if="Object.keys(slots).length > 1" @click="$delete(slots, type)">-</a>
             </label>
 
             <p class="sub">Opening time</p>
             <label class="label">
                 <label class="label">
-                    <input type="time" class="input" id="parkingStartTime" v-model="days.start" required>
+                    <input type="time" class="input" id="parkingStartTime" v-model="days.start">
                     <span>From</span>
                 </label>
                 <label class="label">
-                    <input type="time" class="input" id="parkingEndTime" v-model="days.end" required>
+                    <input type="time" class="input" id="parkingEndTime" v-model="days.end">
                     <span>To</span>
                 </label>
             </label>
@@ -67,7 +66,7 @@
         </div>
 
         <div class="actions" v-if="edit">
-            <button class="action save" id="parkingSaveButton"  @click.prevent="editParking" type="submit">Save</button>
+            <button class="action save" id="parkingSaveButton" type="submit">Save</button>
             <router-link class="action cancel" :to="'/map/parking/'+parking.id">Cancel</router-link>
         </div>
         <div class="actions" v-else>
@@ -79,7 +78,8 @@
 
 <script>
 import axios from 'axios'
-import api from '@/api/municipality'
+import apiParking from '@/api/parking'
+import apiSlot from '@/api/parkingslot'
 import { latLng } from 'leaflet'
 
 export default {
@@ -88,17 +88,15 @@ export default {
         return {
             weekday: ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
             parking: {
-                id: null,
                 address: null,
                 city: null,
                 name: null
             },
             slots: {
-                car: 1
+                CAR: 1
             },
             days: {},
             infos: {
-                reservation: false,
                 guarded: true
             }
         }
@@ -115,35 +113,26 @@ export default {
         }
     },
     methods: {
-        async addParking() {
+        addParking() {
 			this.parking.slots = this.slots
-			this.parking.municipalityId = this.$store.getters.userUid
-            api.addParking(this.parking).then(response => {
-                if (response >= 200 && response < 300) {
-                    this.$store.commit("addParking", this.parking)
-                    this.$router.push('/map/parking/'+this.parking.id)
-                }
+            this.parking.owner = this.$store.getters.userUid
+            apiParking.addParking(this.parking).then(response => {
+                this.$store.dispatch('fetchParking', response.data)
+                this.$router.push('/map')
             })
         },
-        async editParking() {
+        editParking() {
 			this.parking.slots = this.slots
-			this.parking.municipalityId = this.$store.getters.userUid
-            api.editParking(this.parking).then(response => {
-                if (response >= 200 && response < 300) {
-                    this.$store.commit("editParking", this.parking.id)
-                    this.$router.push('/map/parking/'+this.parking.id)
-                }
+            this.parking.owner = this.$store.getters.userUid
+            apiParking.editParking(this.parking).then(response => {
+                this.$store.dispatch('fetchParking', response.data)
+                this.$router.push('/map')
             })
         },
-        async removeParking() {
-			console.log(this.parking)
-			this.parking.slots = this.slots
-            this.parking.municipalityId = this.$store.getters.userUid
-            api.removeParking(this.parking).then(response => {
-                if (response >= 200 && response < 300) {
-                    this.$store.commit("removeParking", this.parking.id)
-                    this.$router.push('/map')
-                }
+        deleteParking() {
+			apiParking.deleteParking(this.parking.id).then(response => {
+                this.$store.dispatch('deleteParking', response.data)
+                this.$router.push('/map')
             })
         },
         findRoute() {
@@ -152,11 +141,17 @@ export default {
     },
     async created() {
         if (this.id) {
-            this.parking = { ...await this.$store.dispatch("fetchParking", this.id) }
-            if (!this.parking || (this.edit && this.$store.getters.userUid != this.parking.municipalityId)) this.$router.push('/map')
+            await apiParking.getParking(this.id).then(response => {
+                this.parking = response.data
+                this.$store.dispatch("fetchParking", this.parking)
+            })
+            await apiSlot.getSlotsByParking(this.id).then(response => {
+                this.$store.dispatch("fetchSlots", response.data)
+            })
+            if (!this.parking || (this.edit && this.$store.getters.userUid != this.parking.owner)) this.$router.push('/map')
             else {
                 this.slots = { ...this.parking.slots }
-                this.$store.commit("setActive", latLng(this.parking.lat, this.parking.lon))
+                this.$store.commit("setActive", latLng(this.parking.coords.y, this.parking.coords.x))
             }
         }
         else if (this.c.indexOf(',') > -1) {
@@ -164,12 +159,16 @@ export default {
             await axios
                 .get('https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat='+coords[0]+'&lon='+coords[1]+'&zoom=16&accept-language=it')
                 .then(response => {
-                    this.parking.lat = response.data.lat
-                    this.parking.lon = response.data.lon
+                    const coords = {
+                        x: response.data.lon,
+                        y: response.data.lat
+                    }
+                    this.parking.coords = coords
                     this.parking.address = response.data.address.road || response.data.address.farm
                     this.parking.city = response.data.address.city || response.data.address.town || response.data.address.village
-                    if (this.$store.getters.municipality.profile.city != this.parking.city) this.$router.push('/map')
-                    else this.$store.commit("setActive", latLng(response.data.lat, response.data.lon))
+                    
+                    if (this.$store.getters.user.city != this.parking.city) this.$router.push('/map')
+                    else this.$store.commit("setActive", latLng(coords.y, coords.x))
                 }) 
                 .catch(error => {
                     this.$router.push('/map')

@@ -9,17 +9,17 @@ export default {
     async getParkings() {
         return AXIOS.get(endpoint)
     },
-    async getParkingsByArea(topright, botleft) {
-        return AXIOS.get(endpoint + '?topright=' + topright + '&botleft=' + botleft)
+    async getParkingsByArea(ne, sw) {
+        return AXIOS.get(endpoint + '?ne=' + ne + '&sw=' + sw)
     },
-    async getParkingsByAreaAndType(topright, botleft, type) {
-        return AXIOS.get(endpoint + '?topright=' + topright + '&botleft=' + botleft + '&type=' + type)
+    async getParkingsByAreaAndType(ne, sw, type) {
+        return AXIOS.get(endpoint + '?ne=' + ne + '&sw=' + sw + '&type=' + type)
     },
     async addParking(parking) {
         return AXIOS.post(endpoint, parking)
     },
     async editParking(parking) {
-        return AXIOS.post(endpoint, parking)
+        return AXIOS.post(endpoint + 'edit', parking)
     },
     async deleteParking(id: string) {
         return AXIOS.delete(endpoint + id)

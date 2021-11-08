@@ -6,22 +6,23 @@
             
             <p class="sub">Choose vehicle</p>
             <div class="picker">
-                <div v-for="vehicle of $store.getters.driver.profile.vehicles" :key="vehicle.id" 
-                    :class="{ 'selected' : vehicle.id == ticket.vehicle }" 
-                    @click="ticket.vehicle = vehicle.id">
-                    <img :src="require('./../../assets/'+vehicle.type+'.png')">
-                    {{ vehicle.name }}
-                </div>
+                <label v-for="vehicle of $store.getters.vehicles" v-show="parking.slots[vehicle.type]"
+                    :key="vehicle.id"
+                    :class="{ 'selected' : vehicle.id == ticket.vehicle }" >
+                    <input type="radio" name="vehicle" :value="vehicle.id" v-model="ticket.vehicle" required>
+                    <h5>{{ vehicle.name }}</h5>
+                    <p>My {{ vehicle.type }}</p>
+                </label>
             </div>
 
             <p class="sub">Time</p>
             <label class="label">
                 <label class="label">
-                    <input type="time" class="input" v-model="ticket.start" @input="priceCalculator" required>
+                    <input type="time" class="input" v-model="time.start" @input="priceCalculator" required>
                     <span>From</span>
                 </label>
                 <label class="label">
-                    <input type="time" class="input" :min="ticket.start" v-model="ticket.end" @input="priceCalculator" required>
+                    <input type="time" class="input" :min="time.start" v-model="time.end" @input="priceCalculator" required>
                     <span>To</span>
                 </label>
             </label>
@@ -36,13 +37,17 @@
 </template>
 
 <script>
-import api from '@/api/driver'
+import apiParking from '@/api/parking'
 import { latLng } from 'leaflet'
 
 export default {
     name: 'Parking',
     data() {
         return {
+            time: {
+                start: null,
+                end: null
+            },
             ticket: {
                 vehicle: null
             },
@@ -50,7 +55,7 @@ export default {
                 address: null,
                 city: null,
                 name: null,
-                slots: null
+                slots: {}
             }
         }
     },
@@ -76,9 +81,11 @@ export default {
         }
     },
     async created() {
-        this.parking = { ...await this.$store.dispatch("fetchParking", this.id) }
+        await apiParking.getParking(this.id).then(response => {
+            this.parking = response.data
+        })
         if (!this.parking) this.$router.push('/map')
-        else this.$store.commit("setActive", latLng(this.parking.lat, this.parking.lon))
+        else this.$store.commit("setActive", latLng(this.parking.coords.y, this.parking.coords.x))
     }
 }
 </script>
@@ -101,24 +108,16 @@ export default {
 .picker {
     display: flex;
 
-    & div {
+    label {
+        min-width: max-content;
         margin-right: 15px;
-        padding: 0 15px;
+        padding: 5px 15px;
         border: 1px solid #00000019;
         border-radius: 8px;
         display: flex;
         flex-flow: column;
         align-items: center;
         cursor: pointer;
-
-        &:hover {
-            border: 1px solid;
-        }
-
-        & img {
-            width: 60px;
-            opacity: .3;
-        }
 
         &.selected  {
             color: black;
@@ -128,6 +127,21 @@ export default {
             img {
                 opacity: 1;
             }
+        }
+
+        &:hover {
+            border: 1px solid;
+        }
+
+        input {
+            left: 0;
+            opacity: 0;
+            position: absolute;
+        }
+
+        p {
+            margin: 0;
+            font-size: 14px;
         }
     }
 }

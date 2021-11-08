@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
-import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,25 +35,25 @@ public class ParkingSlotController {
     @GetMapping(value = "/", params = "id")
     public ResponseEntity<Optional<ParkingSlot>> getSlot(@RequestParam(required = true) String id) {
         Optional<ParkingSlot> slot = slotService.getSlot(id);
-        return new ResponseEntity<>(slot, slot.isPresent() ? HttpStatus.OK : HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(slot, HttpStatus.OK);
     }
     
     @GetMapping(value = "/", params = "parking")
     public ResponseEntity<List<ParkingSlot>> getSlots(@RequestParam(required = true) String parking) {
         List<ParkingSlot> slots = slotService.getSlots(parking);
-    	return new ResponseEntity<>(slots, !slots.isEmpty() ? HttpStatus.OK : HttpStatus.NOT_FOUND);
+    	return new ResponseEntity<>(slots, HttpStatus.OK);
     }
     
     @GetMapping(value = "/", params = {"parking", "type"})
     public ResponseEntity<List<ParkingSlot>> getSlots(@RequestParam(required = true) String parking, @RequestParam(required = true) VehicleType type) {
         List<ParkingSlot> slots = slotService.getSlots(parking, type);
-    	return new ResponseEntity<>(slots, !slots.isEmpty() ? HttpStatus.OK : HttpStatus.NOT_FOUND);
+    	return new ResponseEntity<>(slots, HttpStatus.OK);
     }
     
     @GetMapping(value = "/", params = {"topright", "botleft"})
     public ResponseEntity<List<ParkingSlot>> getSlots(@RequestParam(required = true) double[] topright, @RequestParam(required = true) double[] botleft) {
         List<ParkingSlot> slots = slotService.getSlots(new Coords(botleft), new Coords(topright));
-    	return new ResponseEntity<>(slots, !slots.isEmpty() ? HttpStatus.OK : HttpStatus.NOT_FOUND);
+    	return new ResponseEntity<>(slots, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyAuthority('MUNICIPALITY')")
@@ -66,7 +66,7 @@ public class ParkingSlotController {
 
     @PreAuthorize("hasAnyAuthority('MUNICIPALITY')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteParking(@PathParam("id") String id, Authentication auth) {
+    public ResponseEntity<String> deleteParking(@PathVariable("id") String id, Authentication auth) {
         Optional<ParkingSlot> p = slotService.getSlot(id);
         if (p.isEmpty() || !slotService.checkOwner(p.get(), auth.getName())) return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         slotService.deleteParking(id);

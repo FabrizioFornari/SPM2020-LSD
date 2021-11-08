@@ -16,7 +16,7 @@ export default {
   name: 'dashboard',
   data () {
     return {
-      name: this.$store.getters.user.name
+      name: this.$store.getters.user.displayName
     }
   }
 }

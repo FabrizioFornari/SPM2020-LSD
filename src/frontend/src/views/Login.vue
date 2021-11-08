@@ -18,7 +18,7 @@
 
             <div class="form-group row mb-0">
               <div class="col-md-12">
-                <button type="submit" id="buttonLogin" class="btn btn-primary">Login</button>
+                <button type="submit" id="buttonLogin" class="btn btn-primary" :disabled="loading">Login</button>
                 <br><br>
                 <p><router-link to="/register">Aren't you registered?</router-link></p>
               </div>
@@ -40,14 +40,17 @@ export default {
         email: "",
         password: ""
       },
+      loading: false,
       error: null
     }
   },
   methods: {
     async signIn() {
+      this.loading = true
       this.error = null
       this.error = await login(this.form.email, this.form.password)
       if (!this.error) this.$router.push(this.$route.query.redirect || '/map')
+      this.loading = false
     }
   }
 }

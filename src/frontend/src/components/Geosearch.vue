@@ -45,7 +45,7 @@ export default {
     min-width: 400px;
     left: 50%;
     bottom: 20px;
-    border-radius: 8px;
+    border-radius: 10px;
     background-color: #fff;
     box-shadow: 0 10px 20px #00000033;
     transform: translateX(-50%);
@@ -70,6 +70,9 @@ export default {
         bottom: 0;
         height: 50px;
         padding: 10px;
+        font-size: 20px;
+        font-weight: normal;
+        color: #0009;
       }
 
       .results.active {

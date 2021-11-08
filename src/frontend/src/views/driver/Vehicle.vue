@@ -1,5 +1,5 @@
 <template>
-    <form class="vehicle" @submit.prevent="!id ? addVehicle() : updateVehicle()">
+    <form class="vehicle" @submit.prevent="!id ? addVehicle() : deleteVehicle()">
         <div class="details">
             <label class="label"> 
                 <select class="input" v-model="vehicle.type" required>
@@ -26,22 +26,20 @@
         
         <div class="actions">
             <button v-if="!id" class="action save" type="submit">Add</button>
-            <button v-else class="action save" id="saveVehicle" type="submit">Save</button>
+            <button v-else class="action save" id="deleteVehicle" type="submit">Delete</button>
             <router-link class="action cancel" to="/dashboard/garage">Cancel</router-link>
         </div>
     </form>
 </template>
 
 <script>
-import { fireStore } from '@/firebase'
 import api from '@/api/vehicle'
 
 export default {
     data() {
         return {
             vehicle: {
-                type: "CAR",
-                owner: this.$store.getters.user.id
+                type: "CAR"
             }
         }
     },
@@ -52,23 +50,24 @@ export default {
         }
     },
     created() {
-        if (this.id) this.vehicle = this.$store.getters.vehicles[this.id]
+        if (this.id) {
+            const v = this.$store.getters.vehicles[this.id]
+            if (v) this.vehicle = v
+            else this.$router.push("/dashboard/garage")
+        }
     },
     methods: {
         async addVehicle() {
+            this.vehicle.owner = this.$store.getters.userUid
             await api.addVehicle(this.vehicle, this.vehicle.type.toLowerCase()).then(response => {
                 this.$store.dispatch("fetchVehicle", response.data)
-                this.$router.push('/dashboard/garage')
+                this.$router.push("/dashboard/garage")
             })
         },
-        async updateVehicle() {
-            const vehicles = {[this.vehicle.id]: {id: this.vehicle.id, name: this.vehicle.name, type: this.vehicle.type}}
-            const batch = fireStore.batch()
-            batch.update(fireStore.collection('Vehicles').doc(this.vehicle.id), this.vehicle)
-            batch.set(fireStore.collection('Users').doc(this.vehicle.owner), { vehicles }, { merge: true })
-            batch.commit().then(() => {
-                this.$store.commit("addVehicle", this.vehicle)
-                this.$router.push('/dashboard/garage')
+        async deleteVehicle() {
+            await api.deleteVehicle(this.id).then(response => {
+                this.$store.dispatch("deleteVehicle", response.data)
+                this.$router.push("/dashboard/garage")
             })
         }
     }

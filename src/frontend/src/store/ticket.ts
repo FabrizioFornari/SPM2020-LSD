@@ -15,20 +15,20 @@ const ticket = {
         setTickets(state, tickets) {
             state.tickets = tickets
         },
-        removeTicket(state, ticketId) {
+        deleteTicket(state, ticketId) {
             Vue.delete(state.tickets, ticketId)
         }
     },
     getters: {
-        tickets: state => state.vehicles
+        tickets: state => state.tickets
     },
     actions: {
         fetchTicket({ commit }, ticket) {
             commit("addTicket", ticket)
         },
         fetchTickets({ commit }, tickets) {
-            if (!tickets) commit("setVehicles", {})
-            else commit("addVehicles", tickets)
+            if (!tickets) commit("setTickets", {})
+            else commit("addTickets", tickets)
         }
     }
 }

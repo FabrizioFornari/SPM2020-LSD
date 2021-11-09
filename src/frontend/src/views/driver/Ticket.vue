@@ -2,11 +2,11 @@
     <form @submit.prevent="buyTicket()">
         <div class="details">
             <h3><b>Buy Ticket</b></h3>
-            <div class="address">{{ parking.address }}, {{ parking.city }}</div>
+            <i>{{ parking.address }}, {{ parking.city }}</i>
             
             <p class="sub">Choose vehicle</p>
             <div class="picker">
-                <label v-for="vehicle of $store.getters.vehicles" v-show="parking.slots[vehicle.type]"
+                <label v-for="vehicle of $store.getters.vehicles" v-show="types.includes(vehicle.type)"
                     :key="vehicle.id"
                     :class="{ 'selected' : vehicle.id == ticket.vehicle }" >
                     <input type="radio" name="vehicle" :value="vehicle.id" v-model="ticket.vehicle" required>
@@ -17,14 +17,12 @@
 
             <p class="sub">Time</p>
             <label class="label">
-                <label class="label">
-                    <input type="time" class="input" v-model="time.start" @input="priceCalculator" required>
-                    <span>From</span>
-                </label>
-                <label class="label">
-                    <input type="time" class="input" :min="time.start" v-model="time.end" @input="priceCalculator" required>
-                    <span>To</span>
-                </label>
+                <input type="datetime-local" class="input" v-model="date.start" @input="priceCalculator" required>
+                <span>From</span>
+            </label>
+            <label class="label">
+                <input type="datetime-local" class="input" v-model="date.end" :min="date.start" @input="priceCalculator" required>
+                <span>To</span>
             </label>
             <h3 class="sub">Total: {{ ticket.price || 0 }}€</h3>
         </div>
@@ -37,55 +35,74 @@
 </template>
 
 <script>
+import apiTicket from '@/api/ticket'
 import apiParking from '@/api/parking'
+import apiSlot from '@/api/slot'
 import { latLng } from 'leaflet'
+import moment from 'moment'
 
 export default {
     name: 'Parking',
     data() {
         return {
-            time: {
+            date: {
                 start: null,
                 end: null
             },
             ticket: {
-                vehicle: null
+                vehicle: null,
+                payer: this.$store.getters.userUid,
+                parking: this.slotid ? this.slotid : this.parkingid,
+                type: this.slotid ? "SLOT" : "PARKING"
             },
             parking: {
                 address: null,
                 city: null,
                 name: null,
                 slots: {}
-            }
+            },
+            slot: {},
+            types: []
         }
     },
     props: {
-        id: {
+        parkingid: {
+            type: String
+        },
+        slotid: {
             type: String
         }
     },
     methods: {
         async buyTicket() {
-            //this.$store.commit("addTicket", this.ticket)
-            console.log(this.ticket)
+            this.ticket.inception = moment(this.date.start).format('YYYY-MM-DD HH:mm')
+            this.ticket.expiration = moment(this.date.end).format('YYYY-MM-DD HH:mm')
+            await apiTicket.buyTicket(this.ticket).then(response => {
+                this.$store.dispatch('fetchTicket', response.data)
+                this.$router.push('/dashboard/pocket')
+                console.log(this.$store.getters.tickets)
+            })
         },
         priceCalculator() {
-            if (this.ticket.start && this.ticket.end) {
-                const hours = this.ticket.end.split(':')[0] - this.ticket.start.split(':')[0]
-                let minutes = this.ticket.end.split(':')[1] - this.ticket.start.split(':')[1]
-
-                if (hours>0) minutes = 60*hours + minutes
-                if (minutes>0) this.ticket.price = (minutes * this.parking.price / 60).toFixed(2)
-                else this.ticket.price = null
+            if (this.date.start && this.date.end) {
+                const length = moment(this.date.end) - moment(this.date.start)
+                this.ticket.price = length > 0 ? (length/1000/60/60*this.parking.price).toFixed(2) : null
             }
         }
     },
     async created() {
-        await apiParking.getParking(this.id).then(response => {
+        await apiParking.getParking(this.parkingid).then(async response => {
             this.parking = response.data
+            if (!this.parking) this.$router.push('/map')
+            await apiSlot.getSlotsByParking(this.parkingid).then(response => {
+                this.$store.dispatch("fetchSlots", response.data)
+                this.slot = this.$store.getters.slots[this.slotid]
+                if (this.slotid && !this.slot) return this.$router.push('/map')
+            })
         })
-        if (!this.parking) this.$router.push('/map')
-        else this.$store.commit("setActive", latLng(this.parking.coords.y, this.parking.coords.x))
+        this.types = this.slot ? [this.slot.type] : Object.keys(this.parking.slots)
+        const active = this.slot ? latLng(this.slot.coords.y, this.slot.coords.x) : latLng(this.parking.coords.y, this.parking.coords.x)
+        this.$store.commit("setActive", active)
     }
 }
 </script>
@@ -96,12 +113,9 @@ export default {
     padding: 0 10px;
     padding-bottom: 70px;
 
-    .address {
-        font-style: italic;
-    }
-
     .sub {
         margin-top: 35px;
+        font-weight: bold;
     }
 }
 
@@ -121,7 +135,6 @@ export default {
 
         &.selected  {
             color: black;
-            background-color: aliceblue;
             border: 1px solid;
 
             img {
@@ -131,6 +144,10 @@ export default {
 
         &:hover {
             border: 1px solid;
+        }
+
+        h5 {
+            margin: 0;
         }
 
         input {

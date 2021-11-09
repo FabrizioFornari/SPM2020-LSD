@@ -22,5 +22,8 @@ public interface ParkingSlotRepository extends MongoRepository<ParkingSlot, Stri
     List<ParkingSlot> findByParkingAndType(String parking, VehicleType type);
 
     List<ParkingSlot> findByCoordsWithin(Box box);
+
+    @Query(value = "{'parking' : ?0}", delete = true)
+    void deleteByParking(String id);
     
 }

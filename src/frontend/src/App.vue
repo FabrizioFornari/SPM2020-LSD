@@ -10,24 +10,27 @@
       <router-link to="/dashboard" v-else class="userIcon"><img src="./assets/user.svg"></router-link>
     </div>
 
-    <vue-resizable id="float" v-if="$route.meta.float && ready"
-        class="resizable"
-        ref="resizableComponent"
-        :active="['t']"
-        :fit-parent="false"
-        :height="170"
-        :min-height="170">
-      <router-link to="/map" id="close" />
-      <router-view :key="$route.fullPath" />
-    </vue-resizable>
-    <div id="main" v-else-if="$route.name !== 'Home'">
-      <div class="page">
+    <div id="content">
+      <Map v-if="ready" />
+
+      <vue-resizable id="float" v-if="$route.meta.float && ready"
+          class="resizable"
+          ref="resizableComponent"
+          :active="['t']"
+          :fit-parent="false"
+          :height="170"
+          :min-height="170">
+        <router-link to="/map" id="close" />
         <router-view :key="$route.fullPath" />
+      </vue-resizable>
+
+      <div id="main" v-else-if="$route.name !== 'Home'">
+        <div class="page">
+          <router-view :key="$route.fullPath" />
+        </div>
+        <router-link to="/map" id="backhome" />
       </div>
-      <router-link to="/map" id="backhome" />
     </div>
-    
-    <Map v-if="ready" />
   </div>
 </template>
 
@@ -45,11 +48,16 @@ export default {
     VueResizable,
     Map
   },
-  async created() {
+  created() {
     const center = [45.46, 9.19] 
     this.$store.commit("setCenter", center)
     this.ready = true
-  }
+  },
+  updated() {
+    setTimeout(() => {
+      window.dispatchEvent(new Event("resize"));
+    }, 30);
+  },
 } 
 </script>
 
@@ -103,7 +111,12 @@ button {
   display: none;
 }
 
+#content {
+  display: flex;
+}
+
 #float {
+  max-height: 100%;
   top: auto !important;
   left: auto !important;
   right: 0 !important;
@@ -115,7 +128,6 @@ button {
   overflow-y: auto;
   -ms-overflow-style: none;
   scrollbar-width: none;
-  position: fixed;
   z-index: 100;
 
   &::-webkit-scrollbar {
@@ -123,15 +135,23 @@ button {
   }
 
   & #close {
+    top: 0;
+    right: 0;
+    float: right;
     color: #00000033;
+    position: sticky;
     
     &::after {
-      top: 0;
-      right: 15px;
+      width: 50px;
+      top: -25px;
+      right: 0;
       font-size: 30px;
+      border-radius: 50px;
       content: "\00d7";
+      background: white;
       position: absolute;
     }
+    
     &:hover {
       color: #00000099;
     }
@@ -167,6 +187,7 @@ button {
 #main {
   width: max-content;
   height: 100vh;
+  top: 0;
   right: 0;
   box-shadow: 0 0 30px #00000022;
   position: fixed;
@@ -275,6 +296,11 @@ form {
           border: none;
           border-radius: 8px;
           outline: none;
+          opacity: 0;
+
+          &:valid {
+            opacity: 1;
+          }
       }
 
       & > span {
@@ -297,17 +323,23 @@ form {
           margin-bottom: 50px;
           font-size: 10px;
       }
+
+      &:focus-within {
+        .input {
+          opacity: 1;
+        }
+      }
   }
 }
 
-@media (min-width: 401px) {
+@media (min-width: 481px) {
   #float {
     width: 350px !important;
     height: 100vh !important;
   }
 }
 
-@media (max-width: 400px) {
+@media (max-width: 480px) {
   #nav {
     display: none;
   }
@@ -356,6 +388,7 @@ form {
     height: 170px;
     top: auto !important;
     border-radius: 15px 15px 0 0;
+    position: fixed;
 
     &::before {
       content: '';

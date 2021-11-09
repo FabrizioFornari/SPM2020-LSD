@@ -58,7 +58,7 @@ export default {
     margin: 15px;
     padding: 15px;
     color: black;
-    border: 1px solid #00000011;
+    border: 1px solid #00000020;
     border-radius: 8px;
     flex-flow: column;
     justify-content: center;
@@ -70,7 +70,7 @@ export default {
     }
 
     &:hover {
-      box-shadow: 0 5px 10px #00000011;
+      box-shadow: 0 5px 10px #00000020;
       cursor: pointer;
     }
 

@@ -1,7 +1,7 @@
 <template>
     <div class="menu">
         <div class="choices vehicles">
-            <router-link class="choice vehicle" v-for="(car, index) in vehicles" :key="index" :to="{ path: '/dashboard/vehicle/'+car.id }">
+            <router-link class="choice vehicle" v-for="car in vehicles" :key="car.id" :to="{ path: '/dashboard/vehicle/'+car.id }">
                 <h4>{{ car.name }}</h4>
                 <p>My {{ car.type }}</p>
             </router-link>
@@ -16,12 +16,12 @@
 
 <script>
 export default {
-    name: 'garage',
+    name: 'Garage',
     computed: {
         vehicles() { return this.$store.getters.vehicles }
     },
     watch: {
-        vehicles(newDriver, oldDriver) { return }
+        vehicles() { return }
     }
 }
 </script>

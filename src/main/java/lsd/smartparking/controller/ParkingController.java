@@ -36,7 +36,7 @@ public class ParkingController {
     @GetMapping(value = "/", params = "id")
     public ResponseEntity<Optional<Parking>> getParking(@RequestParam(required = true) String id) {
         Optional<Parking> parking = parkingService.getParking(id);
-        return new ResponseEntity<>(parking, parking.isPresent() ? HttpStatus.OK : HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(parking, HttpStatus.OK);
     }
     
     @GetMapping(value = "/", params = {"ne", "sw"})

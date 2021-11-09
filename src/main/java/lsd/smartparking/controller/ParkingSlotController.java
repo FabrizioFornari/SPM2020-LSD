@@ -58,18 +58,19 @@ public class ParkingSlotController {
 
     @PreAuthorize("hasAnyAuthority('MUNICIPALITY')")
     @PostMapping(path = "/", consumes = "application/json")
-    public ResponseEntity<ParkingSlot> addSlot(Authentication auth, @Valid @RequestBody ParkingSlot slot) {
-        if (!slotService.checkOwner(slot, auth.getName())) return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        slot = slotService.addSlot(slot);
-    	return new ResponseEntity<>(slot, slot != null ? HttpStatus.CREATED : HttpStatus.BAD_REQUEST);
+    public ResponseEntity<List<ParkingSlot>> addSlots(Authentication auth, @Valid @RequestBody List<ParkingSlot> slots) {
+        for (ParkingSlot slot : slots)
+            if (!slotService.checkOwner(slot, auth.getName())) return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        slots = slotService.addSlots(slots);
+    	return new ResponseEntity<>(slots, slots != null ? HttpStatus.CREATED : HttpStatus.BAD_REQUEST);
     }
 
     @PreAuthorize("hasAnyAuthority('MUNICIPALITY')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteParking(@PathVariable("id") String id, Authentication auth) {
+    public ResponseEntity<String> deleteSlot(@PathVariable("id") String id, Authentication auth) {
         Optional<ParkingSlot> p = slotService.getSlot(id);
         if (p.isEmpty() || !slotService.checkOwner(p.get(), auth.getName())) return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        slotService.deleteParking(id);
+        slotService.deleteSlot(id);
     	return new ResponseEntity<>(id, HttpStatus.OK);
     }
     

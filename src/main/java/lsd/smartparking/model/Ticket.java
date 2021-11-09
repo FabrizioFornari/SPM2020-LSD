@@ -54,8 +54,10 @@ public class Ticket {
 		this.id = id;
 		this.payer = payer;
 		this.vehicle = vehicle;
+		this.inception = inception;
 		this.expiration = expiration;
 		this.parking = parking;
+		this.type = type;
 	}
 
 	public Ticket(String payer, String vehicle, Date inception, Date expiration, String parking, TicketType type) {

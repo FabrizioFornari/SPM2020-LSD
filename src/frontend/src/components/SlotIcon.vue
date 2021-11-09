@@ -14,7 +14,7 @@ export default {
     },
     methods: {
         getImg(type) {
-            return require('../assets/' + type + '.png')
+            if (type) return require('../assets/' + type + '.png')
         }
     }
 }

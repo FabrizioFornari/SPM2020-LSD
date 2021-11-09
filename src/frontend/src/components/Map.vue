@@ -6,7 +6,7 @@
         :maxZoom="maxZoom"
         :options="mapOptions"
         @ready="handleEvents"
-        @update:zoom="hideMarkers"
+        @update:zoom="updateZoom"
         @click="addParking">
         <l-tile-layer :url="url" :attribution="attribution"/>
         <l-search :options="searchOptions" />
@@ -16,20 +16,28 @@
             <a class="autoSearch fa fa-repeat" v-bind:class="{ active: autoSearch }" @click="autoSearch = !autoSearch" /> 
         </l-control>
         <l-marker v-if="active" :lat-lng="active" :icon="activeIcon" :zIndexOffset="10" />
-        <l-group v-if="markerVisible">
-            <l-marker v-for="marker in parkings"
-                :lat-lng="[marker.coords.y, marker.coords.x]"
-                :key="marker.id"
-                @click="showParking(marker.id)">
+        <l-group v-if="newZoom > 13.5">
+            <l-marker v-for="parking in parkings"
+                :lat-lng="[parking.coords.y, parking.coords.x]"
+                :key="'parking'+parking.id"
+                @click="$router.push('/map/parking/'+parking.id)">
                 <l-icon>
-                    <p-icon :price="marker.price"></p-icon>
+                    <p-icon :price="parking.price"></p-icon>
                 </l-icon>
             </l-marker>
+        </l-group>
+        <l-group v-if="newZoom > 16">
             <l-marker v-for="slot in slots"
                 :lat-lng="[slot.coords.y, slot.coords.x]"
-                :icon="markerIcon"
-                :key="slot.id"
-                data-class="CIAOOOOOOOO">
+                :key="'slot'+slot.id"
+                @click="$router.push('/map/slot/'+slot.id)">
+                <l-icon :icon-anchor="[16, 36]">
+                    <s-icon :type="slot.type"></s-icon>
+                </l-icon>
+            </l-marker>
+            <l-marker v-for="(slot, index) in newSlots"
+                :lat-lng="[slot.coords.y, slot.coords.x]"
+                :key="'newslot'+index">
                 <l-icon :icon-anchor="[16, 36]">
                     <s-icon :type="slot.type"></s-icon>
                 </l-icon>
@@ -63,6 +71,7 @@ export default {
             searchSpots: [],
 
             zoom: 14,
+            newZoom: 14,
             minZoom: 3,
             maxZoom: 18,
             url: 'https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png',
@@ -114,7 +123,6 @@ export default {
             this.findParkings(map.getBounds())
             map.on('geosearch/showlocation', (ev) => {
                 this.locSearch = true
-                console.log(ev)
                 //this.parseAreas(L.latLngBounds(ev.location.bounds), map)
                 //this.findParkings(ev.location.bounds)
             })
@@ -135,13 +143,10 @@ export default {
             })
         },
 
-        async addParking(ev) {
-            if (store.getters.userRole == 'MUNICIPALITY')
-                this.$router.push({ path: '/map/parking', query: { c: ev.latlng.lat + ',' + ev.latlng.lng }})
-        },
-
-        async showParking(id) {
-            this.$router.push('/map/parking/'+id)
+        addParking(ev) {
+            if (store.getters.userRole != 'MUNICIPALITY') return
+            if (store.getters.insertSlots) this.$store.dispatch('addNewSlot', ev.latlng)
+            else this.$router.push({ path: '/map/parking', query: { c: ev.latlng.lat + ',' + ev.latlng.lng }})
         },
 
         findParkings(bounds) {
@@ -216,31 +221,33 @@ export default {
                 a.every((val, index) => (val[0] === b[index][0] && val[1] === b[index][1]));
         },
         
-        hideMarkers(zoom) {
-            zoom > 13 ? (this.markerVisible = true) : (this.markerVisible = false)
+        updateZoom(zoom) {
+            this.newZoom = zoom
         }
     },
     computed: {
         center() { return store.getters.center },
         active() { return store.getters.active },
+        waypoints() { return store.getters.waypoints },
         parkings() { return store.getters.parkings },
         slots() { return store.getters.slots },
-        waypoints() { return store.getters.waypoints }
+        newSlots() { return store.getters.newSlots }
     },
     watch: {
         center() { return },
         active(newAct, oldAct) { if (newAct) this.map.flyTo(newAct, this.map.getZoom() > 17 ? this.map.getZoom() : 17) },
+        waypoints() { return },
         parkings() { return },
         slots() { return },
-        waypoints() { return }
+        newSlots() { return }
     }
 }
 </script>
 
 <style lang="scss">
 #map {
-    width: 100%;
     height: 100vh;
+    flex: 1;
     z-index: 1;
 }
 
@@ -264,7 +271,7 @@ export default {
 }
 
 
-@media (max-width: 400px) {
+@media (max-width: 480px) {
     #map {
         height: calc(100vh - 60px);
     }

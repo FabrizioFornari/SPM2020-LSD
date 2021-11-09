@@ -9,5 +9,4 @@ export default {
     async buyTicket(ticket) {
         return AXIOS.post(endpoint, ticket)
     }
-    
 }

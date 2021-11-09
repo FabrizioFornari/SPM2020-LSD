@@ -2,16 +2,17 @@
     <form v-if="id && !edit">
         <div class="details">
             <h3><b>{{ parking.name }}</b></h3>
-            <div class="address">{{ parking.address }}, {{ parking.city }}</div>
-            <p class="sub"><b>Parking slots</b></p>
+            <i>{{ parking.address }}, {{ parking.city }}</i>
+            <p class="sub">Parking slots</p>
             <div v-for="(amount, type) in parking.slots" :key="type">{{type}}: {{amount}}</div>
             <!--<p class="sub"><b>Opening time</b></p>
             <div v-for="(day, d) of parking.days" :key="d">{{weekday[d]}}: {{day.start}} - {{day.end}}</div>-->
-            <p class="sub"><b>Price</b></p>
+            <p class="sub">Price</p>
             <div>{{ parking.price }}€/hour</div>
         </div>
         <div class="actions" v-if="this.$store.getters.userUid == parking.owner">
             <router-link class="action save" :to="{path: '/map/parking/'+parking.id, query: {edit: true}}" id="parkingEditButton">Edit</router-link>
+            <router-link class="action save" :to="{path: '/map/slots', query: {p: parking.id}}" id="parkingSlotsButton">Add slots</router-link>
             <button class="action cancel" @click.prevent="deleteParking" id="parkingRemoveButton">Remove</button>
         </div>
         <div class="actions" v-else>
@@ -23,7 +24,7 @@
         <div class="details">
             <h3 v-if="edit"><b>Edit Parking</b></h3>
             <h3 v-else><b>New Parking</b></h3>
-            <div class="address">{{ parking.address }}, {{ parking.city }}</div>
+            <i>{{ parking.address }}, {{ parking.city }}</i>
             <label class="label">
                 <input type="text" class="input" id="parkingName" v-model.trim="parking.name" required autofocus>
                 <span>Name</span>
@@ -66,7 +67,7 @@
         </div>
 
         <div class="actions" v-if="edit">
-            <button class="action save" id="parkingSaveButton" type="submit">Save</button>
+            <button class="action btn btn-primary" id="parkingSaveButton" type="submit">Save</button>
             <router-link class="action cancel" :to="'/map/parking/'+parking.id">Cancel</router-link>
         </div>
         <div class="actions" v-else>
@@ -79,7 +80,7 @@
 <script>
 import axios from 'axios'
 import apiParking from '@/api/parking'
-import apiSlot from '@/api/parkingslot'
+import apiSlot from '@/api/slot'
 import { latLng } from 'leaflet'
 
 export default {
@@ -126,7 +127,7 @@ export default {
             this.parking.owner = this.$store.getters.userUid
             apiParking.editParking(this.parking).then(response => {
                 this.$store.dispatch('fetchParking', response.data)
-                this.$router.push('/map')
+                this.$router.push('/map/parking/' + response.data.id)
             })
         },
         deleteParking() {
@@ -136,23 +137,22 @@ export default {
             })
         },
         findRoute() {
-            this.$store.dispatch("fetchWaypoints", latLng(this.parking.lat, this.parking.lon))
+            this.$store.dispatch("fetchWaypoints", latLng(this.parking.coords.y, this.parking.coords.x))
         }
     },
     async created() {
         if (this.id) {
-            await apiParking.getParking(this.id).then(response => {
+            await apiParking.getParking(this.id).then(async response => {
                 this.parking = response.data
+                if (!this.parking) return this.$router.push('/map')
                 this.$store.dispatch("fetchParking", this.parking)
+                await apiSlot.getSlotsByParking(this.id).then(response => {
+                    this.$store.dispatch("fetchSlots", response.data)
+                })
             })
-            await apiSlot.getSlotsByParking(this.id).then(response => {
-                this.$store.dispatch("fetchSlots", response.data)
-            })
-            if (!this.parking || (this.edit && this.$store.getters.userUid != this.parking.owner)) this.$router.push('/map')
-            else {
-                this.slots = { ...this.parking.slots }
-                this.$store.commit("setActive", latLng(this.parking.coords.y, this.parking.coords.x))
-            }
+            if (this.edit && this.$store.getters.userUid != this.parking.owner) return this.$router.push('/map/parking/'+this.id)
+            this.slots = { ...this.parking.slots }
+            this.$store.commit("setActive", latLng(this.parking.coords.y, this.parking.coords.x))
         }
         else if (this.c.indexOf(',') > -1) {
             const coords = this.c.split(',')
@@ -185,12 +185,9 @@ export default {
     padding: 0 10px;
     padding-bottom: 80px;
 
-    .address {
-        font-style: italic;
-    }
-
     .sub {
         margin-top: 35px;
+        font-weight: bold;
     }
 
     .slider {

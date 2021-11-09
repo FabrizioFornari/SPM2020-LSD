@@ -2,8 +2,7 @@ import Vue from 'vue'
 
 const parking = {
     state: {
-        parkings: {},
-        slots: {}
+        parkings: {}
     },
     mutations: {
         addParking(state, parking) {
@@ -18,28 +17,21 @@ const parking = {
         },
         deleteParking(state, parkingId) {
             Vue.delete(state.parkings, parkingId)
-        },
-        setSlots(state, slots) {
-            state.slots = slots
         }
     },
     getters: {
-        parkings: state => state.parkings,
-        slots: state => state.slots
+        parkings: state => state.parkings
     },
     actions: {
         fetchParking({ commit }, parking) {
             commit("addParking", parking)
         },        
         fetchParkings({ commit }, parkings) {
-            if (!parkings) commit("setParkings", {})
-            else commit("addParkings", parkings)
+            commit("setParkings", {})
+            commit("addParkings", parkings)
         },
         deleteParking({ commit }, id) {
             commit("deleteParking", id)
-        },
-        fetchSlots({ commit }, slots) {
-            commit("setSlots", slots)
         }
     }
 }

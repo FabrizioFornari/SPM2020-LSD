@@ -82,7 +82,7 @@ export default {
     }
   }
 
-  @media (max-width: 400px) {
+  @media (max-width: 480px) {
     .leaflet-geosearch-bar {
       width: 100%;
       max-width: 100%;

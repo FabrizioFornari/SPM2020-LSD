@@ -3,7 +3,8 @@ const map = {
         center: null,
         active: null,
         waypoints: null,
-        userPosition: null
+        userPosition: null,
+        insertSlots: false
     },
     mutations: {
         setCenter(state, center) {
@@ -21,13 +22,17 @@ const map = {
         },
         setUserPosition(state, pos) {
             state.userPosition = pos
+        },
+        setInsertSlots(state, ins) {
+            state.insertSlots = ins
         }
     },
     getters: {
         center: state => state.center,
         active: state => state.active,
         waypoints: state => state.waypoints,
-        userPosition: state => state.userPosition
+        userPosition: state => state.userPosition,
+        insertSlots: state => state.insertSlots
     },
     actions: {
         async fetchWaypoints({ commit, rootGetters }, destination) {

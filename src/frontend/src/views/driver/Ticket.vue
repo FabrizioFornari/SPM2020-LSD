@@ -28,8 +28,8 @@
         </div>
 
         <div class="actions">
-            <button class="action save" type="submit">Buy</button>
-            <router-link class="action cancel" :to="'/map/parking/'+parking.id">Undo</router-link>
+            <button class="pill btn-primary" type="submit" :disabled="loading">Buy</button>
+            <router-link class="pill btn-secondary" :to="'/map/parking/'+parking.id" :disabled="loading">Undo</router-link>
         </div>
     </form>
 </template>
@@ -62,7 +62,8 @@ export default {
                 slots: {}
             },
             slot: {},
-            types: []
+            types: [],
+            loading: false
         }
     },
     props: {
@@ -75,13 +76,14 @@ export default {
     },
     methods: {
         async buyTicket() {
+            this.loading = true
             this.ticket.inception = moment(this.date.start).format('YYYY-MM-DD HH:mm')
             this.ticket.expiration = moment(this.date.end).format('YYYY-MM-DD HH:mm')
             await apiTicket.buyTicket(this.ticket).then(response => {
                 this.$store.dispatch('fetchTicket', response.data)
                 this.$router.push('/dashboard/pocket')
-                console.log(this.$store.getters.tickets)
             })
+            this.loading = false
         },
         priceCalculator() {
             if (this.date.start && this.date.end) {

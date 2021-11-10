@@ -2,7 +2,7 @@
   <div class="menu">
     <municipalityMenu v-if="role == 'municipality'"></municipalityMenu>
     <driverMenu v-else></driverMenu>
-    <div class="choice action logout" id="logoutButton" @click="signOut()"> Logout </div>
+    <div class="choice action logout btn btn-danger" id="logoutButton" @click="signOut()"> Logout </div>
   </div>
 </template>
 
@@ -29,11 +29,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.logout {
-  border: 1px solid #ec000041;
-  background-color: #ff1c1c54;
-  color: white;
-}
-</style>

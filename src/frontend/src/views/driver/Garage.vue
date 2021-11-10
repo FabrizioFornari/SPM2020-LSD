@@ -6,7 +6,7 @@
                 <p>My {{ car.type }}</p>
             </router-link>
         </div>
-        <router-link class="choice action add-vehicle" to="/dashboard/garage/new"> 
+        <router-link class="choice action add-vehicle btn btn-primary" to="/dashboard/garage/new"> 
             Add a vehicle 
         </router-link>
 
@@ -30,12 +30,6 @@ export default {
 .menu {
     .vehicle {
         flex: 1 1 200px;
-    }
-
-    .add-vehicle {
-        color: rgb(37, 66, 160);
-        border: 1px solid #0010ec41;
-        background-color: rgba(0, 63, 236, 0.255);
     }
 }
 </style>

@@ -11,12 +11,12 @@
             <div>{{ parking.price }}€/hour</div>
         </div>
         <div class="actions" v-if="this.$store.getters.userUid == parking.owner">
-            <router-link class="action save" :to="{path: '/map/parking/'+parking.id, query: {edit: true}}" id="slotEditButton">Edit</router-link>
-            <button class="action cancel" @click.prevent="deleteSlot" id="slotRemoveButton">Remove</button>
+            <router-link class="pill btn-primary" :to="{path: '/map/parking/'+parking.id, query: {edit: true}}" id="slotEditButton" :disabled="loading">Edit</router-link>
+            <button class="pill btn-danger" @click.prevent="deleteSlot" id="slotRemoveButton" :disabled="loading">Remove</button>
         </div>
         <div class="actions" v-else>
-            <button id="routeButton" class="action save" @click.prevent="findRoute">Route</button>
-            <router-link class="action save" v-if="this.$store.getters.userRole != 'municipality'" :to="'/buy/ticket/'+parking.id+'/'+slot.id">Buy</router-link>
+            <button id="routeButton" class="pill btn-primary" @click.prevent="findRoute" :disabled="loading">Route</button>
+            <router-link class="pill btn-primary" v-if="this.$store.getters.userRole != 'municipality'" :to="'/buy/ticket/'+parking.id+'/'+slot.id" :disabled="loading">Buy</router-link>
         </div>
     </form>
 </template>
@@ -31,7 +31,8 @@ export default {
     data() {
         return {
             parking: {},
-            slot: {}
+            slot: {},
+            loading: false
         }
     },
     props: {
@@ -41,10 +42,12 @@ export default {
     },
     methods: {
         deleteSlot() {
+            this.loading = true
 			apiSlot.deleteSlot(this.slot.id).then(response => {
                 this.$store.dispatch('deleteSlot', response.data)
                 this.$router.push('/map')
             })
+            this.loading = false
         },
         findRoute() {
             this.$store.dispatch("fetchWaypoints", latLng(this.parking.coords.y, this.parking.coords.x))

@@ -17,8 +17,8 @@
         </div>
 
         <div class="actions">
-            <button class="action save" id="parkingAddButton" type="submit">Add</button>
-            <router-link class="action cancel" to="/map">Cancel</router-link>
+            <button class="pill btn-primary" id="parkingAddButton" type="submit" :disabled="loading">Add</button>
+            <router-link class="pill btn-secondary" to="/map" :disabled="loading">Cancel</router-link>
         </div>
     </form>
 </template>
@@ -33,7 +33,8 @@ export default {
     name: 'SlotList',
     data() {
         return {
-            parking: {}
+            parking: {},
+            loading: false
         }
     },
     props: {
@@ -43,11 +44,13 @@ export default {
     },
     methods: {
         addSlots() {
+            this.disabled = true
             for (const slot of store.getters.newSlots) slot.parking = this.p
             apiSlot.addSlots(store.getters.newSlots).then(response => {
                 store.dispatch("addSlots", response.data)
                 this.$router.push('/map/parking/' + this.p)
             })
+            this.disabled = false
         }
     },
     async created() {

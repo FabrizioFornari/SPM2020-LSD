@@ -80,6 +80,11 @@ button {
   border: none;
 }
 
+.pill {
+  padding: 5px 20px;
+  border-radius: 50px;
+}
+
 #app {
   height: 100vh;
   font-family: Avenir, Helvetica, Arial, sans-serif;

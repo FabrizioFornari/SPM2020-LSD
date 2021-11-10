@@ -51,13 +51,13 @@ export default {
 
     .choice {
       flex: 1 1 250px;
+      color: black;
     }
   }
 
   .choice {
     margin: 15px;
     padding: 15px;
-    color: black;
     border: 1px solid #00000020;
     border-radius: 8px;
     flex-flow: column;

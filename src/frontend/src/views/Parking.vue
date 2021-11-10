@@ -11,13 +11,13 @@
             <div>{{ parking.price }}€/hour</div>
         </div>
         <div class="actions" v-if="this.$store.getters.userUid == parking.owner">
-            <router-link class="action save" :to="{path: '/map/parking/'+parking.id, query: {edit: true}}" id="parkingEditButton">Edit</router-link>
-            <router-link class="action save" :to="{path: '/map/slots', query: {p: parking.id}}" id="parkingSlotsButton">Add slots</router-link>
-            <button class="action cancel" @click.prevent="deleteParking" id="parkingRemoveButton">Remove</button>
+            <router-link class="pill btn-primary" :to="{path: '/map/parking/'+parking.id, query: {edit: true}}" id="parkingEditButton" :disabled="loading">Edit</router-link>
+            <router-link class="pill btn-primary" :to="{path: '/map/slots', query: {p: parking.id}}" id="parkingSlotsButton" :disabled="loading">Add slots</router-link>
+            <button class="pill btn-danger" @click.prevent="deleteParking" id="parkingRemoveButton" :disabled="loading">Remove</button>
         </div>
         <div class="actions" v-else>
-            <button id="routeButton" class="action save" @click.prevent="findRoute">Route</button>
-            <router-link class="action save" v-if="this.$store.getters.userRole != 'municipality'" :to="'/buy/ticket/'+parking.id">Buy</router-link>
+            <button id="routeButton" class="pill btn-primary" @click.prevent="findRoute" :disabled="loading">Route</button>
+            <router-link class="pill btn-primary" v-if="this.$store.getters.userRole != 'municipality'" :to="'/buy/ticket/'+parking.id" :disabled="loading">Buy</router-link>
         </div>
     </form>
     <form v-else @submit.prevent="edit ? editParking() : addParking()">
@@ -67,12 +67,12 @@
         </div>
 
         <div class="actions" v-if="edit">
-            <button class="action btn btn-primary" id="parkingSaveButton" type="submit">Save</button>
-            <router-link class="action cancel" :to="'/map/parking/'+parking.id">Cancel</router-link>
+            <button class="pill btn-primary" id="parkingSaveButton" type="submit" :disabled="loading">Save</button>
+            <router-link class="pill btn-secondary" :to="'/map/parking/'+parking.id" :disabled="loading">Cancel</router-link>
         </div>
         <div class="actions" v-else>
-            <button class="action save" id="parkingAddButton" type="submit">Add</button>
-            <router-link class="action cancel" to="/map">Cancel</router-link>
+            <button class="action save pill btn-primary" id="parkingAddButton" type="submit" :disabled="loading">Add</button>
+            <router-link class="pill btn-secondary" to="/map" :disabled="loading">Cancel</router-link>
         </div>
     </form>
 </template>
@@ -99,7 +99,8 @@ export default {
             days: {},
             infos: {
                 guarded: true
-            }
+            },
+            loading: false
         }
     },
     props: {
@@ -115,26 +116,32 @@ export default {
     },
     methods: {
         addParking() {
+            this.loading = true
 			this.parking.slots = this.slots
             this.parking.owner = this.$store.getters.userUid
             apiParking.addParking(this.parking).then(response => {
                 this.$store.dispatch('fetchParking', response.data)
                 this.$router.push('/map')
             })
+            this.loading = false
         },
         editParking() {
+            this.loading = true
 			this.parking.slots = this.slots
             this.parking.owner = this.$store.getters.userUid
             apiParking.editParking(this.parking).then(response => {
                 this.$store.dispatch('fetchParking', response.data)
                 this.$router.push('/map/parking/' + response.data.id)
             })
+            this.loading = false
         },
         deleteParking() {
+            this.loading = true
 			apiParking.deleteParking(this.parking.id).then(response => {
                 this.$store.dispatch('deleteParking', response.data)
                 this.$router.push('/map')
             })
+            this.loading = false
         },
         findRoute() {
             this.$store.dispatch("fetchWaypoints", latLng(this.parking.coords.y, this.parking.coords.x))

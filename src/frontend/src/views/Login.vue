@@ -6,19 +6,20 @@
           <h1><b>Login</b></h1>
           <div v-if="error" class="alert alert-danger">{{ error }}</div>
           <form @submit.prevent="signIn">
-            <label class="label">
-              <input type="email" id="emailLogin" class="input" value required autofocus v-model="form.email">
-              <span>Email</span>
-            </label>
-
-            <label class="label">
-              <input type="password" id="passwordLogin" class="input" required v-model="form.password"/>
-              <span>Password</span>
-            </label>
+            <div>
+              <label class="label">
+                <input type="email" id="emailLogin" class="input" value required autofocus v-model="form.email">
+                <span>Email</span>
+              </label>
+              <label class="label">
+                <input type="password" id="passwordLogin" class="input" required v-model="form.password"/>
+                <span>Password</span>
+              </label>
+            </div>
 
             <div class="form-group row mb-0">
               <div class="col-md-12">
-                <button type="submit" id="buttonLogin" class="btn btn-primary" :disabled="loading">Login</button>
+                <button type="submit" id="buttonLogin" class="choice btn btn-primary" :disabled="loading">Login</button>
                 <br><br>
                 <p><router-link to="/register">Aren't you registered?</router-link></p>
               </div>
